@@ -1,6 +1,6 @@
 import { gameVSS, gameFSS } from "./shaders.js";
 import { MAT4 } from "./utils/matrix.js";
-import { Game } from "./canvas.js";
+import { Game } from "./game.js";
 
 /**
  * @type {WebGL2RenderingContext}
@@ -19,41 +19,44 @@ const CANVAS_HEIGHT = (gameCanvas.height = window.innerHeight);
 gl.viewport(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
 // INITIALIZE SHADERS AND PROGRAM //
-function initializeGL() {
-  // create vertex shader
-  //
-  //VS stands for Vertex Shader
-  const gameVS = gl.createShader(gl.VERTEX_SHADER);
-  gl.shaderSource(gameVS, gameVSS);
-  gl.compileShader(gameVS);
 
-  //do the same things as above for fragment shader
-  const gameFS = gl.createShader(gl.FRAGMENT_SHADER);
-  gl.shaderSource(gameFS, gameFSS);
-  gl.compileShader(gameFS);
+// create vertex shader
+//
+//VS stands for Vertex Shader
+const gameVS = gl.createShader(gl.VERTEX_SHADER);
+gl.shaderSource(gameVS, gameVSS);
+gl.compileShader(gameVS);
 
-  //create program
-  const program = gl.createProgram();
+//do the same things as above for fragment shader
+const gameFS = gl.createShader(gl.FRAGMENT_SHADER);
+gl.shaderSource(gameFS, gameFSS);
+gl.compileShader(gameFS);
 
-  //attach vertex and fragment shader to program
-  gl.attachShader(program, gameVS);
-  gl.attachShader(program, gameFS);
+//create program
+const program = gl.createProgram();
 
-  //I don't know what this code do
-  gl.linkProgram(program);
+//attach vertex and fragment shader to program
+gl.attachShader(program, gameVS);
+gl.attachShader(program, gameFS);
 
-  //select and start currently usable program // maybe I don't know either
-  gl.useProgram(program);
+//I don't know what this code do
+gl.linkProgram(program);
 
-  //this line compare the z coord of the vertexs with each other and determines which vertex will visible upper to other one
-  gl.enable(gl.DEPTH_TEST);
-}
-initializeGL();
+//select and start currently usable program // maybe I don't know either
+gl.useProgram(program);
+
+//this line compare the z coord of the vertexs with each other and determines which vertex will visible upper to other one
+gl.enable(gl.DEPTH_TEST);
 
 //add matrix class
 const mat4 = new MAT4();
 
-const game = new Game(gl, mat4);
+const game = new Game(program, gl, mat4);
 
-//draw vertexs
-gl.drawArrays(gl.POINTS, 0, 1);
+function animate() {
+  game.update();
+  game.draw();
+
+  requestAnimationFrame(animate);
+}
+animate();

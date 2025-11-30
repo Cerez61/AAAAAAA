@@ -2,9 +2,11 @@
 export const gameVSS = `#version 300 es
 precision mediump float;
 
+layout(location = 0) in vec4 aPosition;
+uniform mat4 uMatrix;
+
 void main() {
-gl_PointSize = 10.0;
-gl_Position = vec4(0.0,0.0,0.0,1.0);
+gl_Position = uMatrix * aPosition;
 }
 `;
 // FSS stands for Fragment Shader Source
