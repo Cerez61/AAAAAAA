@@ -1,5 +1,6 @@
 import { gameVSS, gameFSS } from "./shaders.js";
 import { MAT4 } from "./utils/matrix.js";
+import { Game } from "./canvas.js";
 
 /**
  * @type {WebGL2RenderingContext}
@@ -51,6 +52,8 @@ initializeGL();
 
 //add matrix class
 const mat4 = new MAT4();
+
+const game = new Game(gl, mat4);
 
 //draw vertexs
 gl.drawArrays(gl.POINTS, 0, 1);
