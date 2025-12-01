@@ -9,22 +9,12 @@ export class Game {
     this.program = program;
     this.gl = gl;
     this.mat4 = mat4;
-    this.player = new Player(this.gl, this.mat4, 10, 10, 1);
-
-    this.matrixData = [...this.player.orthoMatrix];
-    console.log(this.matrixData);
-
-    this.matrixLoc = this.gl.getUniformLocation(this.program, "uMatrix");
+    this.player = new Player(this.program, this.gl, this.mat4, 0, 0, 1);
   }
   update() {
     this.player.update();
   }
   draw() {
-    this.gl.useProgram(this.program);
-
-    this.gl.bindVertexArray(this.player.playerVAO);
-    this.gl.uniformMatrix4fv(this.matrixLoc, false, this.matrixData);
-    this.gl.drawArrays(this.gl.TRIANGLES, 0, this.player.vertexData.length / 3);
-    this.gl.bindVertexArray(null);
+    this.player.draw();
   }
 }

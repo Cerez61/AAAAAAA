@@ -1,14 +1,17 @@
 export class Player {
-  constructor(gl, mat4, x, y, z) {
+  constructor(program, gl, mat4, x, y, z) {
     //intelisense webgl content
     /**
      * @type {WebGL2RenderingContext}
      */
 
     this.gl = gl;
+    this.program = program;
     this.mat4 = mat4;
-    this.x = x;
-    this.y = y;
+    this.width = 40;
+    this.height = 50;
+    this.x = x + this.width;
+    this.y = y + this.height;
     this.z = z;
 
     this.vertexData = this.createVertexData();
@@ -23,32 +26,48 @@ export class Player {
     this.gl.enableVertexAttribArray(0);
     this.gl.bindVertexArray(null);
 
+    this.modelMatrix = this.mat4.identity();
     this.viewMatrix = this.mat4.identity();
     this.mvMatrix = this.mat4.identity();
     this.orthoMatrix = this.mat4.ortho(0, this.gl.canvas.width, 0, this.gl.canvas.height, -100, 100);
     this.finalMatrix = this.mat4.identity();
+
+    this.matrixLoc = this.gl.getUniformLocation(this.program, "uMatrix");
+
+    this.mat4.scale(this.modelMatrix, [this.width, this.height, 0]);
+    this.mat4.translate(this.viewMatrix, [this.x, this.y, this.z]);
   }
   createVertexData() {
     /* prettier-ignore */
     return [
         // v stands for vertex
         // v1
-        -10,-10,1,
+        -1,-1,1,
         // v2
-        -10,10,1,
+        -1,1,1,
         // v3
-        10,-10,1,
+        1,-1,1,
         // v3
-        10,-10,1,
+        1,-1,1,
         // v2
-        -10,10,1,
+        -1,1,1,
         // v4
-        10,10,1
+        1,1,1
     ];
   }
   update() {
     //I will multiply view and model matrix and save as mvMatrix
     //after that ı'll multiply mvMatrix and orthoMatrix.this'll give me finalMatrix
     //and send this finalMatrix to the uniform data
+    this.mat4.multiply(this.mvMatrix, this.viewMatrix, this.modelMatrix);
+    this.mat4.multiply(this.finalMatrix, this.orthoMatrix, this.mvMatrix);
+  }
+  draw() {
+    this.gl.useProgram(this.program);
+
+    this.gl.bindVertexArray(this.playerVAO);
+    this.gl.uniformMatrix4fv(this.matrixLoc, false, this.finalMatrix);
+    this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexData.length / 3);
+    this.gl.bindVertexArray(null);
   }
 }
