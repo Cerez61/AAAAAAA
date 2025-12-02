@@ -57,6 +57,8 @@ function animate() {
   game.update();
   game.draw();
 
+  console.log(game.keys);
+
   requestAnimationFrame(animate);
 }
 animate();

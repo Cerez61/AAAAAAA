@@ -1,5 +1,5 @@
 export class Player {
-  constructor(program, gl, mat4, x, y, z) {
+  constructor(program, gl, mat4, keys, x, y, z) {
     //intelisense webgl content
     /**
      * @type {WebGL2RenderingContext}
@@ -8,11 +8,14 @@ export class Player {
     this.gl = gl;
     this.program = program;
     this.mat4 = mat4;
-    this.width = 40;
-    this.height = 50;
+    this.keys = keys;
+    this.width = 20;
+    this.height = 40;
     this.x = x + this.width;
     this.y = y + this.height;
     this.z = z;
+    this.xSpeed = 0;
+    this.ySpeed = 0;
 
     this.vertexData = this.createVertexData();
 
@@ -59,6 +62,12 @@ export class Player {
     //I will multiply view and model matrix and save as mvMatrix
     //after that ı'll multiply mvMatrix and orthoMatrix.this'll give me finalMatrix
     //and send this finalMatrix to the uniform data
+
+    if (this.keys.includes("d")) this.xSpeed = 1;
+    else if (this.keys.includes("a")) this.xSpeed = -1;
+    else this.xSpeed = 0;
+
+    this.mat4.translate(this.viewMatrix, [this.xSpeed, 0, 0]);
     this.mat4.multiply(this.mvMatrix, this.viewMatrix, this.modelMatrix);
     this.mat4.multiply(this.finalMatrix, this.orthoMatrix, this.mvMatrix);
   }
