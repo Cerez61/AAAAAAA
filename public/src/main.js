@@ -53,17 +53,9 @@ const mat4 = new MAT4();
 
 const game = new Game(program, gl, mat4);
 
-let lastTime = 0;
-let time = 0;
-let frameInterval = 1000 / 1000;
 function animate(timeStamp) {
-  const deltaTime = timeStamp - lastTime;
-  lastTime = timeStamp;
-  if (time > frameInterval) {
-    game.update(deltaTime);
-    game.draw();
-    time = 0;
-  } else time += deltaTime;
+  game.update();
+  game.draw();
 
   requestAnimationFrame(animate);
 }

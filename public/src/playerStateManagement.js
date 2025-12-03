@@ -3,6 +3,10 @@ const stateNum = {
   IDLE_RIGHT: 1,
   RUNNING_LEFT: 2,
   RUNNING_RIGHT: 3,
+  JUMP_IDLE_LEFT: 4,
+  JUMP_IDLE_RIGHT: 5,
+  JUMP_RUNNING_LEFT: 6,
+  JUMP_RUNNING_RIGHT: 7,
 };
 
 class playerStates {
@@ -22,8 +26,8 @@ export class IdleLeft extends playerStates {
     this.player.xSpeed = 0;
   }
   updateState() {
-    if (this.lastPressKeys[0] === "a" && this.keys.includes("a")) this.player.setState(this.player, stateNum.RUNNING_LEFT);
-    else if (this.lastPressKeys[0] === "d" && this.keys.includes("d")) this.player.setState(this.player, stateNum.RUNNING_RIGHT);
+    if (this.keys.includes("d")) this.player.setState(this.player, stateNum.RUNNING_RIGHT);
+    if (this.keys.includes("a")) this.player.setState(this.player, stateNum.RUNNING_LEFT);
   }
 }
 
@@ -41,8 +45,8 @@ export class IdleRight extends playerStates {
     this.player.xSpeed = 0;
   }
   updateState() {
-    if (this.lastPressKeys[0] === "a" && !this.keys.includes("d")) this.player.setState(this.player, stateNum.RUNNING_LEFT);
-    else if (this.lastPressKeys[0] === "d" && this.keys.includes("d")) this.player.setState(this.player, stateNum.RUNNING_RIGHT);
+    if (this.keys.includes("d")) this.player.setState(this.player, stateNum.RUNNING_RIGHT);
+    if (this.keys.includes("a")) this.player.setState(this.player, stateNum.RUNNING_LEFT);
   }
 }
 export class RunningLeft extends playerStates {
@@ -58,8 +62,7 @@ export class RunningLeft extends playerStates {
     this.player.xSpeed = -1;
   }
   updateState() {
-    if (this.keys.includes("d")) this.player.setState(this.player, stateNum.RUNNING_RIGHT);
-    else if (!this.keys.includes("a")) this.player.setState(this.player, stateNum.IDLE_LEFT);
+    if (!this.keys.includes("a")) this.player.setState(this.player, stateNum.IDLE_LEFT);
   }
 }
 
@@ -76,8 +79,62 @@ export class RunningRight extends playerStates {
     this.player.xSpeed = 1;
   }
   updateState() {
-    if (this.keys.includes("a") && !this.keys.includes("d")) this.player.setState(this.player, stateNum.RUNNING_LEFT);
-    else if (this.keys.includes("a") && this.keys.includes("d")) this.player.setState(this.player, stateNum.IDLE_RIGHT);
-    else if (!this.keys.includes("d")) this.player.setState(this.player, stateNum.IDLE_RIGHT);
+    if (!this.keys.includes("d")) this.player.setState(this.player, stateNum.IDLE_RIGHT);
   }
+}
+
+export class JumpIdleLeft extends playerStates {
+  constructor(player) {
+    super();
+    this.player = player;
+    this.keys = this.player.keys;
+    this.lastPressKeys = this.player.lastPressKeys;
+    this.lastReleaseKeys = this.player.lastReleaseKeys;
+  }
+  enter() {
+    this.player.xSpeed = 0;
+  }
+  updateState() {}
+}
+
+export class JumpIdleRight extends playerStates {
+  constructor(player) {
+    super();
+    this.player = player;
+    this.keys = this.player.keys;
+    this.lastPressKeys = this.player.lastPressKeys;
+    this.lastReleaseKeys = this.player.lastReleaseKeys;
+  }
+  enter() {
+    this.player.xSpeed = 0;
+  }
+  updateState() {}
+}
+
+export class JumpRunningLeft extends playerStates {
+  constructor(player) {
+    super();
+    this.player = player;
+    this.keys = this.player.keys;
+    this.lastPressKeys = this.player.lastPressKeys;
+    this.lastReleaseKeys = this.player.lastReleaseKeys;
+  }
+  enter() {
+    this.player.xSpeed = -1;
+  }
+  updateState() {}
+}
+
+export class JumpRunningRight extends playerStates {
+  constructor(player) {
+    super();
+    this.player = player;
+    this.keys = this.player.keys;
+    this.lastPressKeys = this.player.lastPressKeys;
+    this.lastReleaseKeys = this.player.lastReleaseKeys;
+  }
+  enter() {
+    this.player.xSpeed = 1;
+  }
+  updateState() {}
 }

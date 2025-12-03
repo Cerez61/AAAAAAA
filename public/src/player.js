@@ -1,4 +1,13 @@
-import { IdleLeft, IdleRight, RunningLeft, RunningRight } from "./playerStateManagement.js";
+import {
+  IdleLeft,
+  IdleRight,
+  RunningLeft,
+  RunningRight,
+  JumpIdleLeft,
+  JumpIdleRight,
+  JumpRunningLeft,
+  JumpRunningRight,
+} from "./playerStateManagement.js";
 import { horizontalSpeed, verticalSpeed } from "./utils/speed.js";
 export class Player {
   constructor(game) {
@@ -22,7 +31,16 @@ export class Player {
     this.xSpeed = 0;
     this.ySpeed = 0;
 
-    this.states = [new IdleLeft(this), new IdleRight(this), new RunningLeft(this), new RunningRight(this)];
+    this.states = [
+      new IdleLeft(this),
+      new IdleRight(this),
+      new RunningLeft(this),
+      new RunningRight(this),
+      new JumpIdleLeft(this),
+      new JumpIdleRight(this),
+      new JumpRunningLeft(this),
+      new JumpRunningRight(this),
+    ];
     this.currentState = this.states[1];
     this.currentState.enter();
 
@@ -73,11 +91,8 @@ export class Player {
   }
   update() {
     this.currentState.updateState();
-    //I will multiply view and model matrix and save as mvMatrix
-    //after that ı'll multiply mvMatrix and orthoMatrix.this'll give me finalMatrix
-    //and send this finalMatrix to the uniform data
 
-    this.x += this.xSpeed * 1;
+    this.x += this.xSpeed * this.speed;
 
     this.mat4.translate(this.viewMatrix, [this.x, this.y, 0]);
     this.mat4.multiply(this.mvMatrix, this.viewMatrix, this.modelMatrix);
