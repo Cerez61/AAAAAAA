@@ -18,10 +18,12 @@ export class IdleLeft extends playerStates {
   }
   enter() {
     checkStatement.innerHTML = "IdleLeft";
+
+    this.player.xSpeed = 0;
   }
   updateState() {
-    if (this.keys.includes("a")) this.player.setState(this.player, stateNum.RUNNING_LEFT);
-    else if (this.keys.includes("d")) this.player.setState(this.player, stateNum.RUNNING_RIGHT);
+    if (this.lastPressKeys[0] === "a" && this.keys.includes("a")) this.player.setState(this.player, stateNum.RUNNING_LEFT);
+    else if (this.lastPressKeys[0] === "d" && this.keys.includes("d")) this.player.setState(this.player, stateNum.RUNNING_RIGHT);
   }
 }
 
@@ -30,16 +32,17 @@ export class IdleRight extends playerStates {
     super();
     this.player = player;
     this.keys = this.player.keys;
-
     this.lastPressKeys = this.player.lastPressKeys;
     this.lastReleaseKeys = this.player.lastReleaseKeys;
   }
   enter() {
     checkStatement.innerHTML = "IdleRight";
+
+    this.player.xSpeed = 0;
   }
   updateState() {
-    if (this.keys.includes("a")) this.player.setState(this.player, stateNum.RUNNING_LEFT);
-    else if (this.keys.includes("d")) this.player.setState(this.player, stateNum.RUNNING_RIGHT);
+    if (this.lastPressKeys[0] === "a" && !this.keys.includes("d")) this.player.setState(this.player, stateNum.RUNNING_LEFT);
+    else if (this.lastPressKeys[0] === "d" && this.keys.includes("d")) this.player.setState(this.player, stateNum.RUNNING_RIGHT);
   }
 }
 export class RunningLeft extends playerStates {
@@ -47,12 +50,12 @@ export class RunningLeft extends playerStates {
     super();
     this.player = player;
     this.keys = this.player.keys;
-
     this.lastPressKeys = this.player.lastPressKeys;
     this.lastReleaseKeys = this.player.lastReleaseKeys;
   }
   enter() {
     checkStatement.innerHTML = "RunningLeft";
+    this.player.xSpeed = -1;
   }
   updateState() {
     if (this.keys.includes("d")) this.player.setState(this.player, stateNum.RUNNING_RIGHT);
@@ -65,12 +68,12 @@ export class RunningRight extends playerStates {
     super();
     this.player = player;
     this.keys = this.player.keys;
-
     this.lastPressKeys = this.player.lastPressKeys;
     this.lastReleaseKeys = this.player.lastReleaseKeys;
   }
   enter() {
     checkStatement.innerHTML = "RunningRight";
+    this.player.xSpeed = 1;
   }
   updateState() {
     if (this.keys.includes("a") && !this.keys.includes("d")) this.player.setState(this.player, stateNum.RUNNING_LEFT);

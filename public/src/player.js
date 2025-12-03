@@ -77,11 +77,6 @@ export class Player {
     //after that ı'll multiply mvMatrix and orthoMatrix.this'll give me finalMatrix
     //and send this finalMatrix to the uniform data
 
-    if (this.keys.includes("d") && this.xSpeed < 10) this.xSpeed += 1;
-    else if (this.keys.includes("a") && this.xSpeed > -10) this.xSpeed -= 1;
-    else if (this.xSpeed < 0) this.xSpeed += 1;
-    else if (this.xSpeed > 0) this.xSpeed -= 1;
-
     this.x += this.xSpeed * 1;
 
     this.mat4.translate(this.viewMatrix, [this.x, this.y, 0]);
