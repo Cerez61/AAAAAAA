@@ -1,3 +1,4 @@
+import { IdleLeft, IdleRight, RunningLeft, RunningRight } from "./playerStateManagement.js";
 import { horizontalSpeed, verticalSpeed } from "./utils/speed.js";
 export class Player {
   constructor(program, gl, mat4, keys, x, y, z) {
@@ -20,6 +21,15 @@ export class Player {
     this.xSpeed = 0;
     this.ySpeed = 0;
 
+    this.states = [
+      new IdleLeft(this),
+      new IdleRight(this),
+      new RunningLeft(this),
+      new RunningRight(this),
+    ];
+    this.currentState = this.states[1];
+    this.currentState.enter();
+
     this.vertexData = this.createVertexData();
 
     this.playerVAO = this.gl.createVertexArray();
@@ -27,7 +37,11 @@ export class Player {
 
     this.vertexBuffer = this.gl.createBuffer();
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexBuffer);
-    this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.vertexData), this.gl.STATIC_DRAW);
+    this.gl.bufferData(
+      this.gl.ARRAY_BUFFER,
+      new Float32Array(this.vertexData),
+      this.gl.STATIC_DRAW
+    );
     this.gl.vertexAttribPointer(0, 3, this.gl.FLOAT, false, 0, 0);
     this.gl.enableVertexAttribArray(0);
     this.gl.bindVertexArray(null);
@@ -35,7 +49,14 @@ export class Player {
     this.modelMatrix = this.mat4.identity();
     this.viewMatrix = this.mat4.identity();
     this.mvMatrix = this.mat4.identity();
-    this.orthoMatrix = this.mat4.ortho(0, this.gl.canvas.width, 0, this.gl.canvas.height, -100, 100);
+    this.orthoMatrix = this.mat4.ortho(
+      0,
+      this.gl.canvas.width,
+      0,
+      this.gl.canvas.height,
+      -100,
+      100
+    );
     this.finalMatrix = this.mat4.identity();
 
     this.matrixLoc = this.gl.getUniformLocation(this.program, "uMatrix");
@@ -61,7 +82,12 @@ export class Player {
         1,1,1
     ];
   }
+  setState(player, state) {
+    player.currentState = player.states[state];
+    player.currentState.enter();
+  }
   update() {
+    this.currentState.updateState();
     //I will multiply view and model matrix and save as mvMatrix
     //after that ı'll multiply mvMatrix and orthoMatrix.this'll give me finalMatrix
     //and send this finalMatrix to the uniform data
