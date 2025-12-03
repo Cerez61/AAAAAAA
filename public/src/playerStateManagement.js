@@ -62,7 +62,8 @@ export class RunningRight extends playerStates {
     checkStatement.innerHTML = "RunningRight";
   }
   updateState() {
-    if (this.keys.includes("a")) this.player.setState(this.player, stateNum.RUNNING_LEFT);
+    if (this.keys.includes("a") && !this.keys.includes("d")) this.player.setState(this.player, stateNum.RUNNING_LEFT);
+    else if (this.keys.includes("a") && this.keys.includes("d")) this.player.setState(this.player, stateNum.IDLE_RIGHT);
     else if (!this.keys.includes("d")) this.player.setState(this.player, stateNum.IDLE_RIGHT);
   }
 }

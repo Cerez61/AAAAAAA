@@ -21,12 +21,7 @@ export class Player {
     this.xSpeed = 0;
     this.ySpeed = 0;
 
-    this.states = [
-      new IdleLeft(this),
-      new IdleRight(this),
-      new RunningLeft(this),
-      new RunningRight(this),
-    ];
+    this.states = [new IdleLeft(this), new IdleRight(this), new RunningLeft(this), new RunningRight(this)];
     this.currentState = this.states[1];
     this.currentState.enter();
 
@@ -37,11 +32,7 @@ export class Player {
 
     this.vertexBuffer = this.gl.createBuffer();
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexBuffer);
-    this.gl.bufferData(
-      this.gl.ARRAY_BUFFER,
-      new Float32Array(this.vertexData),
-      this.gl.STATIC_DRAW
-    );
+    this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.vertexData), this.gl.STATIC_DRAW);
     this.gl.vertexAttribPointer(0, 3, this.gl.FLOAT, false, 0, 0);
     this.gl.enableVertexAttribArray(0);
     this.gl.bindVertexArray(null);
@@ -49,14 +40,7 @@ export class Player {
     this.modelMatrix = this.mat4.identity();
     this.viewMatrix = this.mat4.identity();
     this.mvMatrix = this.mat4.identity();
-    this.orthoMatrix = this.mat4.ortho(
-      0,
-      this.gl.canvas.width,
-      0,
-      this.gl.canvas.height,
-      -100,
-      100
-    );
+    this.orthoMatrix = this.mat4.ortho(0, this.gl.canvas.width, 0, this.gl.canvas.height, -100, 100);
     this.finalMatrix = this.mat4.identity();
 
     this.matrixLoc = this.gl.getUniformLocation(this.program, "uMatrix");
@@ -92,9 +76,10 @@ export class Player {
     //after that ı'll multiply mvMatrix and orthoMatrix.this'll give me finalMatrix
     //and send this finalMatrix to the uniform data
 
-    if (this.keys.includes("d")) this.xSpeed = 5;
-    else if (this.keys.includes("a")) this.xSpeed = -5;
-    else this.xSpeed = 0;
+    if (this.keys.includes("d") && this.xSpeed < 10) this.xSpeed += 1;
+    else if (this.keys.includes("a") && this.xSpeed > -10) this.xSpeed -= 1;
+    else if (this.xSpeed < 0) this.xSpeed += 1;
+    else if (this.xSpeed > 0) this.xSpeed -= 1;
 
     this.x += this.xSpeed * 1;
 

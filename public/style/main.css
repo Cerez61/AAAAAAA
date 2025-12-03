@@ -26,3 +26,17 @@ canvas {
   top: 1.25em;
   user-select: none;
 }
+#checkLastPress {
+  font-size: 0.925rem;
+  position: absolute;
+  margin: 0.25em;
+  top: 2.5em;
+  user-select: none;
+}
+#checkLastRelease {
+  font-size: 0.925rem;
+  position: absolute;
+  margin: 0.25em;
+  top: 3.75em;
+  user-select: none;
+}

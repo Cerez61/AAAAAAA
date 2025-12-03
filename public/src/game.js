@@ -10,7 +10,9 @@ export class Game {
     this.gl = gl;
     this.mat4 = mat4;
     this.keys = [];
-    this.inputHandler = new InputHandler(this.keys);
+    this.lastPressKeys = "";
+    this.lastReleaseKeys = "";
+    this.inputHandler = new InputHandler(this);
     this.player = new Player(this.program, this.gl, this.mat4, this.keys, 0, 0, 1);
   }
   update() {

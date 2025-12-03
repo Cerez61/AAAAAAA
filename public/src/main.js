@@ -56,6 +56,7 @@ const game = new Game(program, gl, mat4);
 function animate() {
   game.update();
   game.draw();
+
   requestAnimationFrame(animate);
 }
 animate();
