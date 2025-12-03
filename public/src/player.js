@@ -1,22 +1,23 @@
 import { IdleLeft, IdleRight, RunningLeft, RunningRight } from "./playerStateManagement.js";
 import { horizontalSpeed, verticalSpeed } from "./utils/speed.js";
 export class Player {
-  constructor(program, gl, mat4, keys, x, y, z) {
+  constructor(game) {
     //intelisense webgl content
     /**
      * @type {WebGL2RenderingContext}
      */
 
-    this.gl = gl;
-    this.program = program;
-    this.mat4 = mat4;
-    this.keys = keys;
+    this.gl = game.gl;
+    this.program = game.program;
+    this.mat4 = game.mat4;
+    this.keys = game.keys;
+    this.lastPressKeys = game.lastPressKeys;
     this.width = 20;
     this.height = 40;
     this.depth = 0;
-    this.x = x + this.width;
-    this.y = y + this.height;
-    this.z = z + this.depth;
+    this.x = 0 + this.width;
+    this.y = 0 + this.height;
+    this.z = 1 + this.depth;
     this.speed = 10;
     this.xSpeed = 0;
     this.ySpeed = 0;

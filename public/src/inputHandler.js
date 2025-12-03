@@ -6,8 +6,8 @@ export class InputHandler {
     window.addEventListener("keydown", (e) => {
       if ((e.key === "a" || e.key === "d" || e.key === "w" || e.key === "s") && this.keys.indexOf(e.key) === -1) {
         this.keys.push(e.key);
-        this.game.lastPressKeys = e.key;
-        checkLastPress.innerHTML = this.game.lastPressKeys;
+        this.game.lastPressKeys[0] = e.key;
+        checkLastPress.innerHTML = this.game.lastPressKeys[0];
       }
     });
 
@@ -16,9 +16,9 @@ export class InputHandler {
 
       if (e.key === "a" || e.key === "d" || e.key === "w" || e.key === "s") {
         this.keys.splice(index, 1);
-        this.game.lastReleaseKeys = e.key;
+        this.game.lastReleaseKeys[0] = e.key;
 
-        checkLastRelease.innerHTML = this.game.lastReleaseKeys;
+        checkLastRelease.innerHTML = this.game.lastReleaseKeys[0];
       }
     });
   }

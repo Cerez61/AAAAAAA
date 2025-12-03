@@ -13,6 +13,8 @@ export class IdleLeft extends playerStates {
     super();
     this.player = player;
     this.keys = this.player.keys;
+    this.lastPressKeys = this.player.lastPressKeys;
+    this.lastReleaseKeys = this.player.lastReleaseKeys;
   }
   enter() {
     checkStatement.innerHTML = "IdleLeft";
@@ -28,6 +30,9 @@ export class IdleRight extends playerStates {
     super();
     this.player = player;
     this.keys = this.player.keys;
+
+    this.lastPressKeys = this.player.lastPressKeys;
+    this.lastReleaseKeys = this.player.lastReleaseKeys;
   }
   enter() {
     checkStatement.innerHTML = "IdleRight";
@@ -42,6 +47,9 @@ export class RunningLeft extends playerStates {
     super();
     this.player = player;
     this.keys = this.player.keys;
+
+    this.lastPressKeys = this.player.lastPressKeys;
+    this.lastReleaseKeys = this.player.lastReleaseKeys;
   }
   enter() {
     checkStatement.innerHTML = "RunningLeft";
@@ -57,6 +65,9 @@ export class RunningRight extends playerStates {
     super();
     this.player = player;
     this.keys = this.player.keys;
+
+    this.lastPressKeys = this.player.lastPressKeys;
+    this.lastReleaseKeys = this.player.lastReleaseKeys;
   }
   enter() {
     checkStatement.innerHTML = "RunningRight";
