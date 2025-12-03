@@ -76,8 +76,8 @@ export class MAT4 {
     const y = n[1] || 0;
     const z = n[2] || 0;
 
-    out[12] = out[0] * x + out[4] * y + out[8] * z + out[12];
-    out[13] = out[1] * x + out[5] * y + out[9] * z + out[13];
-    out[14] = out[2] * x + out[6] * y + out[10] * z + out[14];
+    out[12] = out[0] * x + out[4] * y + out[8] * z;
+    out[13] = out[1] * x + out[5] * y + out[9] * z;
+    out[14] = out[2] * x + out[6] * y + out[10] * z;
   }
 }

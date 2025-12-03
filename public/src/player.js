@@ -1,3 +1,4 @@
+import { horizontalSpeed, verticalSpeed } from "./utils/speed.js";
 export class Player {
   constructor(program, gl, mat4, keys, x, y, z) {
     //intelisense webgl content
@@ -11,9 +12,11 @@ export class Player {
     this.keys = keys;
     this.width = 20;
     this.height = 40;
+    this.depth = 0;
     this.x = x + this.width;
     this.y = y + this.height;
-    this.z = z;
+    this.z = z + this.depth;
+    this.speed = 10;
     this.xSpeed = 0;
     this.ySpeed = 0;
 
@@ -63,11 +66,13 @@ export class Player {
     //after that ı'll multiply mvMatrix and orthoMatrix.this'll give me finalMatrix
     //and send this finalMatrix to the uniform data
 
-    if (this.keys.includes("d")) this.xSpeed = 1;
-    else if (this.keys.includes("a")) this.xSpeed = -1;
+    if (this.keys.includes("d")) this.xSpeed = 5;
+    else if (this.keys.includes("a")) this.xSpeed = -5;
     else this.xSpeed = 0;
 
-    this.mat4.translate(this.viewMatrix, [this.xSpeed, 0, 0]);
+    this.x += this.xSpeed * 1;
+
+    this.mat4.translate(this.viewMatrix, [this.x, this.y, 0]);
     this.mat4.multiply(this.mvMatrix, this.viewMatrix, this.modelMatrix);
     this.mat4.multiply(this.finalMatrix, this.orthoMatrix, this.mvMatrix);
   }
