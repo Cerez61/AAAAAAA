@@ -27,8 +27,9 @@ export class IdleLeft extends playerStates {
   enter() {
     checkStatement.innerHTML = "IdleLeft";
 
-    this.weight = 10;
+    this.player.weight = 20;
     this.player.xSpeed = 0;
+    this.player.ySpeed = 0;
   }
   updateState() {
     if (this.keys.includes("d")) this.player.setState(this.player, stateNum.RUNNING_RIGHT);
