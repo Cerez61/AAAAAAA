@@ -7,6 +7,10 @@ const stateNum = {
   JUMP_IDLE_RIGHT: 5,
   JUMP_RUNNING_LEFT: 6,
   JUMP_RUNNING_RIGHT: 7,
+  FALL_IDLE_LEFT: 8,
+  FALL_IDLE_RIGHT: 9,
+  FALL_RUNNING_LEFT: 10,
+  FALL_RUNNING_RIGHT: 11,
 };
 
 class playerStates {
@@ -23,11 +27,13 @@ export class IdleLeft extends playerStates {
   enter() {
     checkStatement.innerHTML = "IdleLeft";
 
+    this.weight = 10;
     this.player.xSpeed = 0;
   }
   updateState() {
     if (this.keys.includes("d")) this.player.setState(this.player, stateNum.RUNNING_RIGHT);
     if (this.keys.includes("a")) this.player.setState(this.player, stateNum.RUNNING_LEFT);
+    if (this.keys.includes("w") && this.player.onGround()) this.player.setState(this.player, stateNum.JUMP_IDLE_LEFT);
   }
 }
 
@@ -92,9 +98,16 @@ export class JumpIdleLeft extends playerStates {
     this.lastReleaseKeys = this.player.lastReleaseKeys;
   }
   enter() {
+    checkStatement.innerHTML = "JumpIdleLeft";
+
     this.player.xSpeed = 0;
+    this.player.ySpeed = 1;
   }
-  updateState() {}
+  updateState() {
+    if (this.keys.includes("a") && !this.player.onGround()) this.player.setState(this.player, stateNum.JUMP_RUNNING_LEFT);
+    if (this.player.onGround()) this.player.setState(this.player, stateNum.IDLE_LEFT);
+    if (this.player.weight < 0) this.player.setState(this.player, stateNum.FALL_IDLE_LEFT);
+  }
 }
 
 export class JumpIdleRight extends playerStates {
@@ -106,6 +119,8 @@ export class JumpIdleRight extends playerStates {
     this.lastReleaseKeys = this.player.lastReleaseKeys;
   }
   enter() {
+    checkStatement.innerHTML = "JumpIdleRight";
+
     this.player.xSpeed = 0;
   }
   updateState() {}
@@ -120,6 +135,8 @@ export class JumpRunningLeft extends playerStates {
     this.lastReleaseKeys = this.player.lastReleaseKeys;
   }
   enter() {
+    checkStatement.innerHTML = "JumpRunningLeft";
+
     this.player.xSpeed = -1;
   }
   updateState() {}
@@ -134,7 +151,64 @@ export class JumpRunningRight extends playerStates {
     this.lastReleaseKeys = this.player.lastReleaseKeys;
   }
   enter() {
+    checkStatement.innerHTML = "JumpRunningRight";
+
     this.player.xSpeed = 1;
+  }
+  updateState() {}
+}
+export class FallIdleLeft extends playerStates {
+  constructor(player) {
+    super();
+    this.player = player;
+    this.keys = this.player.keys;
+    this.lastPressKeys = this.player.lastPressKeys;
+    this.lastReleaseKeys = this.player.lastReleaseKeys;
+  }
+  enter() {
+    checkStatement.innerHTML = "FallIdleLeft";
+  }
+  updateState() {
+    if (this.player.onGround()) this.player.setState(this.player, stateNum.IDLE_LEFT);
+  }
+}
+
+export class FallIdleRight extends playerStates {
+  constructor(player) {
+    super();
+    this.player = player;
+    this.keys = this.player.keys;
+    this.lastPressKeys = this.player.lastPressKeys;
+    this.lastReleaseKeys = this.player.lastReleaseKeys;
+  }
+  enter() {
+    checkStatement.innerHTML = "FallIdleRight";
+  }
+  updateState() {}
+}
+export class FallRunningLeft extends playerStates {
+  constructor(player) {
+    super();
+    this.player = player;
+    this.keys = this.player.keys;
+    this.lastPressKeys = this.player.lastPressKeys;
+    this.lastReleaseKeys = this.player.lastReleaseKeys;
+  }
+  enter() {
+    checkStatement.innerHTML = "FallRunningLeft";
+  }
+  updateState() {}
+}
+export class FallRunningRight extends playerStates {
+  constructor(player) {
+    super();
+    this.player = player;
+    this.keys = this.player.keys;
+    this.lastPressKeys = this.player.lastPressKeys;
+    this.lastReleaseKeys = this.player.lastReleaseKeys;
+  }
+  enter() {
+    checkStatement.innerHTML = "FallRunningRight";
   }
   updateState() {}
 }

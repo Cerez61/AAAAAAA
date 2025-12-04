@@ -7,6 +7,10 @@ import {
   JumpIdleRight,
   JumpRunningLeft,
   JumpRunningRight,
+  FallIdleLeft,
+  FallIdleRight,
+  FallRunningLeft,
+  FallRunningRight,
 } from "./playerStateManagement.js";
 import { horizontalSpeed, verticalSpeed } from "./utils/speed.js";
 export class Player {
@@ -27,6 +31,7 @@ export class Player {
     this.x = 0 + this.width;
     this.y = 0 + this.height;
     this.z = 1 + this.depth;
+    this.weight = 20;
     this.speed = 10;
     this.xSpeed = 0;
     this.ySpeed = 0;
@@ -40,21 +45,13 @@ export class Player {
       new JumpIdleRight(this),
       new JumpRunningLeft(this),
       new JumpRunningRight(this),
+      new FallIdleLeft(this),
+      new FallIdleRight(this),
+      new FallRunningLeft(this),
+      new FallRunningRight(this),
     ];
     this.currentState = this.states[1];
     this.currentState.enter();
-
-    this.vertexData = this.createVertexData();
-
-    this.playerVAO = this.gl.createVertexArray();
-    this.gl.bindVertexArray(this.playerVAO);
-
-    this.vertexBuffer = this.gl.createBuffer();
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexBuffer);
-    this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.vertexData), this.gl.STATIC_DRAW);
-    this.gl.vertexAttribPointer(0, 3, this.gl.FLOAT, false, 0, 0);
-    this.gl.enableVertexAttribArray(0);
-    this.gl.bindVertexArray(null);
 
     this.modelMatrix = this.mat4.identity();
     this.viewMatrix = this.mat4.identity();
@@ -62,7 +59,23 @@ export class Player {
     this.orthoMatrix = this.mat4.ortho(0, this.gl.canvas.width, 0, this.gl.canvas.height, -100, 100);
     this.finalMatrix = this.mat4.identity();
 
+    this.vertexData = this.createVertexData();
+
+    this.playerVAO = this.gl.createVertexArray();
+
+    this.setupPlayer();
+
     this.matrixLoc = this.gl.getUniformLocation(this.program, "uMatrix");
+  }
+  setupPlayer() {
+    this.gl.bindVertexArray(this.playerVAO);
+
+    const vertexBuffer = this.gl.createBuffer();
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, vertexBuffer);
+    this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.vertexData), this.gl.STATIC_DRAW);
+    this.gl.vertexAttribPointer(0, 3, this.gl.FLOAT, false, 0, 0);
+    this.gl.enableVertexAttribArray(0);
+    this.gl.bindVertexArray(null);
 
     this.mat4.scale(this.modelMatrix, [this.width, this.height, 0]);
     this.mat4.translate(this.viewMatrix, [this.x, this.y, this.z]);
@@ -89,10 +102,18 @@ export class Player {
     player.currentState = player.states[state];
     player.currentState.enter();
   }
+  onGround() {
+    if (this.y - this.height > 0) return false;
+    else return true;
+  }
   update() {
     this.currentState.updateState();
 
     this.x += this.xSpeed * this.speed;
+
+    if (!this.onGround()) this.weight -= 1;
+
+    this.y += this.ySpeed * this.weight;
 
     this.mat4.translate(this.viewMatrix, [this.x, this.y, 0]);
     this.mat4.multiply(this.mvMatrix, this.viewMatrix, this.modelMatrix);
