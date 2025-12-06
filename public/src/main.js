@@ -53,8 +53,12 @@ const mat4 = new MAT4();
 
 const game = new Game(program, gl, mat4);
 
+let lastTime = 0;
 function animate(timeStamp) {
-  game.update();
+  const deltaTime = timeStamp - lastTime;
+  lastTime = timeStamp;
+
+  game.update(deltaTime);
   game.draw();
 
   requestAnimationFrame(animate);

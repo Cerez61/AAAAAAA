@@ -32,7 +32,7 @@ export class Player {
     this.y = 0 + this.height;
     this.z = 1 + this.depth;
     this.weight = 20;
-    this.speed = 10;
+    this.speed = 20;
     this.xSpeed = 0;
     this.ySpeed = 0;
 
@@ -123,6 +123,8 @@ export class Player {
   }
   draw() {
     this.gl.useProgram(this.program);
+
+    this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
     this.gl.bindVertexArray(this.playerVAO);
     this.gl.uniformMatrix4fv(this.matrixLoc, false, this.finalMatrix);
