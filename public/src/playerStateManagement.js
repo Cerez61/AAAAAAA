@@ -28,7 +28,7 @@ export class IdleLeft extends playerStates {
     checkStatement.innerHTML = "IdleLeft";
 
     this.player.weight = 20;
-    this.player.xSpeed = 0;
+    this.player.xSpeedMultiplier = 0;
     this.player.ySpeed = 0;
   }
   updateState() {
@@ -49,7 +49,7 @@ export class IdleRight extends playerStates {
   enter() {
     checkStatement.innerHTML = "IdleRight";
 
-    this.player.xSpeed = 0;
+    this.player.xSpeedMultiplier = 0;
     this.player.ySpeed = 0;
     this.player.weight = 20;
   }
@@ -69,7 +69,7 @@ export class RunningLeft extends playerStates {
   }
   enter() {
     checkStatement.innerHTML = "RunningLeft";
-    this.player.xSpeed = -1;
+    this.player.xSpeedMultiplier = -0.1;
     this.player.ySpeed = 0;
     this.player.weight = 20;
   }
@@ -91,7 +91,7 @@ export class RunningRight extends playerStates {
   }
   enter() {
     checkStatement.innerHTML = "RunningRight";
-    this.player.xSpeed = 1;
+    this.player.xSpeedMultiplier = 0.1;
     this.player.ySpeed = 0;
     this.player.weight = 20;
   }
@@ -114,7 +114,7 @@ export class JumpIdleLeft extends playerStates {
   enter() {
     checkStatement.innerHTML = "JumpIdleLeft";
 
-    this.player.xSpeed = 0;
+    this.player.xSpeedMultiplier = 0;
     this.player.ySpeed = 1;
   }
   updateState() {
@@ -135,7 +135,7 @@ export class JumpIdleRight extends playerStates {
   enter() {
     checkStatement.innerHTML = "JumpIdleRight";
 
-    this.player.xSpeed = 0;
+    this.player.xSpeedMultiplier = 0;
     this.player.ySpeed = 1;
   }
   updateState() {
@@ -156,7 +156,7 @@ export class JumpRunningLeft extends playerStates {
   enter() {
     checkStatement.innerHTML = "JumpRunningLeft";
 
-    this.player.xSpeed = -1;
+    this.player.xSpeedMultiplier = -0.1;
     this.player.ySpeed = 1;
   }
   updateState() {
@@ -177,7 +177,7 @@ export class JumpRunningRight extends playerStates {
   enter() {
     checkStatement.innerHTML = "JumpRunningRight";
 
-    this.player.xSpeed = 1;
+    this.player.xSpeedMultiplier = 0.1;
     this.player.ySpeed = 1;
   }
   updateState() {
@@ -197,7 +197,7 @@ export class FallIdleLeft extends playerStates {
   enter() {
     checkStatement.innerHTML = "FallIdleLeft";
 
-    this.player.xSpeed = 0;
+    this.player.xSpeedMultiplier = 0;
     this.player.ySpeed = 1;
   }
   updateState() {
@@ -218,7 +218,7 @@ export class FallIdleRight extends playerStates {
   enter() {
     checkStatement.innerHTML = "FallIdleRight";
 
-    this.player.xSpeed = 0;
+    this.player.xSpeedMultiplier = 0;
     this.player.ySpeed = 1;
   }
   updateState() {
@@ -238,7 +238,7 @@ export class FallRunningLeft extends playerStates {
   enter() {
     checkStatement.innerHTML = "FallRunningLeft";
 
-    this.player.xSpeed = -1;
+    this.player.xSpeedMultiplier = -0.1;
     this.player.ySpeed = 1;
   }
   updateState() {
@@ -258,7 +258,7 @@ export class FallRunningRight extends playerStates {
   enter() {
     checkStatement.innerHTML = "FallRunningRight";
 
-    this.player.xSpeed = 1;
+    this.player.xSpeedMultiplier = 0.1;
     this.player.ySpeed = 1;
   }
   updateState() {

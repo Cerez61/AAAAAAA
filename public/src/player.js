@@ -34,6 +34,7 @@ export class Player {
     this.weight = 20;
     this.speed = 20;
     this.xSpeed = 0;
+    this.xSpeedMultiplier = 0;
     this.ySpeed = 0;
 
     this.states = [
@@ -103,11 +104,18 @@ export class Player {
     player.currentState.enter();
   }
   onGround() {
-    if (this.y - this.height > 0) return false;
-    else return true;
+    return this.y <= this.height;
+  }
+  verticalSpeed() {
+    if (this.xSpeed < 1) this.xSpeed += this.xSpeedMultiplier;
+    else this.xSpeed = 1;
+
+    if (this.xSpeedMultiplier === 0) this.xSpeed = 0;
   }
   update() {
     this.currentState.updateState();
+
+    this.verticalSpeed();
 
     this.x += this.xSpeed * this.speed;
 
@@ -115,8 +123,6 @@ export class Player {
 
     this.y += this.ySpeed * this.weight;
 
-    console.log(this.ySpeed);
-    console.log(this.weight);
     this.mat4.translate(this.viewMatrix, [this.x, this.y, 0]);
     this.mat4.multiply(this.mvMatrix, this.viewMatrix, this.modelMatrix);
     this.mat4.multiply(this.finalMatrix, this.orthoMatrix, this.mvMatrix);
