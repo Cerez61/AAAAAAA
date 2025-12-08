@@ -7,6 +7,7 @@ export class InputHandler {
       if ((e.key === "a" || e.key === "d" || e.key === "w" || e.key === "s") && this.keys.indexOf(e.key) === -1) {
         this.keys.push(e.key);
         this.game.lastPressKeys[0] = e.key;
+
         checkLastPress.innerHTML = this.game.lastPressKeys[0];
       }
     });
@@ -22,4 +23,6 @@ export class InputHandler {
       }
     });
   }
+  gameInput() {}
+  playerInput() {}
 }

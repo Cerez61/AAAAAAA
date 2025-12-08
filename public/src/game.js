@@ -15,7 +15,7 @@ export class Game {
     this.inputHandler = new InputHandler(this);
     this.player = new Player(this);
     this.gameFrame = 100;
-    this.gameInterval = 0 / this.gameFrame;
+    this.gameInterval = 1000 / this.gameFrame;
     this.lastFrame = 0;
   }
   update() {

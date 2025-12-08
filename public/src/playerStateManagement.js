@@ -26,15 +26,11 @@ export class IdleLeft extends playerStates {
   }
   enter() {
     checkStatement.innerHTML = "IdleLeft";
-
-    this.player.weight = 20;
-    this.player.xSpeedMultiplier = 0;
-    this.player.ySpeed = 0;
   }
   updateState() {
     if (this.keys.includes("d") && !this.keys.includes("a")) this.player.setState(this.player, stateNum.RUNNING_RIGHT);
     if (this.keys.includes("a") && !this.keys.includes("d")) this.player.setState(this.player, stateNum.RUNNING_LEFT);
-    if (this.keys.includes("w") && this.player.onGround()) this.player.setState(this.player, stateNum.JUMP_IDLE_LEFT);
+    if (this.keys.includes("w") && !this.player.onGround()) this.player.setState(this.player, stateNum.JUMP_IDLE_LEFT);
   }
 }
 
@@ -48,10 +44,6 @@ export class IdleRight extends playerStates {
   }
   enter() {
     checkStatement.innerHTML = "IdleRight";
-
-    this.player.xSpeedMultiplier = 0;
-    this.player.ySpeed = 0;
-    this.player.weight = 20;
   }
   updateState() {
     if (this.keys.includes("d") && !this.keys.includes("a")) this.player.setState(this.player, stateNum.RUNNING_RIGHT);
@@ -69,14 +61,12 @@ export class RunningLeft extends playerStates {
   }
   enter() {
     checkStatement.innerHTML = "RunningLeft";
-    this.player.xSpeedMultiplier = -0.1;
     this.player.ySpeed = 0;
     this.player.weight = 20;
   }
   updateState() {
     if (!this.keys.includes("a") && !this.keys.includes("d")) this.player.setState(this.player, stateNum.IDLE_LEFT);
     if (!this.keys.includes("a") && this.keys.includes("d")) this.player.setState(this.player, stateNum.RUNNING_RIGHT);
-    if (this.keys.includes("a") && this.keys.includes("d")) this.player.setState(this.player, stateNum.IDLE_LEFT);
     if (this.keys.includes("w") && this.player.onGround()) this.player.setState(this.player, stateNum.JUMP_RUNNING_LEFT);
   }
 }
@@ -91,14 +81,10 @@ export class RunningRight extends playerStates {
   }
   enter() {
     checkStatement.innerHTML = "RunningRight";
-    this.player.xSpeedMultiplier = 0.1;
-    this.player.ySpeed = 0;
-    this.player.weight = 20;
   }
   updateState() {
     if (!this.keys.includes("d") && !this.keys.includes("a")) this.player.setState(this.player, stateNum.IDLE_RIGHT);
     if (!this.keys.includes("d") && this.keys.includes("a")) this.player.setState(this.player, stateNum.RUNNING_LEFT);
-    if (this.keys.includes("a") && this.keys.includes("d")) this.player.setState(this.player, stateNum.IDLE_RIGHT);
     if (this.keys.includes("w") && this.player.onGround()) this.player.setState(this.player, stateNum.JUMP_RUNNING_RIGHT);
   }
 }
@@ -108,18 +94,17 @@ export class JumpIdleLeft extends playerStates {
     super();
     this.player = player;
     this.keys = this.player.keys;
+    this.jumpCount = this.player.jumpCount;
     this.lastPressKeys = this.player.lastPressKeys;
     this.lastReleaseKeys = this.player.lastReleaseKeys;
   }
   enter() {
     checkStatement.innerHTML = "JumpIdleLeft";
-
-    this.player.xSpeedMultiplier = 0;
-    this.player.ySpeed = 1;
   }
   updateState() {
     if (!this.keys.includes("a") && this.keys.includes("d")) this.player.setState(this.player, stateNum.FALL_RUNNING_RIGHT);
     if (this.keys.includes("a") && !this.player.onGround()) this.player.setState(this.player, stateNum.JUMP_RUNNING_LEFT);
+    if (this.keys.includes("w") && this.jumpCount > 0) this.player.setState(this.player, stateNum.JUMP_IDLE_LEFT);
     if (this.player.weight < 0) this.player.setState(this.player, stateNum.FALL_IDLE_LEFT);
   }
 }
@@ -129,14 +114,12 @@ export class JumpIdleRight extends playerStates {
     super();
     this.player = player;
     this.keys = this.player.keys;
+    this.jumpCount = this.player.jumpCount;
     this.lastPressKeys = this.player.lastPressKeys;
     this.lastReleaseKeys = this.player.lastReleaseKeys;
   }
   enter() {
     checkStatement.innerHTML = "JumpIdleRight";
-
-    this.player.xSpeedMultiplier = 0;
-    this.player.ySpeed = 1;
   }
   updateState() {
     if (this.keys.includes("d")) this.player.setState(this.player, stateNum.JUMP_RUNNING_RIGHT);
@@ -150,14 +133,12 @@ export class JumpRunningLeft extends playerStates {
     super();
     this.player = player;
     this.keys = this.player.keys;
+    this.jumpCount = this.player.jumpCount;
     this.lastPressKeys = this.player.lastPressKeys;
     this.lastReleaseKeys = this.player.lastReleaseKeys;
   }
   enter() {
     checkStatement.innerHTML = "JumpRunningLeft";
-
-    this.player.xSpeedMultiplier = -0.1;
-    this.player.ySpeed = 1;
   }
   updateState() {
     if (!this.keys.includes("a") && !this.keys.includes("d")) this.player.setState(this.player, stateNum.JUMP_IDLE_LEFT);
@@ -171,14 +152,12 @@ export class JumpRunningRight extends playerStates {
     super();
     this.player = player;
     this.keys = this.player.keys;
+    this.jumpCount = this.player.jumpCount;
     this.lastPressKeys = this.player.lastPressKeys;
     this.lastReleaseKeys = this.player.lastReleaseKeys;
   }
   enter() {
     checkStatement.innerHTML = "JumpRunningRight";
-
-    this.player.xSpeedMultiplier = 0.1;
-    this.player.ySpeed = 1;
   }
   updateState() {
     if (!this.keys.includes("d") && !this.keys.includes("a")) this.player.setState(this.player, stateNum.JUMP_IDLE_RIGHT);
@@ -191,14 +170,12 @@ export class FallIdleLeft extends playerStates {
     super();
     this.player = player;
     this.keys = this.player.keys;
+    this.jumpCount = this.player.jumpCount;
     this.lastPressKeys = this.player.lastPressKeys;
     this.lastReleaseKeys = this.player.lastReleaseKeys;
   }
   enter() {
     checkStatement.innerHTML = "FallIdleLeft";
-
-    this.player.xSpeedMultiplier = 0;
-    this.player.ySpeed = 1;
   }
   updateState() {
     if (this.keys.includes("a") && !this.keys.includes("d")) this.player.setState(this.player, stateNum.FALL_RUNNING_LEFT);
@@ -212,14 +189,12 @@ export class FallIdleRight extends playerStates {
     super();
     this.player = player;
     this.keys = this.player.keys;
+    this.jumpCount = this.player.jumpCount;
     this.lastPressKeys = this.player.lastPressKeys;
     this.lastReleaseKeys = this.player.lastReleaseKeys;
   }
   enter() {
     checkStatement.innerHTML = "FallIdleRight";
-
-    this.player.xSpeedMultiplier = 0;
-    this.player.ySpeed = 1;
   }
   updateState() {
     if (this.keys.includes("d") && !this.keys.includes("a")) this.player.setState(this.player, stateNum.FALL_RUNNING_RIGHT);
@@ -232,14 +207,12 @@ export class FallRunningLeft extends playerStates {
     super();
     this.player = player;
     this.keys = this.player.keys;
+    this.jumpCount = this.player.jumpCount;
     this.lastPressKeys = this.player.lastPressKeys;
     this.lastReleaseKeys = this.player.lastReleaseKeys;
   }
   enter() {
     checkStatement.innerHTML = "FallRunningLeft";
-
-    this.player.xSpeedMultiplier = -0.1;
-    this.player.ySpeed = 1;
   }
   updateState() {
     if (!this.keys.includes("a") && !this.keys.includes("d")) this.player.setState(this.player, stateNum.FALL_IDLE_LEFT);
@@ -252,14 +225,12 @@ export class FallRunningRight extends playerStates {
     super();
     this.player = player;
     this.keys = this.player.keys;
+    this.jumpCount = this.player.jumpCount;
     this.lastPressKeys = this.player.lastPressKeys;
     this.lastReleaseKeys = this.player.lastReleaseKeys;
   }
   enter() {
     checkStatement.innerHTML = "FallRunningRight";
-
-    this.player.xSpeedMultiplier = 0.1;
-    this.player.ySpeed = 1;
   }
   updateState() {
     if (!this.keys.includes("d") && !this.keys.includes("a")) this.player.setState(this.player, stateNum.FALL_IDLE_RIGHT);

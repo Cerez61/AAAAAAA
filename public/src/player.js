@@ -12,7 +12,6 @@ import {
   FallRunningLeft,
   FallRunningRight,
 } from "./playerStateManagement.js";
-import { horizontalSpeed, verticalSpeed } from "./utils/speed.js";
 export class Player {
   constructor(game) {
     //intelisense webgl content
@@ -24,6 +23,7 @@ export class Player {
     this.program = game.program;
     this.mat4 = game.mat4;
     this.keys = game.keys;
+    this.inputHandler = game.inputHandler;
     this.lastPressKeys = game.lastPressKeys;
     this.width = 20;
     this.height = 40;
@@ -31,11 +31,12 @@ export class Player {
     this.x = 0 + this.width;
     this.y = 0 + this.height;
     this.z = 1 + this.depth;
-    this.weight = 20;
-    this.speed = 20;
-    this.xSpeed = 0;
-    this.xSpeedMultiplier = 0;
-    this.ySpeed = 0;
+    this.weight = 0;
+    this.speed = 2;
+    this.vx = 0;
+    this.xSpeedMultiplier = 1;
+    this.vy = 0;
+    this.jumpCount = 2;
 
     this.states = [
       new IdleLeft(this),
@@ -106,23 +107,41 @@ export class Player {
   onGround() {
     return this.y <= this.height;
   }
-  verticalSpeed() {
-    if (this.xSpeed < 1) this.xSpeed += this.xSpeedMultiplier;
-    else this.xSpeed = 1;
+  verticalMovement() {
+    if (this.keys.includes("d") && !this.keys.includes("a") && this.vx < 10) this.vx += this.xSpeedMultiplier;
+    else if (this.keys.includes("a") && !this.keys.includes("d") && this.vx > -10) this.vx -= this.xSpeedMultiplier;
+    else if (!this.keys.includes("d") && this.vx > 0) this.vx -= this.xSpeedMultiplier;
+    else if (!this.keys.includes("a") && this.vx < 0) this.vx += this.xSpeedMultiplier;
+    else if (!this.keys.includes("d") && !this.keys.includes("a")) this.vx = 0;
+  }
+  horizontalMovement() {
+    if (this.y + this.weight <= this.height) this.y = this.height;
 
-    if (this.xSpeedMultiplier === 0) this.xSpeed = 0;
+    if (this.onGround()) {
+      this.vy = 0;
+      this.weight = 0;
+      this.jumpCount = 2;
+    }
+
+    if (this.lastPressKeys[0] === "w" && this.jumpCount > 0) {
+      this.jumpCount--;
+      this.vy = 1;
+      this.lastPressKeys[0] = null;
+    }
+    if (this.keys.includes("w")) {
+      this.weight += 3;
+    } else this.weight -= 3;
   }
   update() {
     this.currentState.updateState();
 
-    this.verticalSpeed();
+    this.verticalMovement();
+    this.horizontalMovement();
 
-    this.x += this.xSpeed * this.speed;
+    this.x += this.vx * this.speed;
+    this.y += this.vy * this.weight;
 
-    if (!this.onGround()) this.weight -= 1;
-
-    this.y += this.ySpeed * this.weight;
-
+    console.log(this.y);
     this.mat4.translate(this.viewMatrix, [this.x, this.y, 0]);
     this.mat4.multiply(this.mvMatrix, this.viewMatrix, this.modelMatrix);
     this.mat4.multiply(this.finalMatrix, this.orthoMatrix, this.mvMatrix);
