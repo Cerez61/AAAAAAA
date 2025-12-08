@@ -32,6 +32,7 @@ export class Player {
     this.y = 0 + this.height;
     this.z = 1 + this.depth;
     this.weight = 0;
+    this.jumpHeight = 10;
     this.speed = 2;
     this.vx = 0;
     this.xSpeedMultiplier = 1;
@@ -120,15 +121,19 @@ export class Player {
     if (this.onGround()) {
       this.vy = 0;
       this.weight = 0;
+      this.jumpHeight = 10;
       this.jumpCount = 2;
     }
 
     if (this.lastPressKeys[0] === "w" && this.jumpCount > 0) {
       this.jumpCount--;
       this.vy = 1;
+      this.jumpHeight = 10;
+      this.weight = 0;
       this.lastPressKeys[0] = null;
     }
-    if (this.keys.includes("w")) {
+    if (this.keys.includes("w") && this.jumpHeight > 0) {
+      this.jumpHeight--;
       this.weight += 3;
     } else this.weight -= 3;
   }
