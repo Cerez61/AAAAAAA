@@ -146,7 +146,6 @@ export class Player {
     this.x += this.vx * this.speed;
     this.y += this.vy * this.weight;
 
-    console.log(this.y);
     this.mat4.translate(this.viewMatrix, [this.x, this.y, 0]);
     this.mat4.multiply(this.mvMatrix, this.viewMatrix, this.modelMatrix);
     this.mat4.multiply(this.finalMatrix, this.orthoMatrix, this.mvMatrix);
