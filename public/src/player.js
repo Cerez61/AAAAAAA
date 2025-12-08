@@ -33,7 +33,7 @@ export class Player {
     this.z = 1 + this.depth;
     this.weight = 0;
     this.jumpHeight = 10;
-    this.speed = 2;
+    this.speed = 1.5;
     this.vx = 0;
     this.xSpeedMultiplier = 1;
     this.vy = 0;
@@ -149,6 +149,8 @@ export class Player {
     this.mat4.translate(this.viewMatrix, [this.x, this.y, 0]);
     this.mat4.multiply(this.mvMatrix, this.viewMatrix, this.modelMatrix);
     this.mat4.multiply(this.finalMatrix, this.orthoMatrix, this.mvMatrix);
+
+    this.lastPressKeys[0] = null;
   }
   draw() {
     this.gl.useProgram(this.program);

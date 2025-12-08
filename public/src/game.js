@@ -14,11 +14,11 @@ export class Game {
     this.lastReleaseKeys = [];
     this.inputHandler = new InputHandler(this);
     this.player = new Player(this);
-    this.gameFrame = 100;
+    this.gameFrame = 1000;
     this.gameInterval = 1000 / this.gameFrame;
     this.lastFrame = 0;
   }
-  update() {
+  update(deltaTime) {
     this.player.update();
   }
   draw(deltaTime) {

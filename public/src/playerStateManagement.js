@@ -179,11 +179,10 @@ export class FallIdleLeft extends playerStates {
   updateState() {
     if (this.keys.includes("a") && !this.keys.includes("d")) this.player.setState(this.player, stateNum.FALL_RUNNING_LEFT);
     if (!this.keys.includes("a") && this.keys.includes("d")) this.player.setState(this.player, stateNum.FALL_RUNNING_RIGHT);
-    if (this.lastPressKeys[0] === "w" && this.jumpCount > 0) this.player.setState(this.player, stateNum.JUMP_IDLE_LEFT);
+    if (this.lastPressKeys[0] === "w" && this.player.jumpCount > 0 && !this.player.onGround()) this.player.setState(this.player, stateNum.JUMP_IDLE_LEFT);
     if (this.player.onGround()) this.player.setState(this.player, stateNum.IDLE_LEFT);
   }
 }
-
 export class FallIdleRight extends playerStates {
   constructor(player) {
     super();
@@ -199,7 +198,7 @@ export class FallIdleRight extends playerStates {
   updateState() {
     if (this.keys.includes("d") && !this.keys.includes("a")) this.player.setState(this.player, stateNum.FALL_RUNNING_RIGHT);
     if (!this.keys.includes("d") && this.keys.includes("a")) this.player.setState(this.player, stateNum.FALL_RUNNING_LEFT);
-    if (this.lastPressKeys[0] === "w" && this.jumpCount > 0) this.player.setState(this.player, stateNum.JUMP_IDLE_RIGHT);
+    if (this.lastPressKeys[0] === "w" && this.player.jumpCount > 0 && !this.player.onGround()) this.player.setState(this.player, stateNum.JUMP_IDLE_RIGHT);
     if (this.player.onGround()) this.player.setState(this.player, stateNum.IDLE_RIGHT);
   }
 }
@@ -218,7 +217,7 @@ export class FallRunningLeft extends playerStates {
   updateState() {
     if (!this.keys.includes("a") && !this.keys.includes("d")) this.player.setState(this.player, stateNum.FALL_IDLE_LEFT);
     if (!this.keys.includes("a") && this.keys.includes("d")) this.player.setState(this.player, stateNum.FALL_RUNNING_RIGHT);
-    if (this.lastPressKeys[0] === "w" && this.jumpCount > 0) this.player.setState(this.player, stateNum.JUMP_RUNNING_LEFT);
+    if (this.lastPressKeys[0] === "w" && this.player.jumpCount > 0 && !this.player.onGround()) this.player.setState(this.player, stateNum.JUMP_RUNNING_LEFT);
     if (this.player.onGround()) this.player.setState(this.player, stateNum.RUNNING_LEFT);
   }
 }
@@ -237,7 +236,7 @@ export class FallRunningRight extends playerStates {
   updateState() {
     if (!this.keys.includes("d") && !this.keys.includes("a")) this.player.setState(this.player, stateNum.FALL_IDLE_RIGHT);
     if (!this.keys.includes("d") && this.keys.includes("a")) this.player.setState(this.player, stateNum.FALL_RUNNING_LEFT);
-    if (this.lastPressKeys[0] === "w" && this.jumpCount > 0) this.player.setState(this.player, stateNum.JUMP_RUNNING_RIGHT);
+    if (this.lastPressKeys[0] === "w" && this.player.jumpCount > 0 && !this.player.onGround()) this.player.setState(this.player, stateNum.JUMP_RUNNING_RIGHT);
     if (this.player.onGround()) this.player.setState(this.player, stateNum.RUNNING_RIGHT);
   }
 }
