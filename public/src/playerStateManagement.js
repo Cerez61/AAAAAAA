@@ -31,6 +31,7 @@ export class IdleLeft extends playerStates {
     if (this.keys.includes("d") && !this.keys.includes("a")) this.player.setState(this.player, stateNum.RUNNING_RIGHT);
     if (this.keys.includes("a") && !this.keys.includes("d")) this.player.setState(this.player, stateNum.RUNNING_LEFT);
     if (this.lastPressKeys[0] === "w" && this.player.onGround()) this.player.setState(this.player, stateNum.JUMP_IDLE_LEFT);
+    if (!this.player.onGround()) this.player.setState(this.player, stateNum.JUMP_IDLE_LEFT);
   }
 }
 
@@ -49,6 +50,7 @@ export class IdleRight extends playerStates {
     if (this.keys.includes("d") && !this.keys.includes("a")) this.player.setState(this.player, stateNum.RUNNING_RIGHT);
     if (this.keys.includes("a") && !this.keys.includes("d")) this.player.setState(this.player, stateNum.RUNNING_LEFT);
     if (this.lastPressKeys[0] === "w" && this.player.onGround()) this.player.setState(this.player, stateNum.JUMP_IDLE_RIGHT);
+    if (!this.player.onGround()) this.player.setState(this.player, stateNum.JUMP_IDLE_RIGHT);
   }
 }
 export class RunningLeft extends playerStates {
@@ -68,6 +70,7 @@ export class RunningLeft extends playerStates {
     if (!this.keys.includes("a") && !this.keys.includes("d")) this.player.setState(this.player, stateNum.IDLE_LEFT);
     if (!this.keys.includes("a") && this.keys.includes("d")) this.player.setState(this.player, stateNum.RUNNING_RIGHT);
     if (this.lastPressKeys[0] === "w" && this.player.onGround()) this.player.setState(this.player, stateNum.JUMP_RUNNING_LEFT);
+    if (!this.player.onGround()) this.player.setState(this.player, stateNum.JUMP_RUNNING_LEFT);
   }
 }
 
@@ -86,6 +89,7 @@ export class RunningRight extends playerStates {
     if (!this.keys.includes("d") && !this.keys.includes("a")) this.player.setState(this.player, stateNum.IDLE_RIGHT);
     if (!this.keys.includes("d") && this.keys.includes("a")) this.player.setState(this.player, stateNum.RUNNING_LEFT);
     if (this.lastPressKeys[0] === "w" && this.player.onGround()) this.player.setState(this.player, stateNum.JUMP_RUNNING_RIGHT);
+    if (!this.player.onGround()) this.player.setState(this.player, stateNum.JUMP_RUNNING_RIGHT);
   }
 }
 
