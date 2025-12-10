@@ -64,9 +64,8 @@ export class Player {
     this.viewMatrix = this.camera.cameraMatrix;
     this.mvMatrix = this.mat4.identity();
     this.orthoMatrix = this.mat4.ortho(0, this.gl.canvas.width, 0, this.gl.canvas.height, -100, 100);
-    this.finalMatrix = this.mat4.identity();
+    this.mvoMatrix = this.mat4.identity();
 
-    console.log(this.camera);
     this.vertexData = this.createVertexData();
 
     this.playerVAO = this.gl.createVertexArray();
@@ -153,22 +152,19 @@ export class Player {
 
     this.mat4.translate(this.viewMatrix, [this.x, this.y, 0]);
     this.mat4.multiply(this.mvMatrix, this.viewMatrix, this.modelMatrix);
-    this.mat4.multiply(this.finalMatrix, this.orthoMatrix, this.mvMatrix);
+    this.mat4.multiply(this.mvoMatrix, this.orthoMatrix, this.mvMatrix);
 
     this.lastPressKeys[0] = null;
 
     if (this.vx > 0) this.camera.x += 0.00001;
     else if (this.vx < 0) this.camera.x -= 0.00001;
     this.viewMatrix = this.camera.cameraMatrix;
-    console.log(this.viewMatrix);
   }
   draw() {
     this.gl.useProgram(this.program);
 
-    this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-
     this.gl.bindVertexArray(this.playerVAO);
-    this.gl.uniformMatrix4fv(this.matrixLoc, false, this.finalMatrix);
+    this.gl.uniformMatrix4fv(this.matrixLoc, false, this.mvoMatrix);
     this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexData.length / 3);
     this.gl.bindVertexArray(null);
   }

@@ -58,6 +58,9 @@ function animate(timeStamp) {
   game.update(deltaTime);
   game.draw();
 
+  console.log(gl.getShaderInfoLog(gameVS));
+  console.log(gl.getShaderInfoLog(gameFS));
+
   requestAnimationFrame(animate);
 }
 animate(0);
