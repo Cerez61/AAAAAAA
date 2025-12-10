@@ -15,8 +15,8 @@ export class BackGround {
 
     this.width = this.image.width;
     this.height = this.image.height;
-    this.x = this.width;
-    this.y = this.height;
+    this.x = this.width / 2;
+    this.y = this.height / 2;
     this.z = -1;
     this.mat4 = new MAT4();
 
@@ -30,25 +30,33 @@ export class BackGround {
     this.uvData = this.createUVCoord();
     this.bgVAO = this.gl.createVertexArray();
 
+    this.setupBackground();
+
+    this.mat4.scale(this.modelMatrix, [this.width / 2, this.height / 2, 0]);
+    this.mat4.translate(this.viewMatrix, [this.x, this.y, this.z]);
+
+    this.matrixLoc = this.gl.getUniformLocation(this.program, "uMatrix");
+  }
+  setupBackground() {
     this.gl.bindVertexArray(this.bgVAO);
 
-    this.positionBuffer = this.gl.createBuffer();
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
+    const positionBuffer = this.gl.createBuffer();
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, positionBuffer);
     this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.bgPosition), this.gl.STATIC_DRAW);
 
     this.gl.vertexAttribPointer(0, 2, this.gl.FLOAT, false, 0, 0);
     this.gl.enableVertexAttribArray(0);
 
-    this.texCoordBuffer = this.gl.createBuffer();
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.texCoordBuffer);
+    const texCoordBuffer = this.gl.createBuffer();
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, texCoordBuffer);
     this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.uvData), this.gl.STATIC_DRAW);
 
     this.gl.vertexAttribPointer(1, 2, this.gl.FLOAT, false, 0, 0);
     this.gl.enableVertexAttribArray(1);
 
-    this.texture = this.gl.createTexture();
-    this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
-    this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGB, 2400, 720, 0, this.gl.RGB, this.gl.UNSIGNED_BYTE, this.image);
+    const texture = this.gl.createTexture();
+    this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
+    this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGB, this.width, this.height, 0, this.gl.RGB, this.gl.UNSIGNED_BYTE, this.image);
 
     this.gl.pixelStorei(this.gl.UNPACK_FLIP_Y_WEBGL, true);
     this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.NEAREST);
@@ -56,12 +64,8 @@ export class BackGround {
 
     this.gl.bindVertexArray(null);
 
-    this.mat4.scale(this.modelMatrix, [this.width, this.height, 0]);
-    this.mat4.translate(this.viewMatrix, [this.x, this.y, this.z]);
-
-    this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
+    this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
     this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGB, this.gl.RGB, this.gl.UNSIGNED_BYTE, this.image);
-    this.matrixLoc = this.gl.getUniformLocation(this.program, "uMatrix");
   }
   createUVCoord() {
     /* prettier-ignore */
@@ -94,13 +98,17 @@ export class BackGround {
     });
   }
   update() {
+    this.mat4.translate(this.viewMatrix, [this.x, this.y, this.z]);
+
     this.mat4.multiply(this.mvMatrix, this.viewMatrix, this.modelMatrix);
     this.mat4.multiply(this.mvoMatrix, this.orthoMatrix, this.mvMatrix);
   }
   draw() {
     this.gl.bindVertexArray(this.bgVAO);
+
     this.gl.uniformMatrix4fv(this.matrixLoc, false, this.mvoMatrix);
-    this.gl.drawArrays(this.gl.TRIANGLES, 0, this.bgPosition.length / 3);
+    this.gl.drawArrays(this.gl.TRIANGLES, 0, this.bgPosition.length / 2);
+
     this.gl.bindVertexArray(null);
   }
 }

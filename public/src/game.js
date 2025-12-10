@@ -20,16 +20,19 @@ export class Game {
     this.camera = new Camera();
     this.player = new Player(this);
     this.backgrounds = [new BackGround(this.program, this.gl, "../assets/background_1.png")];
+
+    /*
     this.gameFrame = 1000;
     this.gameInterval = 1000 / this.gameFrame;
     this.lastFrame = 0;
+    */
   }
-  update(deltaTime) {
+  update() {
     this.player.update();
     this.camera.update();
-    this.backgrounds.forEach((background) => background.draw());
+    this.backgrounds.forEach((background) => background.update());
   }
-  draw(deltaTime) {
+  draw() {
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
     this.player.draw();
     this.backgrounds.forEach((background) => background.draw());

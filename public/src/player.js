@@ -67,6 +67,7 @@ export class Player {
     this.mvoMatrix = this.mat4.identity();
 
     this.vertexData = this.createVertexData();
+    this.uvData = this.createuvData();
 
     this.playerVAO = this.gl.createVertexArray();
 
@@ -82,6 +83,12 @@ export class Player {
     this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.vertexData), this.gl.STATIC_DRAW);
     this.gl.vertexAttribPointer(0, 3, this.gl.FLOAT, false, 0, 0);
     this.gl.enableVertexAttribArray(0);
+
+    const texture = this.gl.createTexture();
+
+    const pixels = new Float32Array([255, 0, 0, 255]);
+    this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
+    this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGB, this.width, this.height, 0, this.gl.RGB, this.gl.UNSIGNED_BYTE, pixels);
     this.gl.bindVertexArray(null);
 
     this.mat4.scale(this.modelMatrix, [this.width, this.height, 0]);
@@ -104,6 +111,17 @@ export class Player {
         // v4
         1,1,1
     ];
+  }
+  createuvData() {
+    /* prettier-ignore */
+    return [
+      0,0,
+      1,0,
+      0,1,
+      0,1,
+      1,0,
+      0,0
+    ]
   }
   setState(player, state) {
     player.currentState = player.states[state];
@@ -156,6 +174,8 @@ export class Player {
 
     this.lastPressKeys[0] = null;
 
+    //it didn't happen like I wanted
+    //ı want when ı move player camera follow the player but it didn't
     if (this.vx > 0) this.camera.x += 0.00001;
     else if (this.vx < 0) this.camera.x -= 0.00001;
     this.viewMatrix = this.camera.cameraMatrix;

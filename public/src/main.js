@@ -52,15 +52,19 @@ const game = new Game(program, gl);
 
 let lastTime = 0;
 function animate(timeStamp) {
-  const deltaTime = timeStamp - lastTime;
+  const deltaTime = timeStamp - lastTime || 1;
   lastTime = timeStamp;
 
   game.update(deltaTime);
   game.draw();
 
+  /*
   console.log(gl.getShaderInfoLog(gameVS));
   console.log(gl.getShaderInfoLog(gameFS));
+*/
 
+  //just now later ı'll create seperate ui class and make this process in inside of ui class
+  fps.innerHTML = Math.round(1000 / deltaTime) + " FPS";
   requestAnimationFrame(animate);
 }
 animate(0);
