@@ -1,18 +1,21 @@
 import { Player } from "./player.js";
+import { Camera } from "./camera.js";
 import { InputHandler } from "./inputHandler.js";
+import { MAT4 } from "./utils/matrix.js";
 export class Game {
-  constructor(program, gl, mat4) {
+  constructor(program, gl) {
     //intelisense webgl content
     /**
      * @type {WebGL2RenderingContext}
      */
     this.program = program;
     this.gl = gl;
-    this.mat4 = mat4;
+    this.mat4 = new MAT4();
     this.keys = [];
     this.lastPressKeys = [];
     this.lastReleaseKeys = [];
     this.inputHandler = new InputHandler(this);
+    this.camera = new Camera();
     this.player = new Player(this);
     this.gameFrame = 1000;
     this.gameInterval = 1000 / this.gameFrame;
@@ -20,6 +23,7 @@ export class Game {
   }
   update(deltaTime) {
     this.player.update();
+    this.camera.update();
   }
   draw(deltaTime) {
     this.player.draw();

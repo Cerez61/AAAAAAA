@@ -48,10 +48,7 @@ gl.useProgram(program);
 //this line compare the z coord of the vertexs with each other and determines which vertex will visible upper to other one
 gl.enable(gl.DEPTH_TEST);
 
-//add matrix class
-const mat4 = new MAT4();
-
-const game = new Game(program, gl, mat4);
+const game = new Game(program, gl);
 
 let lastTime = 0;
 function animate(timeStamp) {

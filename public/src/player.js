@@ -12,6 +12,8 @@ import {
   FallRunningLeft,
   FallRunningRight,
 } from "./playerStateManagement.js";
+import { MAT4 } from "./utils/matrix.js";
+
 export class Player {
   constructor(game) {
     //intelisense webgl content
@@ -20,11 +22,13 @@ export class Player {
      */
 
     this.gl = game.gl;
-    this.program = game.program;
-    this.mat4 = game.mat4;
-    this.keys = game.keys;
-    this.inputHandler = game.inputHandler;
-    this.lastPressKeys = game.lastPressKeys;
+    this.game = game;
+    this.program = this.game.program;
+    this.keys = this.game.keys;
+    this.inputHandler = this.game.inputHandler;
+    this.lastPressKeys = this.game.lastPressKeys;
+    this.camera = this.game.camera;
+    this.mat4 = new MAT4();
     this.width = 20;
     this.height = 40;
     this.depth = 0;
@@ -57,11 +61,12 @@ export class Player {
     this.currentState.enter();
 
     this.modelMatrix = this.mat4.identity();
-    this.viewMatrix = this.mat4.identity();
+    this.viewMatrix = this.camera.cameraMatrix;
     this.mvMatrix = this.mat4.identity();
     this.orthoMatrix = this.mat4.ortho(0, this.gl.canvas.width, 0, this.gl.canvas.height, -100, 100);
     this.finalMatrix = this.mat4.identity();
 
+    console.log(this.camera);
     this.vertexData = this.createVertexData();
 
     this.playerVAO = this.gl.createVertexArray();
@@ -151,6 +156,11 @@ export class Player {
     this.mat4.multiply(this.finalMatrix, this.orthoMatrix, this.mvMatrix);
 
     this.lastPressKeys[0] = null;
+
+    if (this.vx > 0) this.camera.x += 0.00001;
+    else if (this.vx < 0) this.camera.x -= 0.00001;
+    this.viewMatrix = this.camera.cameraMatrix;
+    console.log(this.viewMatrix);
   }
   draw() {
     this.gl.useProgram(this.program);
