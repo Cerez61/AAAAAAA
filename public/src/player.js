@@ -71,6 +71,9 @@ export class Player {
 
     this.playerVAO = this.gl.createVertexArray();
 
+    this.texture = this.gl.createTexture();
+
+    this.vertexBuffer = this.gl.createBuffer();
     this.setupPlayer();
 
     this.matrixLoc = this.gl.getUniformLocation(this.program, "uMatrix");
@@ -78,17 +81,21 @@ export class Player {
   setupPlayer() {
     this.gl.bindVertexArray(this.playerVAO);
 
-    const vertexBuffer = this.gl.createBuffer();
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, vertexBuffer);
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexBuffer);
     this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.vertexData), this.gl.STATIC_DRAW);
     this.gl.vertexAttribPointer(0, 3, this.gl.FLOAT, false, 0, 0);
     this.gl.enableVertexAttribArray(0);
 
-    const texture = this.gl.createTexture();
+    const pixels = new Uint8Array([
+      255, 255, 0, 255, 0, 255, 255, 0, 255, 255, 255, 0, 255, 0, 0, 255, 255, 0, 255, 0, 0, 255, 0, 0, 255, 0, 0, 255, 0, 0, 255, 0, 0, 255, 0, 0,
+      255, 0, 0, 255, 0, 0, 255, 0, 0, 255, 0, 0,
+    ]);
+    this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
+    this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGB, 4, 4, 0, this.gl.RGB, this.gl.UNSIGNED_BYTE, pixels);
 
-    const pixels = new Float32Array([255, 0, 0, 255]);
-    this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
-    this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGB, this.width, this.height, 0, this.gl.RGB, this.gl.UNSIGNED_BYTE, pixels);
+    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.LINEAR);
+    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.LINEAR);
+
     this.gl.bindVertexArray(null);
 
     this.mat4.scale(this.modelMatrix, [this.width, this.height, 0]);
@@ -184,6 +191,7 @@ export class Player {
     this.gl.useProgram(this.program);
 
     this.gl.bindVertexArray(this.playerVAO);
+    this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
     this.gl.uniformMatrix4fv(this.matrixLoc, false, this.mvoMatrix);
     this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexData.length / 3);
     this.gl.bindVertexArray(null);

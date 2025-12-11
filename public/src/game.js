@@ -19,7 +19,7 @@ export class Game {
     this.inputHandler = new InputHandler(this);
     this.camera = new Camera();
     this.player = new Player(this);
-    this.backgrounds = [new BackGround(this.program, this.gl, "../assets/background_1.png")];
+    this.backgrounds = [new BackGround(this.program, this.gl, this.player, "../assets/background_1.png")];
 
     /*
     this.gameFrame = 1000;

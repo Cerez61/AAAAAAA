@@ -8,7 +8,8 @@ export class Camera {
     this.mat4.lookAt(this.cameraMatrix, [this.x, this.y, 0.5], [0, 0, 0], [0, 1, 0]);
   }
   update() {
-    this.mat4.lookAt(this.cameraMatrix, [this.x, this.y, 0.5], [0, 0, 0], [0, 1, 0]);
+    this.x += 0.001;
+    this.mat4.lookAt(this.cameraMatrix, [0, this.y, 0.5], [0, 0, 0], [0, 1, 0]);
   }
   draw() {}
 }
