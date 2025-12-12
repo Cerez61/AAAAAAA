@@ -1,4 +1,4 @@
-import { MAT4 } from "./matrix.js";
+import { MAT4 } from "./utils/matrix.js";
 export class BackGround {
   constructor(program, gl, player, src) {
     //intelisense webgl content

@@ -1,6 +1,6 @@
 import { Player } from "./player.js";
 import { Camera } from "./camera.js";
-import { BackGround } from "./utils/background.js";
+import { BackGround } from "./background.js";
 import { InputHandler } from "./inputHandler.js";
 import { MAT4 } from "./utils/matrix.js";
 
