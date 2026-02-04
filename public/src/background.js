@@ -16,10 +16,10 @@ export class BackGround {
     this.image.src = this.src;
     //this.loadImage();
 
-    this.width = this.image.width;
-    this.height = this.image.height;
-    this.x = this.width / 2;
-    this.y = this.height / 2;
+    this.width = this.image.width / 2;
+    this.height = this.image.height / 2;
+    this.x = this.width;
+    this.y = this.height;
     this.z = -5;
     this.speed = 10;
 
@@ -42,7 +42,7 @@ export class BackGround {
 
     this.setupBackground();
 
-    this.mat4.scale(this.modelMatrix, [this.width / 2, this.height / 2, 0]);
+    this.mat4.scale(this.modelMatrix, [this.width, this.height, 0]);
     this.mat4.translate(this.viewMatrix, [this.x, this.y, this.z]);
 
     this.matrixLoc = this.gl.getUniformLocation(this.program, "uMatrix");
@@ -106,7 +106,6 @@ export class BackGround {
   }
   update() {
     this.mat4.translate(this.modelMatrix, [this.x, this.y, this.z]);
-    console.log(this.width);
   }
   draw() {
     this.gl.bindVertexArray(this.bgVAO);

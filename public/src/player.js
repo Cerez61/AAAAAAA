@@ -137,14 +137,14 @@ export class Player {
   onGround() {
     return this.y <= this.height;
   }
-  verticalMovement() {
+  horizontalMovement() {
     if (this.keys.includes("d") && !this.keys.includes("a") && this.vx < 10) this.vx += this.xSpeedMultiplier;
     else if (this.keys.includes("a") && !this.keys.includes("d") && this.vx > -10) this.vx -= this.xSpeedMultiplier;
     else if (!this.keys.includes("d") && this.vx > 0) this.vx -= this.xSpeedMultiplier;
     else if (!this.keys.includes("a") && this.vx < 0) this.vx += this.xSpeedMultiplier;
     else if (!this.keys.includes("d") && !this.keys.includes("a")) this.vx = 0;
   }
-  horizontalMovement() {
+  verticalMovement() {
     if (this.y + this.weight <= this.height) this.y = this.height;
 
     if (this.onGround()) {
@@ -169,8 +169,8 @@ export class Player {
   update() {
     this.currentState.updateState();
 
-    this.verticalMovement();
     this.horizontalMovement();
+    this.verticalMovement();
 
     this.x += this.vx * this.speed;
     this.y += this.vy * this.weight;
