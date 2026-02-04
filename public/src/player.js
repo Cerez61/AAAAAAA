@@ -32,9 +32,9 @@ export class Player {
     this.width = 20;
     this.height = 40;
     this.depth = 0;
-    this.x = 0 + this.width;
-    this.y = 0 + this.height;
-    this.z = 1 + this.depth;
+    this.x = this.width + this.gl.canvas.width / 4;
+    this.y = this.height + 40;
+    this.z = this.depth;
     this.weight = 0;
     this.jumpHeight = 10;
     this.speed = 1.5;
@@ -61,9 +61,9 @@ export class Player {
     this.currentState.enter();
 
     this.modelMatrix = this.mat4.identity();
-    this.viewMatrix = this.camera.cameraMatrix;
+    this.viewMatrix = this.camera.viewMatrix;
     this.mvMatrix = this.mat4.identity();
-    this.orthoMatrix = this.mat4.ortho(0, this.gl.canvas.width, 0, this.gl.canvas.height, -100, 100);
+    this.orthoMatrix = this.camera.orthoMatrix;
     this.mvoMatrix = this.mat4.identity();
 
     this.vertexData = this.createVertexData();
@@ -99,7 +99,7 @@ export class Player {
     this.gl.bindVertexArray(null);
 
     this.mat4.scale(this.modelMatrix, [this.width, this.height, 0]);
-    this.mat4.translate(this.viewMatrix, [this.x, this.y, this.z]);
+    this.mat4.translate(this.modelMatrix, [this.x, this.y, this.z]);
   }
   createVertexData() {
     /* prettier-ignore */
@@ -175,23 +175,20 @@ export class Player {
     this.x += this.vx * this.speed;
     this.y += this.vy * this.weight;
 
-    this.mat4.translate(this.viewMatrix, [this.x, this.y, 0]);
-    this.mat4.multiply(this.mvMatrix, this.viewMatrix, this.modelMatrix);
-    this.mat4.multiply(this.mvoMatrix, this.orthoMatrix, this.mvMatrix);
+    this.mat4.translate(this.modelMatrix, [this.x, this.y, 0]);
 
+    console.log(this.x);
     this.lastPressKeys[0] = null;
-
-    //it didn't happen like I wanted
-    //ı want when ı move player camera follow the player but it didn't
-    if (this.vx > 0) this.camera.x += 0.00001;
-    else if (this.vx < 0) this.camera.x -= 0.00001;
-    this.viewMatrix = this.camera.cameraMatrix;
   }
   draw() {
     this.gl.useProgram(this.program);
 
     this.gl.bindVertexArray(this.playerVAO);
     this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
+
+    this.mat4.multiply(this.mvMatrix, this.viewMatrix, this.modelMatrix);
+    this.mat4.multiply(this.mvoMatrix, this.orthoMatrix, this.mvMatrix);
+
     this.gl.uniformMatrix4fv(this.matrixLoc, false, this.mvoMatrix);
     this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexData.length / 3);
     this.gl.bindVertexArray(null);

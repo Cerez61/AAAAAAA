@@ -1,13 +1,15 @@
 import { MAT4 } from "./utils/matrix.js";
 export class BackGround {
-  constructor(program, gl, player, src) {
+  constructor(game, src) {
     //intelisense webgl content
     /**
      * @type {WebGL2RenderingContext}
      */
-    this.gl = gl;
-    this.program = program;
-    this.player = player;
+    this.game = game;
+    this.gl = this.game.gl;
+    this.program = this.game.program;
+    this.player = this.game.player;
+    this.camera = this.game.camera;
 
     this.image = new Image();
     this.src = src;
@@ -18,21 +20,21 @@ export class BackGround {
     this.height = this.image.height;
     this.x = this.width / 2;
     this.y = this.height / 2;
-    this.z = -1;
+    this.z = -5;
     this.speed = 10;
 
     this.mat4 = new MAT4();
 
     this.modelMatrix = this.mat4.identity();
-    this.viewMatrix = this.mat4.identity();
+    this.viewMatrix = this.camera.viewMatrix;
     this.mvMatrix = this.mat4.identity();
-    this.orthoMatrix = this.mat4.ortho(0, this.gl.canvas.width, 0, this.gl.canvas.height, -100, 100);
+    this.orthoMatrix = this.camera.orthoMatrix;
     this.mvoMatrix = this.mat4.identity();
 
     this.bgPosition = this.createPosition();
     this.uvData = this.createUVCoord();
-    this.bgVAO = this.gl.createVertexArray();
 
+    this.bgVAO = this.gl.createVertexArray();
     this.texture = this.gl.createTexture();
 
     this.texCoordBuffer = this.gl.createBuffer();
@@ -103,22 +105,16 @@ export class BackGround {
     });
   }
   update() {
-    if (this.player.vx > 0) {
-      this.x -= (this.player.vx * this.speed) / 10;
-    } else if (this.player.vx < 0) {
-      this.x -= (this.player.vx * this.speed) / 10;
-    }
-
-    console.log(this.x);
-    this.mat4.translate(this.viewMatrix, [this.x, this.y, this.z]);
-
-    this.mat4.multiply(this.mvMatrix, this.viewMatrix, this.modelMatrix);
-    this.mat4.multiply(this.mvoMatrix, this.orthoMatrix, this.mvMatrix);
+    this.mat4.translate(this.modelMatrix, [this.x, this.y, this.z]);
+    console.log(this.width);
   }
   draw() {
     this.gl.bindVertexArray(this.bgVAO);
 
     this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
+
+    this.mat4.multiply(this.mvMatrix, this.viewMatrix, this.modelMatrix);
+    this.mat4.multiply(this.mvoMatrix, this.orthoMatrix, this.mvMatrix);
 
     this.gl.uniformMatrix4fv(this.matrixLoc, false, this.mvoMatrix);
     this.gl.drawArrays(this.gl.TRIANGLES, 0, this.bgPosition.length / 3);

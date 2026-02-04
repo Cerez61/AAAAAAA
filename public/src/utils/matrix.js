@@ -76,9 +76,9 @@ export class MAT4 {
     const y = n[1] || 0;
     const z = n[2] || 0;
 
-    out[12] = out[0] * x + out[4] * y + out[8] * z;
-    out[13] = out[1] * x + out[5] * y + out[9] * z;
-    out[14] = out[2] * x + out[6] * y + out[10] * z;
+    out[12] = x;
+    out[13] = y;
+    out[14] = z;
   }
   lookAt(out, eye, center, up) {
     let x0, x1, x2, y0, y1, y2, z0, z1, z2, len;
