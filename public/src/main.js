@@ -1,5 +1,4 @@
 import { gameVSS, gameFSS } from "./shaders.js";
-import { MAT4 } from "./utils/matrix.js";
 import { Game } from "./game.js";
 
 /**

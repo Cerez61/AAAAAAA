@@ -24,8 +24,8 @@ export class Player {
     this.gl = game.gl;
     this.game = game;
     this.program = this.game.program;
-    this.keys = this.game.keys;
     this.inputHandler = this.game.inputHandler;
+    this.keys = this.game.keys;
     this.lastPressKeys = this.game.lastPressKeys;
     this.camera = this.game.camera;
     this.mat4 = new MAT4();
@@ -38,6 +38,7 @@ export class Player {
     this.weight = 0;
     this.jumpHeight = 10;
     this.speed = 1.5;
+    this.maxSpeed = 10;
     this.vx = 0;
     this.xSpeedMultiplier = 1;
     this.vy = 0;
@@ -87,8 +88,8 @@ export class Player {
     this.gl.enableVertexAttribArray(0);
 
     const pixels = new Uint8Array([
-      255, 255, 0, 255, 0, 255, 255, 0, 255, 255, 255, 0, 255, 0, 0, 255, 255, 0, 255, 0, 0, 255, 0, 0, 255, 0, 0, 255, 0, 0, 255, 0, 0, 255, 0, 0,
-      255, 0, 0, 255, 0, 0, 255, 0, 0, 255, 0, 0,
+      0, 0, 0, 255, 0, 0, 255, 0, 255, 255, 255, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 255, 0, 0, 255, 0, 0, 255, 0, 0, 0, 0,
+      0, 0, 0, 0, 255, 0, 0,
     ]);
     this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
     this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGB, 4, 4, 0, this.gl.RGB, this.gl.UNSIGNED_BYTE, pixels);
@@ -138,8 +139,8 @@ export class Player {
     return this.y <= this.height;
   }
   horizontalMovement() {
-    if (this.keys.includes("d") && !this.keys.includes("a") && this.vx < 10) this.vx += this.xSpeedMultiplier;
-    else if (this.keys.includes("a") && !this.keys.includes("d") && this.vx > -10) this.vx -= this.xSpeedMultiplier;
+    if (this.keys.includes("d") && !this.keys.includes("a") && this.vx < this.maxSpeed) this.vx += this.xSpeedMultiplier;
+    else if (this.keys.includes("a") && !this.keys.includes("d") && this.vx > -this.maxSpeed) this.vx -= this.xSpeedMultiplier;
     else if (!this.keys.includes("d") && this.vx > 0) this.vx -= this.xSpeedMultiplier;
     else if (!this.keys.includes("a") && this.vx < 0) this.vx += this.xSpeedMultiplier;
     else if (!this.keys.includes("d") && !this.keys.includes("a")) this.vx = 0;
@@ -177,7 +178,6 @@ export class Player {
 
     this.mat4.translate(this.modelMatrix, [this.x, this.y, 0]);
 
-    console.log(this.x);
     this.lastPressKeys[0] = null;
   }
   draw() {

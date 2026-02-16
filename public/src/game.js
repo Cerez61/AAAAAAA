@@ -2,7 +2,7 @@ import { Player } from "./player.js";
 import { Camera } from "./camera.js";
 import { BackGround } from "./background.js";
 import { InputHandler } from "./inputHandler.js";
-import { MAT4 } from "./utils/matrix.js";
+import { GameState } from "./gameStates.js";
 
 export class Game {
   constructor(program, gl) {
@@ -12,20 +12,14 @@ export class Game {
      */
     this.program = program;
     this.gl = gl;
-    this.mat4 = new MAT4();
+    this.gameState = new GameState(this.program, this.gl);
     this.keys = [];
     this.lastPressKeys = [];
     this.lastReleaseKeys = [];
-    this.inputHandler = new InputHandler(this);
-    this.camera = new Camera(this);
+    this.inputHandler = new InputHandler(this, this.gameState);
+    this.camera = new Camera(this.gameState);
     this.player = new Player(this);
     this.backgrounds = [new BackGround(this, "../assets/background_1.png")];
-
-    /*
-    this.gameFrame = 1000;
-    this.gameInterval = 1000 / this.gameFrame;
-    this.lastFrame = 0;
-    */
   }
   update() {
     this.backgrounds.forEach((background) => background.update());
