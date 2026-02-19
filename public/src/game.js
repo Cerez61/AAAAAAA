@@ -13,18 +13,15 @@ export class Game {
     this.program = program;
     this.gl = gl;
     this.gameState = new GameState(this.program, this.gl);
-    this.keys = [];
-    this.lastPressKeys = [];
-    this.lastReleaseKeys = [];
-    this.inputHandler = new InputHandler(this, this.gameState);
+    this.inputHandler = new InputHandler(this.gameState);
     this.camera = new Camera(this.gameState);
-    this.player = new Player(this);
-    this.backgrounds = [new BackGround(this, "../assets/background_1.png")];
+    this.player = new Player(this.gameState);
+    this.backgrounds = [new BackGround(this.gameState, "../assets/background_1.png")];
   }
   update() {
     this.backgrounds.forEach((background) => background.update());
     this.player.update();
-    this.camera.update(this.player);
+    this.camera.update();
   }
   draw() {
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);

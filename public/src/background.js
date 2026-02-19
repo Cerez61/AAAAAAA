@@ -1,15 +1,13 @@
 import { MAT4 } from "./utils/matrix.js";
 export class BackGround {
-  constructor(game, src) {
+  constructor(gameState, src) {
     //intelisense webgl content
     /**
      * @type {WebGL2RenderingContext}
      */
-    this.game = game;
-    this.gl = this.game.gl;
-    this.program = this.game.program;
-    this.player = this.game.player;
-    this.camera = this.game.camera;
+    this.gameState = gameState;
+    this.gl = this.gameState.gl;
+    this.program = this.gameState.program;
 
     this.image = new Image();
     this.src = src;
@@ -26,9 +24,9 @@ export class BackGround {
     this.mat4 = new MAT4();
 
     this.modelMatrix = this.mat4.identity();
-    this.viewMatrix = this.camera.viewMatrix;
+    this.viewMatrix = this.gameState.viewMatrix;
     this.mvMatrix = this.mat4.identity();
-    this.orthoMatrix = this.camera.orthoMatrix;
+    this.orthoMatrix = this.gameState.orthoMatrix;
     this.mvoMatrix = this.mat4.identity();
 
     this.bgPosition = this.createPosition();
@@ -104,7 +102,11 @@ export class BackGround {
       this.image.src = this.src;
     });
   }
+  gameStateUpdateTake() {
+    this.viewMatrix = this.gameState.viewMatrix;
+  }
   update() {
+    this.gameStateUpdateTake();
     this.mat4.translate(this.modelMatrix, [this.x, this.y, this.z]);
   }
   draw() {

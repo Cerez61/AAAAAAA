@@ -15,19 +15,16 @@ import {
 import { MAT4 } from "./utils/matrix.js";
 
 export class Player {
-  constructor(game) {
+  constructor(gameState) {
     //intelisense webgl content
     /**
      * @type {WebGL2RenderingContext}
      */
-
-    this.gl = game.gl;
-    this.game = game;
-    this.program = this.game.program;
-    this.inputHandler = this.game.inputHandler;
-    this.keys = this.game.keys;
-    this.lastPressKeys = this.game.lastPressKeys;
-    this.camera = this.game.camera;
+    this.gameState = gameState;
+    this.gl = this.gameState.gl;
+    this.program = this.gameState.program;
+    this.keys = this.gameState.keys;
+    this.lastPressKeys = this.gameState.lastPressKeys;
     this.mat4 = new MAT4();
     this.width = 20;
     this.height = 40;
@@ -62,9 +59,9 @@ export class Player {
     this.currentState.enter();
 
     this.modelMatrix = this.mat4.identity();
-    this.viewMatrix = this.camera.viewMatrix;
+    this.viewMatrix = this.gameState.viewMatrix;
     this.mvMatrix = this.mat4.identity();
-    this.orthoMatrix = this.camera.orthoMatrix;
+    this.orthoMatrix = this.gameState.orthoMatrix;
     this.mvoMatrix = this.mat4.identity();
 
     this.vertexData = this.createVertexData();
@@ -78,6 +75,8 @@ export class Player {
     this.setupPlayer();
 
     this.matrixLoc = this.gl.getUniformLocation(this.program, "uMatrix");
+
+    this.gameStateInitialize();
   }
   setupPlayer() {
     this.gl.bindVertexArray(this.playerVAO);
@@ -144,6 +143,8 @@ export class Player {
     else if (!this.keys.includes("d") && this.vx > 0) this.vx -= this.xSpeedMultiplier;
     else if (!this.keys.includes("a") && this.vx < 0) this.vx += this.xSpeedMultiplier;
     else if (!this.keys.includes("d") && !this.keys.includes("a")) this.vx = 0;
+
+    this.x += this.vx * this.speed;
   }
   verticalMovement() {
     if (this.y + this.weight <= this.height) this.y = this.height;
@@ -166,19 +167,29 @@ export class Player {
       this.jumpHeight--;
       this.weight += 3;
     } else this.weight -= 3;
+
+    this.y += this.vy * this.weight;
+  }
+  gameStateInitialize() {
+    this.orthoMatrix = this.gameState.orthoMatrix;
+  }
+  gameStateUpdateTake() {
+    this.viewMatrix = this.gameState.viewMatrix;
+  }
+  gameStateUpdateGive() {
+    this.gameState.playerPosition = [this.x, this.y];
   }
   update() {
+    this.gameStateUpdateTake();
     this.currentState.updateState();
 
     this.horizontalMovement();
     this.verticalMovement();
-
-    this.x += this.vx * this.speed;
-    this.y += this.vy * this.weight;
-
     this.mat4.translate(this.modelMatrix, [this.x, this.y, 0]);
 
     this.lastPressKeys[0] = null;
+
+    this.gameStateUpdateGive();
   }
   draw() {
     this.gl.useProgram(this.program);
