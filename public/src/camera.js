@@ -1,22 +1,20 @@
 import { MAT4 } from "./utils/matrix.js";
 export class Camera {
   constructor(gameState) {
-    //these are gonna be deleted
-
     this.gameState = gameState;
-
     this.gl = this.gameState.gl;
 
+    //Camera Matrixs
     this.mat4 = new MAT4();
-
     this.viewMatrix = this.mat4.identity();
     this.orthoMatrix = this.mat4.ortho(0, this.gl.canvas.width, 0, this.gl.canvas.height, -100, 100);
 
+    //Camera and Player Position
     this.x = 0;
     this.y = 0;
-
     this.playerPosition = [];
 
+    //Camera Boundary and Lerp Values
     this.leftCameraAngle = 0.49;
     this.rightCameraAngle = 1 - this.leftCameraAngle;
     this.targetOffsetX = this.gl.canvas.width * this.leftCameraAngle;
@@ -24,10 +22,12 @@ export class Camera {
     this.offsetY = this.gl.canvas.height * 0.5;
     this.lerpSpeed = 0.08;
 
+    //Camera Func Parameters
     this.eye = [0, 0, 10];
     this.at = [0, 0, 0];
     this.up = [0, 1, 0];
 
+    //Inputs
     this.keys = [];
     this.lastPressKey = [];
 
@@ -64,7 +64,7 @@ export class Camera {
       this.at[1] = 0;
     }
   }
-  update(player) {
+  update() {
     this.gameStateUpdateTake();
 
     this.horizontalMovement();

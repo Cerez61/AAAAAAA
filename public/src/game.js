@@ -1,8 +1,8 @@
 import { Player } from "./player.js";
 import { Camera } from "./camera.js";
-import { BackGround } from "./background.js";
+import { BackGround } from "./AssetManagement/background.js";
 import { InputHandler } from "./inputHandler.js";
-import { GameState } from "./gameStates.js";
+import { GameState } from "./States/gameState.js";
 
 export class Game {
   constructor(program, gl) {
@@ -16,16 +16,19 @@ export class Game {
     this.inputHandler = new InputHandler(this.gameState);
     this.camera = new Camera(this.gameState);
     this.player = new Player(this.gameState);
-    this.backgrounds = [new BackGround(this.gameState, "../assets/background_1.png")];
+    this.background = new BackGround(this.gameState);
+  }
+  async init() {
+    await this.background.init();
   }
   update() {
-    this.backgrounds.forEach((background) => background.update());
+    this.background.update();
     this.player.update();
     this.camera.update();
   }
   draw() {
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
     this.player.draw();
-    this.backgrounds.forEach((background) => background.draw());
+    this.background.draw();
   }
 }

@@ -1,6 +1,5 @@
 export class InputHandler {
   constructor(gameState) {
-    //these two lines gonna be deleted
     this.gameState = gameState;
     this.keys = this.gameState.keys;
 
@@ -19,6 +18,7 @@ export class InputHandler {
       if (e.key === "a" || e.key === "d" || e.key === "w" || e.key === "s") {
         this.gameState.keys.splice(index, 1);
         this.gameState.lastReleaseKeys[0] = e.key;
+
         checkLastRelease.innerHTML = this.gameState.lastReleaseKeys[0];
       }
     });

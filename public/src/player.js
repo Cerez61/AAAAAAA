@@ -181,10 +181,12 @@ export class Player {
   }
   update() {
     this.gameStateUpdateTake();
+
     this.currentState.updateState();
 
     this.horizontalMovement();
     this.verticalMovement();
+
     this.mat4.translate(this.modelMatrix, [this.x, this.y, 0]);
 
     this.lastPressKeys[0] = null;

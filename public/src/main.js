@@ -66,4 +66,12 @@ function animate(timeStamp) {
   fps.innerHTML = Math.round(1000 / deltaTime) + " FPS";
   requestAnimationFrame(animate);
 }
-animate(0);
+async function init() {
+  await game.init();
+}
+async function gameStart() {
+  await init();
+  animate(0);
+}
+
+gameStart();
