@@ -77,7 +77,7 @@ export class BackGround {
   async addUVCoord(assets) {
     await assets.forEach((asset) => this.uvPosition.push(...asset.uvCoord));
   }
-  addAssets(spriteAtlasName, spriteAtlasJSON, frame, worldPosition) {
+  addAssets(spriteAtlasName, spriteAtlasJSON, spriteAtlasSize, frame, worldPosition) {
     const z = worldPosition[2];
     const layer = this.layers.find((layer) => layer.z === z);
 
@@ -85,7 +85,7 @@ export class BackGround {
       this.addLayers(z);
     }
 
-    this.layers[0].addAsset(spriteAtlasName, spriteAtlasJSON, frame, worldPosition);
+    this.layers[0].addAsset(spriteAtlasName, spriteAtlasJSON, spriteAtlasSize, frame, worldPosition);
   }
   addLayers(depth) {
     this.layers.push(new Layer(depth));
@@ -111,17 +111,13 @@ export class BackGround {
       });
   }
   async init() {
-    await this.fetchSpriteSheet("./src/assets/texture.png");
-    await this.fetchSpriteSheetJSON("./src/assets/texture.json");
+    await this.fetchSpriteSheet("./src/assets/assets.png");
+    await this.fetchSpriteSheetJSON("./src/assets/assets.json");
 
-    this.addAssets("texture.png", "texture.json", this.textureJSON.frames["lamp"].frame, [100, 450, 1]);
-    this.addAssets("texture.png", "texture.json", this.textureJSON.frames["lamp"].frame, [500, 450, 1]);
-    this.addAssets("texture.png", "texture.json", this.textureJSON.frames["lamp"].frame, [900, 450, 1]);
-    this.addAssets("texture.png", "texture.json", this.textureJSON.frames["lamp"].frame, [1300, 450, 1]);
-    this.addAssets("texture.png", "texture.json", this.textureJSON.frames["cloud"].frame, [500, 100, 1]);
-    this.addAssets("texture.png", "texture.json", this.textureJSON.frames["cloud"].frame, [700, 200, 1]);
-    this.addAssets("texture.png", "texture.json", this.textureJSON.frames["cloud"].frame, [900, 300, 1]);
-    this.addAssets("texture.png", "texture.json", this.textureJSON.frames["cloud"].frame, [1100, 400, 1]);
+    this.addAssets("assets.png", "assets.json", this.textureJSON.meta.size, this.textureJSON.frames["Old_Horn"].frame, [100, 0, 1]);
+    this.addAssets("assets.png", "assets.json", this.textureJSON.meta.size, this.textureJSON.frames["Old_Horn"].frame, [500, 0, 1]);
+    this.addAssets("assets.png", "assets.json", this.textureJSON.meta.size, this.textureJSON.frames["Old_Horn"].frame, [900, 0, 1]);
+    this.addAssets("assets.png", "assets.json", this.textureJSON.meta.size, this.textureJSON.frames["Old_Horn"].frame, [1300, 0, 1]);
 
     this.createPosition();
     this.createUVCoord();

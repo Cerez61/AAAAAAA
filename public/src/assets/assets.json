@@ -1,0 +1,87 @@
+{
+  "frames": {
+    "Old_Horn": {
+      "frame": {
+        "x": 1,
+        "y": 1,
+        "w": 48,
+        "h": 72
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 3,
+        "w": 48,
+        "h": 72
+      },
+      "sourceSize": {
+        "w": 54,
+        "h": 75
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "aseprite assets/...png": {
+      "frame": {
+        "x": 51,
+        "y": 1,
+        "w": 21,
+        "h": 89
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 56,
+        "y": 6,
+        "w": 21,
+        "h": 89
+      },
+      "sourceSize": {
+        "w": 150,
+        "h": 150
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "aseprite assets/Tree.png": {
+      "frame": {
+        "x": 74,
+        "y": 1,
+        "w": 105,
+        "h": 125
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 105,
+        "h": 125
+      },
+      "sourceSize": {
+        "w": 125,
+        "h": 125
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  },
+  "meta": {
+    "app": "http://free-tex-packer.com",
+    "version": "0.6.7",
+    "image": "assets.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 256,
+      "h": 128
+    },
+    "scale": 1
+  }
+}

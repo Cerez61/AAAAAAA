@@ -1,9 +1,9 @@
 export class Asset {
-  constructor(textureName, textureJSON, frame, worldPosition) {
+  constructor(textureName, textureJSON, spriteAtlasSize, frame, worldPosition) {
     this.textureName = textureName;
     this.textureJSON = textureJSON;
-    this.textureWidth = 512;
-    this.textureHeight = 256;
+    this.textureWidth = spriteAtlasSize.w;
+    this.textureHeight = spriteAtlasSize.h;
     this.width = frame.w;
     this.height = frame.h;
     this.x = frame.x;
