@@ -47,6 +47,10 @@ gl.useProgram(program);
 //this line compare the z coord of the vertexs with each other and determines which vertex will visible upper to other one
 gl.enable(gl.DEPTH_TEST);
 
+gl.depthFunc(gl.LEQUAL);
+gl.enable(gl.BLEND);
+gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
 const game = new Game(program, gl);
 
 let lastTime = 0;
@@ -54,6 +58,7 @@ function animate(timeStamp) {
   const deltaTime = timeStamp - lastTime || 1;
   lastTime = timeStamp;
 
+  gl.clear(gl.COLOR_BUFFER_BIT);
   game.update(deltaTime);
   game.draw();
 

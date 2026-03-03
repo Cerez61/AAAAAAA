@@ -28,7 +28,7 @@ export class Player {
     this.mat4 = new MAT4();
     this.width = 20;
     this.height = 40;
-    this.depth = 0;
+    this.depth = 1;
     this.x = this.width + this.gl.canvas.width / 4;
     this.y = this.height + 40;
     this.z = this.depth;

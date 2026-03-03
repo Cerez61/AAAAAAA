@@ -4,10 +4,11 @@ export class Asset {
     this.textureJSON = textureJSON;
     this.textureWidth = spriteAtlasSize.w;
     this.textureHeight = spriteAtlasSize.h;
+    this.textureDepth = spriteAtlasSize.d;
     this.width = frame.w;
     this.height = frame.h;
-    this.x = frame.x;
-    this.y = frame.y;
+    this.textureX = frame.x;
+    this.textureY = frame.y;
     this.worldX = worldPosition[0];
     this.worldY = worldPosition[1];
     this.worldZ = worldPosition[2];
@@ -18,23 +19,23 @@ export class Asset {
     this.z = this.worldZ;
     this.uvCoord = [
       //v1
-      this.x / this.textureWidth,
-      (this.y + this.height) / this.textureHeight,
+      this.textureX / this.textureWidth,
+      (this.textureY + this.height) / this.textureHeight,
       //v2
-      this.x / this.textureWidth,
-      this.y / this.textureHeight,
+      this.textureX / this.textureWidth,
+      this.textureY / this.textureHeight,
       //v3
-      (this.x + this.width) / this.textureWidth,
-      (this.y + this.height) / this.textureHeight,
+      (this.textureX + this.width) / this.textureWidth,
+      (this.textureY + this.height) / this.textureHeight,
       //v3
-      (this.x + this.width) / this.textureWidth,
-      (this.y + this.height) / this.textureHeight,
+      (this.textureX + this.width) / this.textureWidth,
+      (this.textureY + this.height) / this.textureHeight,
       //v2
-      this.x / this.textureWidth,
-      this.y / this.textureHeight,
+      this.textureX / this.textureWidth,
+      this.textureY / this.textureHeight,
       //v4
-      (this.x + this.width) / this.textureWidth,
-      this.y / this.textureHeight,
+      (this.textureX + this.width) / this.textureWidth,
+      this.textureY / this.textureHeight,
     ];
     this.position = [
       this.x1,

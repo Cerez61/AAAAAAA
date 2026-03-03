@@ -31,17 +31,17 @@ export class Camera {
     this.keys = [];
     this.lastPressKey = [];
 
-    this.gameStateUpdateInitialize();
+    this.gameStateInitialize();
   }
-  gameStateUpdateInitialize() {
+  gameStateInitialize() {
     this.gameState.orthoMatrix = this.orthoMatrix;
   }
-  gameStateUpdateTake() {
+  gameStateTake() {
     this.keys = this.gameState.keys;
     this.lastPressKey = this.gameState.lastPressKey;
     this.playerPosition = this.gameState.playerPosition;
   }
-  gameStateUpdateGive() {
+  gameStateGive() {
     this.gameState.viewMatrix = this.mat4.lookAt(this.viewMatrix, this.eye, this.at, this.up);
   }
   horizontalMovement() {
@@ -64,12 +64,17 @@ export class Camera {
       this.at[1] = 0;
     }
   }
+  pixelSnapping() {
+    this.eye = [Math.floor(this.eye[0]), Math.floor(this.eye[1]), Math.floor(this.eye[2])];
+  }
   update() {
-    this.gameStateUpdateTake();
+    this.gameStateTake();
 
     this.horizontalMovement();
     this.verticalMovement();
 
-    this.gameStateUpdateGive();
+    // this.pixelSnapping();
+
+    this.gameStateGive();
   }
 }

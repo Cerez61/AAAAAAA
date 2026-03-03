@@ -24,7 +24,7 @@
         "y": 0.5
       }
     },
-    "aseprite assets/...png": {
+    "chain": {
       "frame": {
         "x": 51,
         "y": 1,
@@ -48,7 +48,7 @@
         "y": 0.5
       }
     },
-    "aseprite assets/Tree.png": {
+    "tree": {
       "frame": {
         "x": 74,
         "y": 1,
