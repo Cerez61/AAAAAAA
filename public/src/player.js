@@ -15,16 +15,17 @@ import {
 import { MAT4 } from "./utils/matrix.js";
 
 export class Player {
-  constructor(gameState) {
+  constructor(gameData) {
     //intelisense webgl content
     /**
      * @type {WebGL2RenderingContext}
      */
-    this.gameState = gameState;
-    this.gl = this.gameState.gl;
-    this.program = this.gameState.program;
-    this.keys = this.gameState.keys;
-    this.lastPressKeys = this.gameState.lastPressKeys;
+    this.globalData = gameData[0];
+    this.entityData = gameData[1];
+    this.gl = this.globalData.gl;
+    this.program = this.globalData.program;
+    this.keys = this.entityData.keys;
+    this.lastPressKeys = this.entityData.lastPressKeys;
     this.mat4 = new MAT4();
     this.width = 20;
     this.height = 40;
@@ -59,9 +60,9 @@ export class Player {
     this.currentState.enter();
 
     this.modelMatrix = this.mat4.identity();
-    this.viewMatrix = this.gameState.viewMatrix;
+    this.viewMatrix = this.entityData.viewMatrix;
     this.mvMatrix = this.mat4.identity();
-    this.orthoMatrix = this.gameState.orthoMatrix;
+    this.orthoMatrix = this.entityData.orthoMatrix;
     this.mvoMatrix = this.mat4.identity();
 
     this.vertexData = this.createVertexData();
@@ -76,7 +77,7 @@ export class Player {
 
     this.matrixLoc = this.gl.getUniformLocation(this.program, "uMatrix");
 
-    this.gameStateInitialize();
+    this.entityDataInitialize();
   }
   setupPlayer() {
     this.gl.bindVertexArray(this.playerVAO);
@@ -170,17 +171,17 @@ export class Player {
 
     this.y += this.vy * this.weight;
   }
-  gameStateInitialize() {
-    this.orthoMatrix = this.gameState.orthoMatrix;
+  entityDataInitialize() {
+    this.orthoMatrix = this.entityData.orthoMatrix;
   }
-  gameStateUpdateTake() {
-    this.viewMatrix = this.gameState.viewMatrix;
+  entityDataUpdateTake() {
+    this.viewMatrix = this.entityData.viewMatrix;
   }
-  gameStateUpdateGive() {
-    this.gameState.playerPosition = [this.x, this.y];
+  entityDataUpdateGive() {
+    this.entityData.playerPosition = [this.x, this.y];
   }
   update() {
-    this.gameStateUpdateTake();
+    this.entityDataUpdateTake();
 
     this.currentState.updateState();
 
@@ -191,7 +192,7 @@ export class Player {
 
     this.lastPressKeys[0] = null;
 
-    this.gameStateUpdateGive();
+    this.entityDataUpdateGive();
   }
   draw() {
     this.gl.useProgram(this.program);

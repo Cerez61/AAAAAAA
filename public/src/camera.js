@@ -1,8 +1,10 @@
 import { MAT4 } from "./utils/matrix.js";
 export class Camera {
-  constructor(gameState) {
-    this.gameState = gameState;
-    this.gl = this.gameState.gl;
+  constructor(gameData) {
+    this.globalData = gameData[0];
+    this.entityData = gameData[1];
+
+    this.gl = this.globalData.gl;
 
     //Camera Matrixs
     this.mat4 = new MAT4();
@@ -31,18 +33,18 @@ export class Camera {
     this.keys = [];
     this.lastPressKey = [];
 
-    this.gameStateInitialize();
+    this.entityDataInitialize();
   }
-  gameStateInitialize() {
-    this.gameState.orthoMatrix = this.orthoMatrix;
+  entityDataInitialize() {
+    this.entityData.orthoMatrix = this.orthoMatrix;
   }
-  gameStateTake() {
-    this.keys = this.gameState.keys;
-    this.lastPressKey = this.gameState.lastPressKey;
-    this.playerPosition = this.gameState.playerPosition;
+  entityDataTake() {
+    this.keys = this.entityData.keys;
+    this.lastPressKey = this.entityData.lastPressKey;
+    this.playerPosition = this.entityData.playerPosition;
   }
-  gameStateGive() {
-    this.gameState.viewMatrix = this.mat4.lookAt(this.viewMatrix, this.eye, this.at, this.up);
+  entityDataGive() {
+    this.entityData.viewMatrix = this.mat4.lookAt(this.viewMatrix, this.eye, this.at, this.up);
   }
   horizontalMovement() {
     if (this.keys.includes("d")) this.targetOffsetX = this.gl.canvas.width * this.leftCameraAngle;
@@ -68,13 +70,13 @@ export class Camera {
     this.eye = [Math.floor(this.eye[0]), Math.floor(this.eye[1]), Math.floor(this.eye[2])];
   }
   update() {
-    this.gameStateTake();
+    this.entityDataTake();
 
     this.horizontalMovement();
     this.verticalMovement();
 
     // this.pixelSnapping();
 
-    this.gameStateGive();
+    this.entityDataGive();
   }
 }

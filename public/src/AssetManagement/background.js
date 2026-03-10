@@ -1,14 +1,16 @@
 import { Layer } from "./layerManagement.js";
 import { MAT4 } from "../utils/matrix.js";
 export class BackGround {
-  constructor(gameState) {
+  constructor(gameData) {
     //intelisense webgl content
     /**
      * @type {WebGL2RenderingContext}
      */
-    this.gameState = gameState;
-    this.gl = this.gameState.gl;
-    this.program = this.gameState.program;
+    this.globalData = gameData[0];
+    this.entityData = gameData[1];
+    this.assetData = gameData[2];
+    this.gl = this.globalData.gl;
+    this.program = this.globalData.program;
 
     this.layers = [];
 
@@ -18,9 +20,9 @@ export class BackGround {
     this.mat4 = new MAT4();
 
     this.modelMatrix = this.mat4.identity();
-    this.viewMatrix = this.gameState.viewMatrix;
+    this.viewMatrix = this.entityData.viewMatrix;
     this.mvMatrix = this.mat4.identity();
-    this.orthoMatrix = this.gameState.orthoMatrix;
+    this.orthoMatrix = this.entityData.orthoMatrix;
     this.mvoMatrix = this.mat4.identity();
 
     this.bgPosition = [];
@@ -136,65 +138,73 @@ export class BackGround {
     const targetJSON = this.findAssetsFile(assetName);
     if (!targetJSON) return;
 
-    const z = worldPosition[2];
-    const layer = this.layers.find((layer) => layer.z === z);
+    const depth = worldPosition[2];
 
-    if (!layer) {
-      this.addLayers(z);
-    }
+    this.addLayers(depth);
 
-    this.layers[0].addAsset(targetJSON.meta.image, "a.json", targetJSON.meta.size, targetJSON.frames[assetName].frame, worldPosition);
+    this.layers.forEach((layer) => {
+      if (layer.z === depth) {
+        layer.addAsset(targetJSON.meta.image, "a.json", targetJSON.meta.size, targetJSON.frames[assetName].frame, worldPosition);
+        return;
+      }
+    });
   }
   addLayers(depth) {
-    this.layers.push(new Layer(depth));
+    const targetLayer = this.layers.find((layer) => layer.z === depth);
 
-    this.layers.sort((a, b) => a.z - b.z);
+    if (!targetLayer) {
+      this.layers.push(new Layer(depth));
+      this.layers.sort((a, b) => a.z - b.z);
+    }
   }
 
-  async fetchSpriteSheet(sprite) {
-    const response = await fetch(sprite);
+  async fetchSpriteSheet(spriteNames) {
+    const responses = await Promise.all(spriteNames.map((textureName) => fetch("./assets/textures/" + textureName)));
 
-    const blop = await response.blob();
+    const blobs = await Promise.all(
+      responses.map((res) => {
+        if (!res.ok) throw new Error("Yükleme hatası");
+        return res.blob();
+      }),
+    );
 
-    this.spriteAtlases.push(await createImageBitmap(blop));
+    const bitmaps = await Promise.all(blobs.map((blob) => createImageBitmap(blob)));
+
+    this.spriteAtlases.push(...bitmaps);
   }
-  async fetchSpriteSheetJSON(json) {
-    await fetch(json)
-      .then((res) => res.json())
-      .then((data) => {
-        this.spriteAtlasesJSON.push(data);
-      });
+  async fetchSpriteSheetJSON(jsonNames) {
+    const responses = await Promise.all(jsonNames.map((jsonName) => fetch("./assets/data/" + jsonName)));
+
+    const data = await Promise.all(responses.map((res) => res.json()));
+
+    this.spriteAtlasesJSON.push(...data);
   }
   async init() {
     const date = Date.now();
 
-    await this.fetchSpriteSheet("./src/assets/a.png");
-    await this.fetchSpriteSheet("./src/assets/Cizgi.png");
-    await this.fetchSpriteSheet("./src/assets/kucukKiz.png");
-
-    await this.fetchSpriteSheetJSON("./src/assets/a.json");
-    await this.fetchSpriteSheetJSON("./src/assets/Cizgi.json");
-    await this.fetchSpriteSheetJSON("./src/assets/kucukKiz.json");
+    await this.fetchSpriteSheet(this.assetData.textureNames);
+    await this.fetchSpriteSheetJSON(this.assetData.jsonNames);
 
     this.changeMetaJSON();
 
-    for (let i = 0; i < 1000; i++) {
+    for (let i = 0; i < 100; i++) {
       this.addAssets("kk", [i * 100, 0, 2]);
       this.addAssets("sea", [i * 200, 100, 2]);
-      this.addAssets("greenBg", [i * 200, 200, 2]);
+      this.addAssets("greenBg", [i * 200, 200, 1]);
     }
 
     this.createPosition();
     this.createUVCoord();
     this.createDepthValue();
     this.setupBackground();
+
     console.log(Date.now() - date);
   }
-  gameStateUpdateTake() {
-    this.viewMatrix = this.gameState.viewMatrix;
+  globalDataUpdateTake() {
+    this.viewMatrix = this.entityData.viewMatrix;
   }
   update() {
-    this.gameStateUpdateTake();
+    this.globalDataUpdateTake();
   }
   draw() {
     this.gl.bindVertexArray(this.bgVAO);

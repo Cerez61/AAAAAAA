@@ -1,9 +1,5 @@
-export class GameState {
-  constructor(program, gl) {
-    //WebGL Data
-    this.program = program;
-    this.gl = gl;
-
+export class EntityData {
+  constructor() {
     //Player Data
     this.playerPosition = [0, 0];
 
