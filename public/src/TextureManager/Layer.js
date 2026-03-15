@@ -1,4 +1,4 @@
-import { Asset } from "./asset.js";
+import { Asset } from "./Asset.js";
 
 export class Layer {
   constructor(z) {

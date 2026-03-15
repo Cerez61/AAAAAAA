@@ -1,7 +1,7 @@
 import { Renderer } from "./GameSystem/rendererSystem/renderer.js";
 import { Player } from "./player.js";
 import { Camera } from "./camera.js";
-import { BackGround } from "./AssetManagement/background.js";
+import { BackGround } from "./TextureManager/Background.js";
 import { InputHandler } from "./inputHandler.js";
 import { GlobalData } from "./GameData/globalData.js";
 import { EntityData } from "./GameData/entityData.js";
@@ -12,7 +12,7 @@ export class Game {
     this.globalData = new GlobalData();
     this.entityData = new EntityData();
     this.assetData = new AssetData();
-    this.renderer = new Renderer(this.globalData);
+    this.renderer = new Renderer([this.globalData, this.entityData]);
     this.inputHandler = new InputHandler(this.entityData);
     this.camera = new Camera([this.globalData, this.entityData]);
     this.player = new Player([this.globalData, this.entityData]);
@@ -29,5 +29,7 @@ export class Game {
   draw() {
     this.player.draw();
     this.background.draw();
+
+    this.renderer.draw();
   }
 }

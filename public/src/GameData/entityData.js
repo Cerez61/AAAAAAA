@@ -7,6 +7,9 @@ export class EntityData {
     this.viewMatrix = [];
     this.orthoMatrix = [];
 
+    //Background Data
+    /* */
+
     //Input Data
     this.keys = [];
     this.lastPressKeys = [];

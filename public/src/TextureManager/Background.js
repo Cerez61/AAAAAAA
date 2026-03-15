@@ -1,4 +1,4 @@
-import { Layer } from "./layerManagement.js";
+import { Layer } from "./Layer.js";
 import { MAT4 } from "../utils/matrix.js";
 export class BackGround {
   constructor(gameData) {
@@ -25,10 +25,11 @@ export class BackGround {
     this.orthoMatrix = this.entityData.orthoMatrix;
     this.mvoMatrix = this.mat4.identity();
 
-    this.bgPosition = [];
-    this.uvPosition = [];
+    this.assetsPosition = [];
+    this.assetsUVCoord = [];
     this.spriteAtlasDepth = [];
 
+    this.assetCount = 0;
     this.bgVAO = this.gl.createVertexArray();
     this.textureBuffer = this.gl.createTexture();
 
@@ -44,14 +45,14 @@ export class BackGround {
 
     //Texture World XYZ
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
-    this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.bgPosition), this.gl.STATIC_DRAW);
+    this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.assetsPosition), this.gl.STATIC_DRAW);
 
     this.gl.vertexAttribPointer(0, 3, this.gl.FLOAT, false, 0, 0);
     this.gl.enableVertexAttribArray(0);
 
     //Texture UV Coord
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.texCoordBuffer);
-    this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.uvPosition), this.gl.STATIC_DRAW);
+    this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.assetsUVCoord), this.gl.STATIC_DRAW);
 
     this.gl.vertexAttribPointer(1, 2, this.gl.FLOAT, false, 0, 0);
     this.gl.enableVertexAttribArray(1);
@@ -74,23 +75,14 @@ export class BackGround {
 
     this.gl.bindVertexArray(null);
   }
-  createUVCoord() {
-    /* prettier-ignore */
-    this.layers.forEach(layer => {
-      this.addUVCoord(layer.assets);
-    });
-  }
-  createPosition() {
-    /* prettier-ignore */
-    this.layers.forEach(layer => {
-      this.addPosition(layer.assets);
-    });
-  }
-  createDepthValue() {
+  createAssetsData() {
     this.layers.forEach((layer) => {
+      this.addUVCoord(layer.assets);
+      this.addPosition(layer.assets);
       this.addDepthValue(layer.assets);
     });
   }
+
   addSpriteAtlas(spriteAtlases) {
     spriteAtlases.forEach((spriteAtlas, index) => {
       this.gl.texSubImage3D(
@@ -109,10 +101,10 @@ export class BackGround {
     });
   }
   async addPosition(assets) {
-    await assets.forEach((asset) => this.bgPosition.push(...asset.position));
+    await assets.forEach((asset) => this.assetsPosition.push(...asset.position));
   }
   async addUVCoord(assets) {
-    await assets.forEach((asset) => this.uvPosition.push(...asset.uvCoord));
+    await assets.forEach((asset) => this.assetsUVCoord.push(...asset.uvCoord));
   }
   async addDepthValue(assets) {
     const r = (a) => {
@@ -193,9 +185,7 @@ export class BackGround {
       this.addAssets("greenBg", [i * 200, 200, 1]);
     }
 
-    this.createPosition();
-    this.createUVCoord();
-    this.createDepthValue();
+    this.createAssetsData();
     this.setupBackground();
 
     console.log(Date.now() - date);
@@ -203,8 +193,13 @@ export class BackGround {
   globalDataUpdateTake() {
     this.viewMatrix = this.entityData.viewMatrix;
   }
+  entityDataGive() {
+    this.entityData.assetsPosition = this.assetsPosition;
+    this.entityData.assetsUVCoord = this.assetsUVCoord;
+  }
   update() {
     this.globalDataUpdateTake();
+    this.entityDataGive();
   }
   draw() {
     this.gl.bindVertexArray(this.bgVAO);
@@ -213,7 +208,7 @@ export class BackGround {
     this.mat4.multiply(this.mvoMatrix, this.orthoMatrix, this.mvMatrix);
 
     this.gl.uniformMatrix4fv(this.matrixLoc, false, this.mvoMatrix);
-    this.gl.drawArrays(this.gl.TRIANGLES, 0, this.bgPosition.length / 3);
+    this.gl.drawArrays(this.gl.TRIANGLES, 0, this.assetsPosition.length / 3);
 
     this.gl.bindVertexArray(null);
   }

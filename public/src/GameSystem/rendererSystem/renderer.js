@@ -5,16 +5,18 @@ export class Renderer {
     /** @type {HTMLCanvasElement} */
     this.gameCanvas = gameCanvas;
     this.gl = this.gameCanvas.getContext("webgl2");
+    this.checkWebGL();
     this.gameVS = this.gl.createShader(this.gl.VERTEX_SHADER);
     this.gameFS = this.gl.createShader(this.gl.FRAGMENT_SHADER);
     this.program = this.gl.createProgram();
-    this.initialize();
+    this.init();
 
     this.CANVAS_WIDTH = gameCanvas.width = window.innerWidth;
     this.CANVAS_HEIGHT = gameCanvas.height = window.innerHeight;
     this.gl.viewport(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
 
-    this.globalData = gameData;
+    this.globalData = gameData[0];
+    this.entityData = gameData[1];
 
     this.gameDataGive();
 
@@ -23,7 +25,15 @@ export class Renderer {
   console.log(gl.getShaderInfoLog(gameFS));
 */
   }
-  initialize() {
+  checkWebGL() {
+    if (!this.gl) checkWebGL.innerHTML = "Your Browser Doesn't Support WeblGL2";
+    else checkWebGL.innerHTML = "Your Browser Supports WeblGL2";
+  }
+  gameDataGive() {
+    this.globalData.gl = this.gl;
+    this.globalData.program = this.program;
+  }
+  init() {
     //Vertex Shader
     this.gl.shaderSource(this.gameVS, gameVSS);
     this.gl.compileShader(this.gameVS);
@@ -47,8 +57,8 @@ export class Renderer {
     this.gl.enable(this.gl.BLEND);
     this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
   }
-  gameDataGive() {
-    this.globalData.gl = this.gl;
-    this.globalData.program = this.program;
+  draw() {
+    //console.log(this.entityData.assetsPosition);
+    console.log(this.entityData.assetsUVCoord);
   }
 }
