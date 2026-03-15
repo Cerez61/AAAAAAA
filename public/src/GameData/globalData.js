@@ -1,7 +1,7 @@
 export class GlobalData {
-  constructor(program, gl) {
+  constructor() {
     //WebGL Data
-    this.program = program;
-    this.gl = gl;
+    this.program;
+    this.gl;
   }
 }
