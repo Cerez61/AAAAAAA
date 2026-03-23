@@ -1,4 +1,5 @@
 import { gameVSS, gameFSS } from "../../shaders.js";
+
 export class Renderer {
   constructor(gameData) {
     //intelisense webgl content
@@ -6,24 +7,30 @@ export class Renderer {
     this.gameCanvas = gameCanvas;
     this.gl = this.gameCanvas.getContext("webgl2");
     this.checkWebGL();
-    this.gameVS = this.gl.createShader(this.gl.VERTEX_SHADER);
-    this.gameFS = this.gl.createShader(this.gl.FRAGMENT_SHADER);
-    this.program = this.gl.createProgram();
-    this.init();
 
     this.CANVAS_WIDTH = gameCanvas.width = window.innerWidth;
     this.CANVAS_HEIGHT = gameCanvas.height = window.innerHeight;
-    this.gl.viewport(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
+
+    this.gameVS = this.gl.createShader(this.gl.VERTEX_SHADER);
+    this.gameFS = this.gl.createShader(this.gl.FRAGMENT_SHADER);
+    this.program = this.gl.createProgram();
+
+    this.positionBuffer = this.gl.createBuffer();
+    this.uvBuffer = this.gl.createBuffer();
+    this.matrixBuffer = this.gl.createBuffer();
+    this.textureBuffer = this.gl.createTexture();
+    this.spriteAtlasDepthBuffer = this.gl.createBuffer();
+
+    this.init();
+
+    this.viewMatrixLoc = this.gl.getUniformLocation(this.program, "uViewMatrix");
+    this.orthoMatrixLoc = this.gl.getUniformLocation(this.program, "uOrthoMatrix");
 
     this.globalData = gameData[0];
-    this.entityData = gameData[1];
+    this.instanceData = gameData[1];
+    this.assetData = gameData[2];
 
     this.gameDataGive();
-
-    /*
-  console.log(gl.getShaderInfoLog(gameVS));
-  console.log(gl.getShaderInfoLog(gameFS));
-*/
   }
   checkWebGL() {
     if (!this.gl) checkWebGL.innerHTML = "Your Browser Doesn't Support WeblGL2";
@@ -34,6 +41,8 @@ export class Renderer {
     this.globalData.program = this.program;
   }
   init() {
+    this.gl.viewport(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
+
     //Vertex Shader
     this.gl.shaderSource(this.gameVS, gameVSS);
     this.gl.compileShader(this.gameVS);
@@ -57,8 +66,62 @@ export class Renderer {
     this.gl.enable(this.gl.BLEND);
     this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
   }
+  initBuffer() {
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
+    this.gl.bufferData(this.gl.ARRAY_BUFFER, this.instanceData.positionData, this.gl.DYNAMIC_DRAW);
+    this.gl.vertexAttribPointer(0, 3, this.gl.FLOAT, false, 0, 0);
+    this.gl.enableVertexAttribArray(0);
+
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.uvBuffer);
+    this.gl.bufferData(this.gl.ARRAY_BUFFER, this.instanceData.uvData, this.gl.DYNAMIC_DRAW);
+    this.gl.vertexAttribPointer(1, 2, this.gl.FLOAT, false, 0, 0);
+    this.gl.enableVertexAttribArray(1);
+
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.spriteAtlasDepthBuffer);
+    this.gl.bufferData(this.gl.ARRAY_BUFFER, this.instanceData.spriteAtlasDepthData, this.gl.DYNAMIC_DRAW);
+    this.gl.vertexAttribPointer(2, 1, this.gl.FLOAT, false, 0, 0);
+    this.gl.enableVertexAttribArray(2);
+
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.matrixBuffer);
+    this.gl.bufferData(this.gl.ARRAY_BUFFER, this.instanceData.matrixData, this.gl.DYNAMIC_DRAW);
+    this.gl.vertexAttribPointer(3, 4, this.gl.FLOAT, false, 0, 0);
+    this.gl.vertexAttribPointer(4, 4, this.gl.FLOAT, false, 0, 4 * 4);
+    this.gl.vertexAttribPointer(5, 4, this.gl.FLOAT, false, 0, 8 * 4);
+    this.gl.vertexAttribPointer(6, 4, this.gl.FLOAT, false, 0, 12 * 4);
+    this.gl.enableVertexAttribArray(3);
+    this.gl.enableVertexAttribArray(4);
+    this.gl.enableVertexAttribArray(5);
+    this.gl.enableVertexAttribArray(6);
+
+    this.gl.bindTexture(this.gl.TEXTURE_2D_ARRAY, this.textureBuffer);
+    this.gl.texStorage3D(this.gl.TEXTURE_2D_ARRAY, 1, this.gl.RGBA8, 256, 256, this.assetData.spriteAtlases.length);
+    this.assetData.spriteAtlases.forEach((spriteAtlas, index) => {
+      this.gl.texSubImage3D(
+        this.gl.TEXTURE_2D_ARRAY,
+        0,
+        0,
+        0,
+        index,
+        spriteAtlas.width,
+        spriteAtlas.height,
+        1,
+        this.gl.RGBA,
+        this.gl.UNSIGNED_BYTE,
+        spriteAtlas,
+      );
+    });
+
+    this.gl.pixelStorei(this.gl.UNPACK_FLIP_Y_WEBGL, true);
+    this.gl.texParameteri(this.gl.TEXTURE_2D_ARRAY, this.gl.TEXTURE_MIN_FILTER, this.gl.NEAREST);
+    this.gl.texParameteri(this.gl.TEXTURE_2D_ARRAY, this.gl.TEXTURE_MAG_FILTER, this.gl.NEAREST);
+  }
+  update() {
+    this.initBuffer();
+  }
   draw() {
-    //console.log(this.entityData.assetsPosition);
-    console.log(this.entityData.assetsUVCoord);
+    this.gl.uniformMatrix4fv(this.viewMatrixLoc, false, this.instanceData.viewMatrix);
+    this.gl.uniformMatrix4fv(this.orthoMatrixLoc, false, this.instanceData.orthoMatrix);
+    this.gl.drawArrays(this.gl.TRIANGLES, 0, this.instanceData.totalEntity);
+    console.log(this.instanceData.uvData);
   }
 }

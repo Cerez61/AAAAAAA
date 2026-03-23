@@ -1,5 +1,6 @@
 export class Asset {
-  constructor(textureName, textureJSON, spriteAtlasSize, frame, worldPosition) {
+  constructor(textureName, textureJSON, spriteAtlasSize, frame, assetID, worldPosition) {
+    this.assetID = assetID;
     this.textureName = textureName;
     this.textureJSON = textureJSON;
     this.textureWidth = spriteAtlasSize.w;
@@ -17,7 +18,7 @@ export class Asset {
     this.y1 = this.worldY;
     this.y2 = this.worldY + this.height;
     this.z = this.worldZ;
-    this.uvCoord = [
+    this.uvData = [
       //v1
       this.textureX / this.textureWidth,
       (this.textureY + this.height) / this.textureHeight,

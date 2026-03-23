@@ -21,7 +21,8 @@ export class Player {
      * @type {WebGL2RenderingContext}
      */
     this.globalData = gameData[0];
-    this.entityData = gameData[1];
+    this.instanceData = gameData[1];
+    this.entityData = gameData[2];
     this.gl = this.globalData.gl;
     this.program = this.globalData.program;
     this.keys = this.entityData.keys;
@@ -60,47 +61,9 @@ export class Player {
     this.currentState.enter();
 
     this.modelMatrix = this.mat4.identity();
-    this.viewMatrix = this.entityData.viewMatrix;
-    this.mvMatrix = this.mat4.identity();
-    this.orthoMatrix = this.entityData.orthoMatrix;
-    this.mvoMatrix = this.mat4.identity();
 
-    this.vertexData = this.createVertexData();
+    this.position = this.createVertexData();
     this.uvData = this.createuvData();
-
-    this.playerVAO = this.gl.createVertexArray();
-
-    this.texture = this.gl.createTexture();
-
-    this.vertexBuffer = this.gl.createBuffer();
-    this.setupPlayer();
-
-    this.matrixLoc = this.gl.getUniformLocation(this.program, "uMatrix");
-
-    this.entityDataInitialize();
-  }
-  setupPlayer() {
-    this.gl.bindVertexArray(this.playerVAO);
-
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexBuffer);
-    this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.vertexData), this.gl.STATIC_DRAW);
-    this.gl.vertexAttribPointer(0, 3, this.gl.FLOAT, false, 0, 0);
-    this.gl.enableVertexAttribArray(0);
-
-    const pixels = new Uint8Array([
-      0, 0, 0, 255, 0, 0, 255, 0, 255, 255, 255, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 255, 0, 0, 255, 0, 0, 255, 0, 0, 0, 0,
-      0, 0, 0, 0, 255, 0, 0,
-    ]);
-    this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
-    this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGB, 4, 4, 0, this.gl.RGB, this.gl.UNSIGNED_BYTE, pixels);
-
-    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.LINEAR);
-    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.LINEAR);
-
-    this.gl.bindVertexArray(null);
-
-    this.mat4.scale(this.modelMatrix, [this.width, this.height, 0]);
-    this.mat4.translate(this.modelMatrix, [this.x, this.y, this.z]);
   }
   createVertexData() {
     /* prettier-ignore */
@@ -171,18 +134,11 @@ export class Player {
 
     this.y += this.vy * this.weight;
   }
-  entityDataInitialize() {
-    this.orthoMatrix = this.entityData.orthoMatrix;
-  }
-  entityDataUpdateTake() {
-    this.viewMatrix = this.entityData.viewMatrix;
-  }
   entityDataUpdateGive() {
     this.entityData.playerPosition = [this.x, this.y];
   }
-  update() {
-    this.entityDataUpdateTake();
 
+  update() {
     this.currentState.updateState();
 
     this.horizontalMovement();
@@ -193,18 +149,5 @@ export class Player {
     this.lastPressKeys[0] = null;
 
     this.entityDataUpdateGive();
-  }
-  draw() {
-    this.gl.useProgram(this.program);
-
-    this.gl.bindVertexArray(this.playerVAO);
-    this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
-
-    this.mat4.multiply(this.mvMatrix, this.viewMatrix, this.modelMatrix);
-    this.mat4.multiply(this.mvoMatrix, this.orthoMatrix, this.mvMatrix);
-
-    this.gl.uniformMatrix4fv(this.matrixLoc, false, this.mvoMatrix);
-    this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexData.length / 3);
-    this.gl.bindVertexArray(null);
   }
 }

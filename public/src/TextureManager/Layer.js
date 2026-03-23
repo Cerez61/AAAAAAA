@@ -5,7 +5,7 @@ export class Layer {
     this.z = z;
     this.assets = [];
   }
-  addAsset(spriteAtlasName, spriteAtlasJSON, spriteAtlasSize, frame, worldPosition) {
-    this.assets.push(new Asset(spriteAtlasName, spriteAtlasJSON, spriteAtlasSize, frame, worldPosition));
+  addAsset(spriteAtlasName, spriteAtlasJSON, spriteAtlasSize, frame, assetID, worldPosition) {
+    this.assets.push(new Asset(spriteAtlasName, spriteAtlasJSON, spriteAtlasSize, frame, assetID, worldPosition));
   }
 }

@@ -10,7 +10,7 @@ function animate(timeStamp) {
   //gl.clear(gl.COLOR_BUFFER_BIT);
   game.update();
   game.draw();
-
+  game.clear();
   //just now later ı'll create seperate ui class and make this process in inside of ui class
   fps.innerHTML = Math.round(1000 / deltaTime) + " FPS";
   requestAnimationFrame(animate);
