@@ -30,10 +30,10 @@ export class BackGround {
   }
 
   createAssetsData() {
-    this.layers.forEach((layer) => {
-      this.addUVCoord(layer.assets);
-      this.addPosition(layer.assets);
-      this.addDepthValue(layer.assets);
+    this.assets.forEach((asset) => {
+      this.addUVCoord(asset);
+      this.addPosition(asset);
+      this.addDepthValue(asset);
     });
   }
 
@@ -54,19 +54,17 @@ export class BackGround {
       );
     });
   }
-  async addPosition(assets) {
-    await assets.forEach((asset) => this.assetsPosition.push(...asset.position));
+  addPosition(asset) {
+    this.assetsPosition.push(asset.position);
   }
-  async addUVCoord(assets) {
-    await assets.forEach((asset) => this.assetsUVCoord.push(...asset.uvData));
+  addUVCoord(asset) {
+    this.assetsUVCoord.push(asset.uvData);
   }
-  async addDepthValue(assets) {
+  addDepthValue(asset) {
     const r = (a) => {
       return [a, a, a, a, a, a];
     };
-    await assets.forEach((asset) => {
-      this.spriteAtlasDepth.push(...r(asset.textureDepth));
-    });
+    this.spriteAtlasDepth.push(...r(asset.textureDepth));
   }
 
   changeMetaJSON() {
@@ -134,14 +132,12 @@ export class BackGround {
 
     this.changeMetaJSON();
 
-    for (let i = 0; i < 100; i++) {
-      this.addAssets("kk", [i * 100, 0, 2]);
-      this.addAssets("sea", [i * 200, 100, 2]);
-      this.addAssets("greenBg", [i * 200, 200, 2]);
+    for (let i = 0; i < 5; i++) {
+      this.addAssets("kk", [i * 100 + 100, 0, 2]);
+      this.addAssets("sea", [i * 200, 200, 2]);
     }
 
     this.createAssetsData();
-
     this.initAssetsArray();
 
     this.update();

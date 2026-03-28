@@ -3,9 +3,9 @@ export class InstanceData {
     //Proxy Data
     this.maxProxy = 1000;
     this.positionDataOffSet = 18;
-    this.uvDataOffSet = 18;
+    this.uvDataOffSet = 12;
     this.matrixDataOffSet = 16;
-    this.spriteAtlasDepthOffSet = 6;
+    this.spriteAtlasDepthOffSet = 1;
 
     this.positionData = new Float32Array(this.maxProxy * this.positionDataOffSet);
     this.uvData = new Float32Array(this.maxProxy * this.uvDataOffSet);

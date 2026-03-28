@@ -17,7 +17,7 @@ out vec2 vUVCoord;
 void main() {
 vUVCoord = aUVCoord;
 vDepth = aDepth;
-gl_Position = uOrthoMatrix * uViewMatrix * mat4(1.0) * aPosition;
+gl_Position = uOrthoMatrix * uViewMatrix * aModelMatrix *  aPosition;
 }
 `;
 // FSS stands for Fragment Shader Source

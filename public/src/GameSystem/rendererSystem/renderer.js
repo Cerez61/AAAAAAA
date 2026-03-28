@@ -71,27 +71,34 @@ export class Renderer {
     this.gl.bufferData(this.gl.ARRAY_BUFFER, this.instanceData.positionData, this.gl.DYNAMIC_DRAW);
     this.gl.vertexAttribPointer(0, 3, this.gl.FLOAT, false, 0, 0);
     this.gl.enableVertexAttribArray(0);
+    this.gl.vertexAttribDivisor(0, 0);
 
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.uvBuffer);
     this.gl.bufferData(this.gl.ARRAY_BUFFER, this.instanceData.uvData, this.gl.DYNAMIC_DRAW);
     this.gl.vertexAttribPointer(1, 2, this.gl.FLOAT, false, 0, 0);
     this.gl.enableVertexAttribArray(1);
+    this.gl.vertexAttribDivisor(1, 0);
 
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.spriteAtlasDepthBuffer);
     this.gl.bufferData(this.gl.ARRAY_BUFFER, this.instanceData.spriteAtlasDepthData, this.gl.DYNAMIC_DRAW);
     this.gl.vertexAttribPointer(2, 1, this.gl.FLOAT, false, 0, 0);
     this.gl.enableVertexAttribArray(2);
+    this.gl.vertexAttribDivisor(2, 0);
 
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.matrixBuffer);
     this.gl.bufferData(this.gl.ARRAY_BUFFER, this.instanceData.matrixData, this.gl.DYNAMIC_DRAW);
-    this.gl.vertexAttribPointer(3, 4, this.gl.FLOAT, false, 0, 0);
-    this.gl.vertexAttribPointer(4, 4, this.gl.FLOAT, false, 0, 4 * 4);
-    this.gl.vertexAttribPointer(5, 4, this.gl.FLOAT, false, 0, 8 * 4);
-    this.gl.vertexAttribPointer(6, 4, this.gl.FLOAT, false, 0, 12 * 4);
+    this.gl.vertexAttribPointer(3, 4, this.gl.FLOAT, false, 64, 0);
+    this.gl.vertexAttribPointer(4, 4, this.gl.FLOAT, false, 64, 4 * 4);
+    this.gl.vertexAttribPointer(5, 4, this.gl.FLOAT, false, 64, 8 * 4);
+    this.gl.vertexAttribPointer(6, 4, this.gl.FLOAT, false, 64, 12 * 4);
     this.gl.enableVertexAttribArray(3);
     this.gl.enableVertexAttribArray(4);
     this.gl.enableVertexAttribArray(5);
     this.gl.enableVertexAttribArray(6);
+    this.gl.vertexAttribDivisor(3, 1);
+    this.gl.vertexAttribDivisor(4, 1);
+    this.gl.vertexAttribDivisor(5, 1);
+    this.gl.vertexAttribDivisor(6, 1);
 
     this.gl.bindTexture(this.gl.TEXTURE_2D_ARRAY, this.textureBuffer);
     this.gl.texStorage3D(this.gl.TEXTURE_2D_ARRAY, 1, this.gl.RGBA8, 256, 256, this.assetData.spriteAtlases.length);
@@ -121,7 +128,7 @@ export class Renderer {
   draw() {
     this.gl.uniformMatrix4fv(this.viewMatrixLoc, false, this.instanceData.viewMatrix);
     this.gl.uniformMatrix4fv(this.orthoMatrixLoc, false, this.instanceData.orthoMatrix);
-    this.gl.drawArrays(this.gl.TRIANGLES, 0, this.instanceData.totalEntity);
-    console.log(this.instanceData.uvData);
+
+    this.gl.drawArraysInstanced(this.gl.TRIANGLES, 0, this.instanceData.totalEntity * 6, this.instanceData.totalEntity);
   }
 }

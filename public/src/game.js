@@ -29,6 +29,7 @@ export class Game {
   }
   update() {
     this.renderer.update();
+    this.background.update();
     this.player.update();
     this.camera.update();
     this.collector.update([this.player, this.background]);

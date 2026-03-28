@@ -17,20 +17,17 @@ export class Collector {
     this.spriteAtlasDepthOffSet = this.instanceData.spriteAtlasDepthOffSet;
   }
   updateInstanceData(player, textures) {
-    const duplicateDepth = (d) => {
-      return [d, d, d, d, d, d];
-    };
     this.instanceData.positionData.set(player.position, this.currentCount * this.positionDataOffSet);
     this.instanceData.uvData.set(player.uvData, this.currentCount * this.uvDataOffSet);
     this.instanceData.matrixData.set(player.modelMatrix, this.currentCount * this.matrixDataOffSet);
-    this.instanceData.spriteAtlasDepthData.set(...duplicateDepth(2), this.currentCount * this.spriteAtlasDepthOffSet);
+    this.instanceData.spriteAtlasDepthData.set(2, this.currentCount * this.spriteAtlasDepthOffSet);
     this.currentCount++;
 
     textures.assets.forEach((asset) => {
       this.instanceData.positionData.set(asset.position, this.currentCount * this.positionDataOffSet);
       this.instanceData.uvData.set(asset.uvData, this.currentCount * this.uvDataOffSet);
       this.instanceData.matrixData.set(textures.modelMatrix, this.currentCount * this.matrixDataOffSet);
-      this.instanceData.spriteAtlasDepthData.set(...duplicateDepth(asset.textureDepth), this.currentCount * this.spriteAtlasDepthOffSet);
+      this.instanceData.spriteAtlasDepthData.set(asset.textureDepth, this.currentCount * this.spriteAtlasDepthOffSet);
       this.currentCount++;
     });
 

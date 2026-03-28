@@ -64,6 +64,8 @@ export class Player {
 
     this.position = this.createVertexData();
     this.uvData = this.createuvData();
+
+    this.mat4.scale(this.modelMatrix, [this.width, this.height, 1]);
   }
   createVertexData() {
     /* prettier-ignore */
@@ -86,13 +88,13 @@ export class Player {
   createuvData() {
     /* prettier-ignore */
     return [
-      0,0,
-      1,0,
-      0,1,
-      0,1,
-      1,0,
-      0,0
-    ]
+      0.79296875, 0.58984375,
+      0.79296875, 0.29296875,
+      0.91796875, 0.58984375,
+      0.91796875, 0.58984375,
+      0.79296875, 0.29296875,
+      0.91796875, 0.29296875,
+    ];
   }
   setState(player, state) {
     player.currentState = player.states[state];
