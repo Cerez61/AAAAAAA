@@ -5,6 +5,7 @@ export class Collector {
     this.currentCount = 0;
     this.positionDataOffSet;
     this.uvDataOffSet;
+    this.uvRectOffSet;
     this.matrixDataOffSet;
     this.spriteAtlasDepthOffSet;
 
@@ -13,21 +14,19 @@ export class Collector {
   async init() {
     this.positionDataOffSet = this.instanceData.positionDataOffSet;
     this.uvDataOffSet = this.instanceData.uvDataOffSet;
+    this.uvRectOffSet = this.instanceData.uvRectOffSet;
     this.matrixDataOffSet = this.instanceData.matrixDataOffSet;
     this.spriteAtlasDepthOffSet = this.instanceData.spriteAtlasDepthOffSet;
   }
   updateInstanceData(player, textures) {
-    this.instanceData.positionData.set(player.position, this.currentCount * this.positionDataOffSet);
-    this.instanceData.uvData.set(player.uvData, this.currentCount * this.uvDataOffSet);
+    this.instanceData.uvRectData.set(player.uvRect, this.currentCount * this.uvRectOffSet);
     this.instanceData.matrixData.set(player.modelMatrix, this.currentCount * this.matrixDataOffSet);
-    this.instanceData.spriteAtlasDepthData.set(2, this.currentCount * this.spriteAtlasDepthOffSet);
+    this.instanceData.spriteAtlasDepthData.set([0], this.currentCount * this.spriteAtlasDepthOffSet);
     this.currentCount++;
-
     textures.assets.forEach((asset) => {
-      this.instanceData.positionData.set(asset.position, this.currentCount * this.positionDataOffSet);
-      this.instanceData.uvData.set(asset.uvData, this.currentCount * this.uvDataOffSet);
-      this.instanceData.matrixData.set(textures.modelMatrix, this.currentCount * this.matrixDataOffSet);
-      this.instanceData.spriteAtlasDepthData.set(asset.textureDepth, this.currentCount * this.spriteAtlasDepthOffSet);
+      this.instanceData.uvRectData.set(asset.uvRect, this.currentCount * this.uvRectOffSet);
+      this.instanceData.matrixData.set(asset.modelMatrix, this.currentCount * this.matrixDataOffSet);
+      this.instanceData.spriteAtlasDepthData.set([asset.textureDepth], this.currentCount * this.spriteAtlasDepthOffSet);
       this.currentCount++;
     });
 

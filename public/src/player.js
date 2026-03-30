@@ -28,9 +28,9 @@ export class Player {
     this.keys = this.entityData.keys;
     this.lastPressKeys = this.entityData.lastPressKeys;
     this.mat4 = new MAT4();
-    this.width = 20;
-    this.height = 40;
-    this.depth = 1;
+    this.width = 37;
+    this.height = 76;
+    this.depth = 2;
     this.x = this.width + this.gl.canvas.width / 4;
     this.y = this.height + 40;
     this.z = this.depth;
@@ -62,39 +62,9 @@ export class Player {
 
     this.modelMatrix = this.mat4.identity();
 
-    this.position = this.createVertexData();
-    this.uvData = this.createuvData();
+    this.uvRect = [203, 75, this.width, this.height];
 
-    this.mat4.scale(this.modelMatrix, [this.width, this.height, 1]);
-  }
-  createVertexData() {
-    /* prettier-ignore */
-    return [
-        // v stands for vertex
-        // v1
-        -1,-1,1,
-        // v2
-        -1,1,1,
-        // v3
-        1,-1,1,
-        // v3
-        1,-1,1,
-        // v2
-        -1,1,1,
-        // v4
-        1,1,1
-    ];
-  }
-  createuvData() {
-    /* prettier-ignore */
-    return [
-      0.79296875, 0.58984375,
-      0.79296875, 0.29296875,
-      0.91796875, 0.58984375,
-      0.91796875, 0.58984375,
-      0.79296875, 0.29296875,
-      0.91796875, 0.29296875,
-    ];
+    this.mat4.scale(this.modelMatrix, [this.width, this.height]);
   }
   setState(player, state) {
     player.currentState = player.states[state];

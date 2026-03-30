@@ -6,12 +6,8 @@ export class BackGround {
     /**
      * @type {WebGL2RenderingContext}
      */
-    this.globalData = gameData[0];
-    this.instanceData = gameData[1];
-    this.assetData = gameData[2];
-    this.gl = this.globalData.gl;
-    this.program = this.globalData.program;
-
+    this.instanceData = gameData[0];
+    this.assetData = gameData[1];
     this.layers = [];
     this.assets = [];
 
@@ -22,49 +18,7 @@ export class BackGround {
 
     this.modelMatrix = this.mat4.identity();
 
-    this.assetsPosition = [];
-    this.assetsUVCoord = [];
-    this.spriteAtlasDepth = [];
-
     this.assetCount = 0;
-  }
-
-  createAssetsData() {
-    this.assets.forEach((asset) => {
-      this.addUVCoord(asset);
-      this.addPosition(asset);
-      this.addDepthValue(asset);
-    });
-  }
-
-  addSpriteAtlas(spriteAtlases) {
-    spriteAtlases.forEach((spriteAtlas, index) => {
-      this.gl.texSubImage3D(
-        this.gl.TEXTURE_2D_ARRAY,
-        0,
-        0,
-        0,
-        index,
-        spriteAtlas.width,
-        spriteAtlas.height,
-        1,
-        this.gl.RGBA,
-        this.gl.UNSIGNED_BYTE,
-        spriteAtlas,
-      );
-    });
-  }
-  addPosition(asset) {
-    this.assetsPosition.push(asset.position);
-  }
-  addUVCoord(asset) {
-    this.assetsUVCoord.push(asset.uvData);
-  }
-  addDepthValue(asset) {
-    const r = (a) => {
-      return [a, a, a, a, a, a];
-    };
-    this.spriteAtlasDepth.push(...r(asset.textureDepth));
   }
 
   changeMetaJSON() {
@@ -132,36 +86,43 @@ export class BackGround {
 
     this.changeMetaJSON();
 
-    for (let i = 0; i < 5; i++) {
-      this.addAssets("kk", [i * 100 + 100, 0, 2]);
-      this.addAssets("sea", [i * 200, 200, 2]);
+    for (let i = 0; i < 1; i++) {
+      this.addAssets("...png", [i * 100, 100, 2]);
+      this.addAssets("Old_Horn.png", [i * 100, 200, 2]);
     }
 
-    this.createAssetsData();
     this.initAssetsArray();
-
+    /*  this.createAssetsData();
+     */
     this.update();
 
     console.log(Date.now() - date);
   }
-  globalDataUpdateTake() {
-    this.viewMatrix = this.instanceData.viewMatrix;
-  }
   instanceDataGive() {
-    this.assetData.assetsPosition = this.assetsPosition;
-    this.assetData.assetsUVCoord = this.assetsUVCoord;
     this.instanceData.assetCount = this.assetCount;
     this.assetData.spriteAtlases = this.spriteAtlases;
   }
   initAssetsArray() {
     this.layers.forEach((layer) => {
       layer.assets.forEach((asset) => {
-        this.assets.push(asset);
+        this.initAsset(asset);
+      });
+    });
+  }
+  initAsset(asset) {
+    this.mat4.scale(asset.modelMatrix, [asset.width, asset.height, 1]);
+    this.mat4.translate(asset.modelMatrix, [asset.x, asset.y, asset.z]);
+
+    this.assets.push(asset);
+  }
+  updateAssets() {
+    this.layers.forEach((layer) => {
+      layer.assets.forEach((asset) => {
+        this.mat4.translate(asset.modelMatrix, [asset.x, asset.y, asset.z]);
       });
     });
   }
   update() {
-    this.globalDataUpdateTake();
     this.instanceDataGive();
   }
 }

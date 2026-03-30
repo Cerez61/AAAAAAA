@@ -20,15 +20,16 @@ export class Game {
     this.inputHandler = new InputHandler(this.entityData);
     this.camera = new Camera([this.globalData, this.instanceData, this.entityData]);
     this.player = new Player([this.globalData, this.instanceData, this.entityData]);
-    this.background = new BackGround([this.globalData, this.instanceData, this.assetData]);
+    this.background = new BackGround([this.instanceData, this.assetData]);
   }
   async init() {
-    //await this.renderer.init();
     await this.collector.init();
     await this.background.init();
+    this.update();
+    this.clear();
+    this.renderer.initBuffer();
   }
   update() {
-    this.renderer.update();
     this.background.update();
     this.player.update();
     this.camera.update();
