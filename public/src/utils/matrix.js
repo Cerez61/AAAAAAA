@@ -62,6 +62,14 @@ export class MAT4 {
 
     return out;
   }
+  multiplyVerticesMatrix(out, vertices, m) {
+    for (let i = 0; i < vertices.length; i += 3) {
+      out[i] = vertices[i] * m[0] + vertices[i + 1] * m[4] + vertices[i + 2] * m[8] + m[12];
+      out[i + 1] = vertices[i] * m[1] + vertices[i + 1] * m[5] + vertices[i + 2] * m[9] + m[13];
+      out[i + 2] = vertices[i] * m[2] + vertices[i + 1] * m[6] + vertices[i + 2] * m[10] + m[14];
+    }
+    return out;
+  }
   scale(out, n) {
     const x = n[0] || 1;
     const y = n[1] || 1;

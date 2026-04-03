@@ -87,8 +87,9 @@ export class BackGround {
     this.changeMetaJSON();
 
     for (let i = 0; i < 1; i++) {
-      this.addAssets("...png", [i * 100, 100, 2]);
-      this.addAssets("Old_Horn.png", [i * 100, 200, 2]);
+      for (let k = 0; k < 1; k++) {
+        this.addAssets("...png", [100, 30, 2]);
+      }
     }
 
     this.initAssetsArray();
@@ -110,7 +111,7 @@ export class BackGround {
     });
   }
   initAsset(asset) {
-    this.mat4.scale(asset.modelMatrix, [asset.width, asset.height, 1]);
+    this.mat4.scale(asset.modelMatrix, [15, 30, 1]);
     this.mat4.translate(asset.modelMatrix, [asset.x, asset.y, asset.z]);
 
     this.assets.push(asset);

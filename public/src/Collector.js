@@ -3,20 +3,14 @@ export class Collector {
     this.instanceData = gameData;
 
     this.currentCount = 0;
-    this.positionDataOffSet;
-    this.uvDataOffSet;
     this.uvRectOffSet;
     this.matrixDataOffSet;
-    this.spriteAtlasDepthOffSet;
 
     this.totalEntity;
   }
   async init() {
-    this.positionDataOffSet = this.instanceData.positionDataOffSet;
-    this.uvDataOffSet = this.instanceData.uvDataOffSet;
     this.uvRectOffSet = this.instanceData.uvRectOffSet;
     this.matrixDataOffSet = this.instanceData.matrixDataOffSet;
-    this.spriteAtlasDepthOffSet = this.instanceData.spriteAtlasDepthOffSet;
   }
   updateInstanceData(player, textures) {
     this.instanceData.uvRectData.set(player.uvRect, this.currentCount * this.uvRectOffSet);

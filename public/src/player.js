@@ -28,8 +28,8 @@ export class Player {
     this.keys = this.entityData.keys;
     this.lastPressKeys = this.entityData.lastPressKeys;
     this.mat4 = new MAT4();
-    this.width = 37;
-    this.height = 76;
+    this.width = 20;
+    this.height = 40;
     this.depth = 2;
     this.x = this.width + this.gl.canvas.width / 4;
     this.y = this.height + 40;
@@ -62,7 +62,7 @@ export class Player {
 
     this.modelMatrix = this.mat4.identity();
 
-    this.uvRect = [203, 75, this.width, this.height];
+    this.uvRect = [203, 75, 37, 76];
 
     this.mat4.scale(this.modelMatrix, [this.width, this.height]);
   }
