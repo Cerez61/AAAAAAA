@@ -23,6 +23,7 @@ export class Renderer {
     this.rendererVAO = this.gl.createVertexArray();
     this.collisionVAO = this.gl.createVertexArray();
 
+    this.collisionBuffer = this.gl.createBuffer();
     this.positionBuffer = this.gl.createBuffer();
     this.uvBuffer = this.gl.createBuffer();
     this.uvRectBuffer = this.gl.createBuffer();
@@ -171,8 +172,8 @@ export class Renderer {
   initCollisionBuffer() {
     this.gl.bindVertexArray(this.collisionVAO);
 
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
-    this.gl.bufferData(this.gl.ARRAY_BUFFER, this.instanceData.positionData, this.gl.DYNAMIC_DRAW);
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.collisionBuffer);
+    this.gl.bufferData(this.gl.ARRAY_BUFFER, this.instanceData.collisionData, this.gl.DYNAMIC_DRAW);
     this.gl.vertexAttribPointer(0, 3, this.gl.FLOAT, false, 0, 0);
     this.gl.enableVertexAttribArray(0);
 
@@ -234,7 +235,7 @@ export class Renderer {
     this.gl.uniformMatrix4fv(this.collisionViewLoc, false, this.instanceData.viewMatrix);
     this.gl.uniformMatrix4fv(this.collisionOrthoLoc, false, this.instanceData.orthoMatrix);
 
-    this.gl.drawArraysInstanced(this.gl.LINE_LOOP, 0, 6, this.instanceData.totalEntity);
+    this.gl.drawArraysInstanced(this.gl.LINE_LOOP, 0, 4, this.instanceData.totalEntity);
 
     this.gl.bindVertexArray(null);
   }

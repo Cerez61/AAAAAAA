@@ -5,6 +5,7 @@ export class InstanceData {
     this.uvRectOffSet = 4;
     this.matrixDataOffSet = 16;
 
+    this.collisionData = new Float32Array([-1, -1, 1, -1, 1, 1, 1, 1, 1, 1, -1, 1]);
     this.positionData = new Float32Array([-1, -1, 1, -1, 1, 1, 1, -1, 1, 1, -1, 1, -1, 1, 1, 1, 1, 1]);
     this.uvData = new Float32Array(this.maxProxy * this.uvDataOffSet);
     this.uvRectData = new Float32Array(this.maxProxy * this.uvRectOffSet);

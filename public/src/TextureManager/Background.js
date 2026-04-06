@@ -88,7 +88,7 @@ export class BackGround {
 
     for (let i = 0; i < 10; i++) {
       for (let k = 0; k < 1; k++) {
-        this.addAssets("...png", [i * 150, 80, 2]);
+        this.addAssets("...png", [i * 700, 80, 2]);
       }
     }
 
