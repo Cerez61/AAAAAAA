@@ -21,5 +21,7 @@ export class Asset {
     this.z = worldPosition[2];
 
     this.modelMatrix = mat4.identity();
+
+    this.outlineColor = 0;
   }
 }

@@ -1,4 +1,5 @@
-import { gameVSS, gameFSS } from "../../shaders.js";
+import { collisionVSS, collisionFSS } from "./shaders/collisionShader.js";
+import { gameVSS, gameFSS } from "./shaders/shaders.js";
 
 export class Renderer {
   constructor(gameData) {
@@ -13,9 +14,15 @@ export class Renderer {
 
     this.gameVS = this.gl.createShader(this.gl.VERTEX_SHADER);
     this.gameFS = this.gl.createShader(this.gl.FRAGMENT_SHADER);
+    this.collisionVS = this.gl.createShader(this.gl.VERTEX_SHADER);
+    this.collisionFS = this.gl.createShader(this.gl.FRAGMENT_SHADER);
+
     this.program = this.gl.createProgram();
+    this.collisionProgram = this.gl.createProgram();
 
     this.rendererVAO = this.gl.createVertexArray();
+    this.collisionVAO = this.gl.createVertexArray();
+
     this.positionBuffer = this.gl.createBuffer();
     this.uvBuffer = this.gl.createBuffer();
     this.uvRectBuffer = this.gl.createBuffer();
@@ -23,6 +30,7 @@ export class Renderer {
     this.textureBuffer = this.gl.createTexture();
     this.spriteAtlasDepthBuffer = this.gl.createBuffer();
     this.spriteAtlasSizeBuffer = this.gl.createBuffer();
+    this.outlineColorBuffer = this.gl.createBuffer();
 
     this.indexBuffer = this.gl.createBuffer();
 
@@ -30,6 +38,9 @@ export class Renderer {
 
     this.viewMatrixLoc = this.gl.getUniformLocation(this.program, "uViewMatrix");
     this.orthoMatrixLoc = this.gl.getUniformLocation(this.program, "uOrthoMatrix");
+
+    this.collisionViewLoc = this.gl.getUniformLocation(this.collisionProgram, "uViewMatrix");
+    this.collisionOrthoLoc = this.gl.getUniformLocation(this.collisionProgram, "uOrthoMatrix");
 
     this.globalData = gameData[0];
     this.instanceData = gameData[1];
@@ -46,24 +57,34 @@ export class Renderer {
     this.globalData.program = this.program;
   }
   init() {
+    this.initProgram(this.program, this.gameVS, this.gameFS, gameVSS, gameFSS);
+    this.initProgram(this.collisionProgram, this.collisionVS, this.collisionFS, collisionVSS, collisionFSS);
+  }
+  initProgram(program, vs, fs, vss, fss) {
     this.gl.viewport(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
 
     //Vertex Shader
-    this.gl.shaderSource(this.gameVS, gameVSS);
-    this.gl.compileShader(this.gameVS);
-
+    this.gl.shaderSource(vs, vss);
+    this.gl.compileShader(vs);
+    if (!this.gl.getShaderParameter(vs, this.gl.COMPILE_STATUS)) {
+      console.error("Vertex Shader Error:", this.gl.getShaderInfoLog(vs));
+    }
     //Fragment Shader
-    this.gl.shaderSource(this.gameFS, gameFSS);
-    this.gl.compileShader(this.gameFS);
-
+    this.gl.shaderSource(fs, fss);
+    this.gl.compileShader(fs);
+    if (!this.gl.getShaderParameter(fs, this.gl.COMPILE_STATUS)) {
+      console.error("Fragment Shader Error:", this.gl.getShaderInfoLog(fs));
+    }
     //Attach Shader to Program
-    this.gl.attachShader(this.program, this.gameVS);
-    this.gl.attachShader(this.program, this.gameFS);
+    this.gl.attachShader(program, vs);
+    this.gl.attachShader(program, fs);
 
     //Run Program
-    this.gl.linkProgram(this.program);
-    this.gl.useProgram(this.program);
-
+    this.gl.linkProgram(program);
+    this.gl.useProgram(program);
+    if (!this.gl.getProgramParameter(program, this.gl.LINK_STATUS)) {
+      console.error("Program Link Error:", this.gl.getProgramInfoLog(program));
+    }
     //Adjust Depth
     this.gl.enable(this.gl.DEPTH_TEST);
 
@@ -71,7 +92,7 @@ export class Renderer {
     this.gl.enable(this.gl.BLEND);
     this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
   }
-  initBuffer() {
+  initGameBuffer() {
     this.gl.bindVertexArray(this.rendererVAO);
 
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
@@ -147,37 +168,73 @@ export class Renderer {
 
     this.gl.bindVertexArray(null);
   }
-  update() {}
-  draw() {
-    this.gl.bindVertexArray(this.rendererVAO);
+  initCollisionBuffer() {
+    this.gl.bindVertexArray(this.collisionVAO);
 
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
     this.gl.bufferData(this.gl.ARRAY_BUFFER, this.instanceData.positionData, this.gl.DYNAMIC_DRAW);
+    this.gl.vertexAttribPointer(0, 3, this.gl.FLOAT, false, 0, 0);
+    this.gl.enableVertexAttribArray(0);
 
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.uvBuffer);
-    this.gl.bufferData(this.gl.ARRAY_BUFFER, this.instanceData.uvData, this.gl.DYNAMIC_DRAW);
-
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.spriteAtlasDepthBuffer);
-    this.gl.bufferData(this.gl.ARRAY_BUFFER, this.instanceData.spriteAtlasDepthData, this.gl.DYNAMIC_DRAW);
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.outlineColorBuffer);
+    this.gl.bufferData(this.gl.ARRAY_BUFFER, this.instanceData.outlineColorData, this.gl.DYNAMIC_DRAW);
+    this.gl.vertexAttribPointer(1, 1, this.gl.FLOAT, false, 0, 0);
+    this.gl.enableVertexAttribArray(1);
+    this.gl.vertexAttribDivisor(1, 1);
 
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.matrixBuffer);
     this.gl.bufferData(this.gl.ARRAY_BUFFER, this.instanceData.matrixData, this.gl.DYNAMIC_DRAW);
+    this.gl.vertexAttribPointer(3, 4, this.gl.FLOAT, false, 64, 0);
+    this.gl.vertexAttribPointer(4, 4, this.gl.FLOAT, false, 64, 16);
+    this.gl.vertexAttribPointer(5, 4, this.gl.FLOAT, false, 64, 32);
+    this.gl.vertexAttribPointer(6, 4, this.gl.FLOAT, false, 64, 48);
+    this.gl.enableVertexAttribArray(3);
+    this.gl.enableVertexAttribArray(4);
+    this.gl.enableVertexAttribArray(5);
+    this.gl.enableVertexAttribArray(6);
+    this.gl.vertexAttribDivisor(3, 1);
+    this.gl.vertexAttribDivisor(4, 1);
+    this.gl.vertexAttribDivisor(5, 1);
+    this.gl.vertexAttribDivisor(6, 1);
+
+    this.gl.bindVertexArray(null);
+  }
+  update() {}
+  draw() {
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.matrixBuffer);
+    this.gl.bufferSubData(this.gl.ARRAY_BUFFER, 0, this.instanceData.matrixData);
+
+    this.gl.useProgram(this.program);
+
+    this.gl.bindVertexArray(this.rendererVAO);
+
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.spriteAtlasDepthBuffer);
+    this.gl.bufferSubData(this.gl.ARRAY_BUFFER, 0, this.instanceData.spriteAtlasDepthData);
 
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.uvRectBuffer);
-    this.gl.bufferData(this.gl.ARRAY_BUFFER, this.instanceData.uvRectData, this.gl.DYNAMIC_DRAW);
-
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.indexBuffer);
-    this.gl.bufferData(this.gl.ARRAY_BUFFER, this.instanceData.indexData, this.gl.STATIC_DRAW);
+    this.gl.bufferSubData(this.gl.ARRAY_BUFFER, 0, this.instanceData.uvRectData);
 
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.spriteAtlasSizeBuffer);
-    this.gl.bufferData(this.gl.ARRAY_BUFFER, this.instanceData.spriteAtlasSizeData, this.gl.DYNAMIC_DRAW);
-
-    this.gl.bindTexture(this.gl.TEXTURE_2D_ARRAY, this.textureBuffer);
+    this.gl.bufferSubData(this.gl.ARRAY_BUFFER, 0, this.instanceData.spriteAtlasSizeData);
 
     this.gl.uniformMatrix4fv(this.viewMatrixLoc, false, this.instanceData.viewMatrix);
     this.gl.uniformMatrix4fv(this.orthoMatrixLoc, false, this.instanceData.orthoMatrix);
 
     this.gl.drawArraysInstanced(this.gl.TRIANGLES, 0, 6, this.instanceData.totalEntity);
+
+    this.gl.bindVertexArray(null);
+
+    this.gl.useProgram(this.collisionProgram);
+
+    this.gl.bindVertexArray(this.collisionVAO);
+
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.outlineColorBuffer);
+    this.gl.bufferSubData(this.gl.ARRAY_BUFFER, 0, this.instanceData.outlineColorData);
+
+    this.gl.uniformMatrix4fv(this.collisionViewLoc, false, this.instanceData.viewMatrix);
+    this.gl.uniformMatrix4fv(this.collisionOrthoLoc, false, this.instanceData.orthoMatrix);
+
+    this.gl.drawArraysInstanced(this.gl.LINE_LOOP, 0, 6, this.instanceData.totalEntity);
 
     this.gl.bindVertexArray(null);
   }

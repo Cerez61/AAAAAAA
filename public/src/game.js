@@ -29,7 +29,8 @@ export class Game {
     await this.background.init();
     this.update();
     this.clear();
-    this.renderer.initBuffer();
+    this.renderer.initGameBuffer();
+    this.renderer.initCollisionBuffer();
   }
   update() {
     this.background.update();

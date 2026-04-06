@@ -3,6 +3,7 @@ export class CollisionSAT {
   constructor(gameData) {
     this.instanceData = gameData;
     this.vertexData = this.instanceData.positionData;
+    this.assetID;
     this.mat4 = new MAT4();
   }
   intersectPolygons(verticesA, verticesB) {
@@ -22,9 +23,29 @@ export class CollisionSAT {
       const b = this.projectVertices(verticesB, axis, minB, maxB);
 
       if (a.min >= b.max || b.min >= a.max) {
-        console.log("çarpışmıyor");
+        return false;
       }
     }
+    for (let i = 0; i < verticesB.length; i += 3) {
+      const va = [verticesB[i], verticesB[i + 1]];
+      const vb = [verticesB[(i + 3) % verticesB.length], verticesB[(i + 4) % verticesB.length]];
+
+      const edge = this.getEdge(va, vb);
+      const axis = this.getAxis(edge);
+
+      let minA = Number.MAX_VALUE;
+      let minB = Number.MAX_VALUE;
+      let maxA = Number.MIN_VALUE;
+      let maxB = Number.MIN_VALUE;
+
+      const a = this.projectVertices(verticesA, axis, minA, maxA);
+      const b = this.projectVertices(verticesB, axis, minB, maxB);
+
+      if (a.min >= b.max || b.min >= a.max) {
+        return false;
+      }
+    }
+    return true;
   }
   projectVertices(vertices, axis, min, max) {
     for (let i = 0; i < vertices.length; i += 3) {
@@ -45,18 +66,42 @@ export class CollisionSAT {
   dotProduct(vertex, axis) {
     return axis[0] * vertex[0] + axis[1] * vertex[1];
   }
-  update(entities) {
-    console.log();
+  checkCollision(entities) {
     //entities[0] = player, entities[1] = textures
     const player = entities[0];
     const textures = entities[1];
 
     for (let i = 0; i < 1; i++) {
       const playerVertices = this.mat4.multiplyVerticesMatrix(new Float32Array(18), this.vertexData, player.modelMatrix);
-      textures.assets.forEach((asset) => {
+      for (const asset of textures.assets) {
         const assetVertices = this.mat4.multiplyVerticesMatrix(new Float32Array(18), this.vertexData, asset.modelMatrix);
-        this.intersectPolygons(playerVertices, assetVertices);
-      });
+
+        if (this.intersectPolygons(playerVertices, assetVertices)) {
+          //çarpışma var
+          return asset;
+        }
+      }
+
+      return null;
+    }
+  }
+  update(entities) {
+    //entities[0] = player, entities[1] = textures
+    const player = entities[0];
+    const textures = entities[1];
+
+    const collidedAsset = this.checkCollision([player, textures]);
+
+    if (this.assetID !== undefined) {
+      textures.assets[this.assetID].outlineColor = 0;
+    }
+
+    if (collidedAsset) {
+      player.outlineColor = 1;
+      collidedAsset.outlineColor = 1;
+      this.assetID = collidedAsset.assetID;
+    } else {
+      player.outlineColor = 0;
     }
   }
 }

@@ -15,12 +15,14 @@ export class Collector {
   updateInstanceData(player, textures) {
     this.instanceData.uvRectData.set(player.uvRect, this.currentCount * this.uvRectOffSet);
     this.instanceData.matrixData.set(player.modelMatrix, this.currentCount * this.matrixDataOffSet);
-    this.instanceData.spriteAtlasDepthData.set([0], this.currentCount * this.spriteAtlasDepthOffSet);
+    this.instanceData.spriteAtlasDepthData.set([0], this.currentCount);
+    this.instanceData.outlineColorData.set([player.outlineColor], this.currentCount);
     this.currentCount++;
     textures.assets.forEach((asset) => {
       this.instanceData.uvRectData.set(asset.uvRect, this.currentCount * this.uvRectOffSet);
       this.instanceData.matrixData.set(asset.modelMatrix, this.currentCount * this.matrixDataOffSet);
-      this.instanceData.spriteAtlasDepthData.set([asset.textureDepth], this.currentCount * this.spriteAtlasDepthOffSet);
+      this.instanceData.spriteAtlasDepthData.set([asset.textureDepth], this.currentCount);
+      this.instanceData.outlineColorData.set([asset.outlineColor], this.currentCount);
       this.currentCount++;
     });
 

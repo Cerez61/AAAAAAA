@@ -10,7 +10,6 @@ layout(location = 7) in vec4 aUVRect;
 layout(location = 8) in float aIndex;
 layout(location = 9) in vec2 aSpriteAtlasSize;
 
-uniform mat4 uMatrix;
 uniform mat4 uViewMatrix;
 uniform mat4 uOrthoMatrix;
 

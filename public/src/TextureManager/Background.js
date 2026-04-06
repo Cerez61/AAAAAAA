@@ -86,9 +86,9 @@ export class BackGround {
 
     this.changeMetaJSON();
 
-    for (let i = 0; i < 1; i++) {
+    for (let i = 0; i < 10; i++) {
       for (let k = 0; k < 1; k++) {
-        this.addAssets("...png", [100, 30, 2]);
+        this.addAssets("...png", [i * 150, 80, 2]);
       }
     }
 
@@ -111,7 +111,7 @@ export class BackGround {
     });
   }
   initAsset(asset) {
-    this.mat4.scale(asset.modelMatrix, [15, 30, 1]);
+    this.mat4.scale(asset.modelMatrix, [40, 80, 1]);
     this.mat4.translate(asset.modelMatrix, [asset.x, asset.y, asset.z]);
 
     this.assets.push(asset);

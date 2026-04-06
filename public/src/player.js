@@ -64,6 +64,7 @@ export class Player {
 
     this.uvRect = [203, 75, 37, 76];
 
+    this.outlineColor = 0;
     this.mat4.scale(this.modelMatrix, [this.width, this.height]);
   }
   setState(player, state) {
