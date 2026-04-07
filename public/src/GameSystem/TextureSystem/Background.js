@@ -1,5 +1,5 @@
 import { Layer } from "./Layer.js";
-import { MAT4 } from "../utils/matrix.js";
+import { MAT4 } from "../../utils/matrix.js";
 export class BackGround {
   constructor(gameData) {
     //intelisense webgl content

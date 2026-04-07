@@ -24,7 +24,6 @@ export class Player {
     this.instanceData = gameData[1];
     this.entityData = gameData[2];
     this.gl = this.globalData.gl;
-    this.program = this.globalData.program;
     this.keys = this.entityData.keys;
     this.lastPressKeys = this.entityData.lastPressKeys;
     this.mat4 = new MAT4();
@@ -34,14 +33,16 @@ export class Player {
     this.x = this.width + this.gl.canvas.width / 4;
     this.y = this.height + 40;
     this.z = this.depth;
-    this.weight = 0;
-    this.jumpHeight = 10;
+
     this.speed = 1.5;
     this.maxSpeed = 10;
     this.vx = 0;
     this.xSpeedMultiplier = 1;
+
     this.vy = 0;
     this.jumpCount = 2;
+    this.jumpHeight = 10;
+    this.weight = 0;
 
     this.states = [
       new IdleLeft(this),
@@ -113,6 +114,8 @@ export class Player {
 
   update() {
     this.currentState.updateState();
+
+    // this.x += horizontalMovement();
 
     this.horizontalMovement();
     this.verticalMovement();

@@ -1,7 +1,8 @@
 import { Renderer } from "./GameSystem/rendererSystem/renderer.js";
 import { Player } from "./player.js";
+import { Enemy } from "./GameSystem/enemySystem/enemy.js";
 import { Camera } from "./camera.js";
-import { BackGround } from "./TextureManager/Background.js";
+import { BackGround } from "./GameSystem/TextureSystem/Background.js";
 import { InputHandler } from "./inputHandler.js";
 import { Collector } from "./Collector.js";
 import { CollisionSAT } from "./GameSystem/collisionSystem/collisionSAT.js";
@@ -22,11 +23,13 @@ export class Game {
     this.collisionSAT = new CollisionSAT(this.instanceData);
     this.camera = new Camera([this.globalData, this.instanceData, this.entityData]);
     this.player = new Player([this.globalData, this.instanceData, this.entityData]);
+    this.enemy = new Enemy(this.entityData);
     this.background = new BackGround([this.instanceData, this.assetData]);
   }
   async init() {
     await this.collector.init();
     await this.background.init();
+    this.enemy.init();
     this.update();
     this.clear();
     this.renderer.initGameBuffer();
@@ -35,9 +38,10 @@ export class Game {
   update() {
     this.background.update();
     this.player.update();
+    this.enemy.update();
     this.camera.update();
-    this.collector.update([this.player, this.background]);
-    this.collisionSAT.update([this.player, this.background]);
+    this.collector.update([this.player, this.background, this.enemy]);
+    this.collisionSAT.update([this.player, this.background, this.enemy]);
   }
   draw() {
     this.renderer.draw();
