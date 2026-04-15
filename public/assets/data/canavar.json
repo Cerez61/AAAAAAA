@@ -1,0 +1,39 @@
+{
+  "frames": {
+    "kaçin": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 900,
+        "h": 1600
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 900,
+        "h": 1600
+      },
+      "sourceSize": {
+        "w": 900,
+        "h": 1600
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  },
+  "meta": {
+    "app": "http://free-tex-packer.com",
+    "version": "0.6.7",
+    "image": "canavar.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 2048,
+      "h": 2048
+    },
+    "scale": 1
+  }
+}

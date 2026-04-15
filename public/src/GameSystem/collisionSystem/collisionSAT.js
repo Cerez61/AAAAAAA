@@ -1,19 +1,4 @@
-import { MAT4 } from "../../utils/matrix.js";
 export class CollisionSAT {
-  constructor(gameData) {
-    this.instanceData = gameData;
-    this.vertexData = this.instanceData.collisionData;
-
-    this.assetID = [];
-    this.enemyID = [];
-
-    this.mat4 = new MAT4();
-
-    this.viewMatrix = this.mat4.identity();
-    this.orthoMatrix = this.mat4.identity();
-    this.mvMatrix = this.mat4.identity();
-    this.mvoMatrix = this.mat4.identity();
-  }
   intersectPolygons(verticesA, verticesB) {
     for (let i = 0; i < verticesA.length; i += 3) {
       const va = [verticesA[i], verticesA[i + 1]];
@@ -73,74 +58,5 @@ export class CollisionSAT {
   }
   dotProduct(vertex, axis) {
     return axis[0] * vertex[0] + axis[1] * vertex[1];
-  }
-  checkCollision(entities) {
-    //entities[0] = player, entities[1] = textures
-    const player = entities[0];
-    const textures = entities[1];
-    const encounters = entities[2];
-
-    for (let i = 0; i < 1; i++) {
-      const playerVertices = this.mat4.multiplyVerticesMatrix(new Float32Array(12), this.vertexData, player.modelMatrix);
-      for (const asset of textures.assets) {
-        const assetVertices = this.mat4.multiplyVerticesMatrix(new Float32Array(12), this.vertexData, asset.modelMatrix);
-
-        if (this.intersectPolygons(playerVertices, assetVertices)) {
-          //çarpışma var
-          this.assetID.push(asset.assetID);
-          continue;
-        }
-      }
-      for (const enemy of encounters.enemies) {
-        const enemyVertices = this.mat4.multiplyVerticesMatrix(new Float32Array(12), this.vertexData, enemy.modelMatrix);
-
-        if (this.intersectPolygons(playerVertices, enemyVertices)) {
-          this.enemyID.push(enemy.enemyID);
-          continue;
-        }
-      }
-    }
-  }
-  instanceDataTake() {
-    this.viewMatrix = this.instanceData.viewMatrix;
-    this.orthoMatrix = this.instanceData.orthoMatrix;
-  }
-  update(entities) {
-    this.instanceDataTake();
-    //entities[0] = player, entities[1] = textures,entities[2] = enemy
-    const player = entities[0];
-    const textures = entities[1];
-    const encounters = entities[2];
-
-    if (this.assetID.length > 0) {
-      for (const id of this.assetID) {
-        textures.assets[id].outlineColor = 0;
-      }
-      this.assetID = [];
-    }
-    if (this.enemyID.length > 0) {
-      for (const id of this.enemyID) {
-        encounters.enemies[id].outlineColor = 0;
-      }
-      this.enemyID = [];
-    }
-
-    this.checkCollision([player, textures, encounters]);
-
-    if (this.assetID.length > 0) {
-      player.outlineColor = 1;
-
-      for (const id of this.assetID) {
-        textures.assets[id].outlineColor = 1;
-      }
-    } else if (this.enemyID.length > 0) {
-      player.outlineColor = 1;
-
-      for (const id of this.enemyID) {
-        encounters.enemies[id].outlineColor = 1;
-      }
-    } else {
-      player.outlineColor = 0;
-    }
   }
 }

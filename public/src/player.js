@@ -27,11 +27,11 @@ export class Player {
     this.keys = this.entityData.keys;
     this.lastPressKeys = this.entityData.lastPressKeys;
     this.mat4 = new MAT4();
-    this.width = 20;
-    this.height = 40;
+    this.w = 20;
+    this.h = 40;
     this.depth = 2;
-    this.x = this.width + this.gl.canvas.width / 4;
-    this.y = this.height + 40;
+    this.x = this.w + this.gl.canvas.width / 4;
+    this.y = this.h + 40;
     this.z = this.depth;
 
     this.speed = 1.5;
@@ -66,14 +66,14 @@ export class Player {
     this.uvRect = [203, 75, 37, 76];
 
     this.outlineColor = 0;
-    this.mat4.scale(this.modelMatrix, [this.width, this.height]);
+    this.mat4.scale(this.modelMatrix, [this.w, this.h]);
   }
   setState(player, state) {
     player.currentState = player.states[state];
     player.currentState.enter();
   }
   onGround() {
-    return this.y <= this.height;
+    return this.y <= this.h;
   }
   horizontalMovement() {
     if (this.keys.includes("d") && !this.keys.includes("a") && this.vx < this.maxSpeed) this.vx += this.xSpeedMultiplier;
@@ -85,7 +85,7 @@ export class Player {
     this.x += this.vx * this.speed;
   }
   verticalMovement() {
-    if (this.y + this.weight <= this.height) this.y = this.height;
+    if (this.y + this.weight <= this.h) this.y = this.h;
 
     if (this.onGround()) {
       this.vy = 0;

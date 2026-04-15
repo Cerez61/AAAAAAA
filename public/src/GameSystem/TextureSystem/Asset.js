@@ -11,10 +11,10 @@ export class Asset {
 
     this.u = frame.x;
     this.v = frame.y;
-    this.width = frame.w;
-    this.height = frame.h;
+    this.w = frame.w;
+    this.h = frame.h;
 
-    this.uvRect = [this.u, this.v, this.width, this.height];
+    this.uvRect = [this.u, this.v, this.w, this.h];
 
     this.x = worldPosition[0];
     this.y = worldPosition[1];
