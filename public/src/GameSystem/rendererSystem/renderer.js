@@ -1,4 +1,5 @@
 import { collisionVSS, collisionFSS } from "./shaders/collisionShader.js";
+import { qtVSS, qtFSS } from "./shaders/qtShader.js";
 import { gameVSS, gameFSS } from "./shaders/shaders.js";
 
 export class Renderer {
@@ -16,18 +17,23 @@ export class Renderer {
     this.gameFS = this.gl.createShader(this.gl.FRAGMENT_SHADER);
     this.collisionVS = this.gl.createShader(this.gl.VERTEX_SHADER);
     this.collisionFS = this.gl.createShader(this.gl.FRAGMENT_SHADER);
+    this.qtVS = this.gl.createShader(this.gl.VERTEX_SHADER);
+    this.qtFS = this.gl.createShader(this.gl.FRAGMENT_SHADER);
 
     this.program = this.gl.createProgram();
     this.collisionProgram = this.gl.createProgram();
+    this.qtProgram = this.gl.createProgram();
 
     this.rendererVAO = this.gl.createVertexArray();
     this.collisionVAO = this.gl.createVertexArray();
+    this.qtVAO = this.gl.createVertexArray();
 
     this.collisionBuffer = this.gl.createBuffer();
     this.positionBuffer = this.gl.createBuffer();
     this.uvBuffer = this.gl.createBuffer();
     this.uvRectBuffer = this.gl.createBuffer();
     this.matrixBuffer = this.gl.createBuffer();
+    this.qtMatrixBuffer = this.gl.createBuffer();
     this.textureBuffer = this.gl.createTexture();
     this.spriteAtlasDepthBuffer = this.gl.createBuffer();
     this.spriteAtlasSizeBuffer = this.gl.createBuffer();
@@ -42,6 +48,9 @@ export class Renderer {
 
     this.collisionViewLoc = this.gl.getUniformLocation(this.collisionProgram, "uViewMatrix");
     this.collisionOrthoLoc = this.gl.getUniformLocation(this.collisionProgram, "uOrthoMatrix");
+
+    this.qtViewLoc = this.gl.getUniformLocation(this.qtProgram, "uViewMatrix");
+    this.qtOrthoLoc = this.gl.getUniformLocation(this.qtProgram, "uOrthoMatrix");
 
     this.globalData = gameData[0];
     this.instanceData = gameData[1];
@@ -60,6 +69,7 @@ export class Renderer {
   init() {
     this.initProgram(this.program, this.gameVS, this.gameFS, gameVSS, gameFSS);
     this.initProgram(this.collisionProgram, this.collisionVS, this.collisionFS, collisionVSS, collisionFSS);
+    this.initProgram(this.qtProgram, this.qtVS, this.qtFS, qtVSS, qtFSS);
   }
   initProgram(program, vs, fs, vss, fss) {
     this.gl.viewport(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
@@ -185,6 +195,7 @@ export class Renderer {
 
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.matrixBuffer);
     this.gl.bufferData(this.gl.ARRAY_BUFFER, this.instanceData.matrixData, this.gl.DYNAMIC_DRAW);
+
     this.gl.vertexAttribPointer(3, 4, this.gl.FLOAT, false, 64, 0);
     this.gl.vertexAttribPointer(4, 4, this.gl.FLOAT, false, 64, 16);
     this.gl.vertexAttribPointer(5, 4, this.gl.FLOAT, false, 64, 32);
@@ -200,7 +211,32 @@ export class Renderer {
 
     this.gl.bindVertexArray(null);
   }
-  update() {}
+  initQtBuffer() {
+    this.gl.bindVertexArray(this.qtVAO);
+
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.collisionBuffer);
+    this.gl.bufferData(this.gl.ARRAY_BUFFER, this.instanceData.collisionData, this.gl.DYNAMIC_DRAW);
+    this.gl.vertexAttribPointer(0, 3, this.gl.FLOAT, false, 0, 0);
+    this.gl.enableVertexAttribArray(0);
+
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.qtMatrixBuffer);
+    this.gl.bufferData(this.gl.ARRAY_BUFFER, this.instanceData.qtMatrixData, this.gl.DYNAMIC_DRAW);
+
+    this.gl.vertexAttribPointer(1, 4, this.gl.FLOAT, false, 64, 0);
+    this.gl.vertexAttribPointer(2, 4, this.gl.FLOAT, false, 64, 16);
+    this.gl.vertexAttribPointer(3, 4, this.gl.FLOAT, false, 64, 32);
+    this.gl.vertexAttribPointer(4, 4, this.gl.FLOAT, false, 64, 48);
+    this.gl.enableVertexAttribArray(1);
+    this.gl.enableVertexAttribArray(2);
+    this.gl.enableVertexAttribArray(3);
+    this.gl.enableVertexAttribArray(4);
+    this.gl.vertexAttribDivisor(1, 1);
+    this.gl.vertexAttribDivisor(2, 1);
+    this.gl.vertexAttribDivisor(3, 1);
+    this.gl.vertexAttribDivisor(4, 1);
+
+    this.gl.bindVertexArray(null);
+  }
   draw() {
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.matrixBuffer);
     this.gl.bufferSubData(this.gl.ARRAY_BUFFER, 0, this.instanceData.matrixData);
@@ -236,6 +272,22 @@ export class Renderer {
     this.gl.uniformMatrix4fv(this.collisionOrthoLoc, false, this.instanceData.orthoMatrix);
 
     this.gl.drawArraysInstanced(this.gl.LINE_LOOP, 0, 4, this.instanceData.totalEntity);
+
+    this.gl.bindVertexArray(null);
+
+    this.gl.useProgram(this.qtProgram);
+
+    this.gl.bindVertexArray(this.qtVAO);
+
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.qtMatrixBuffer);
+    this.gl.bufferSubData(this.gl.ARRAY_BUFFER, 0, this.instanceData.qtMatrixData);
+    /* this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.qtMatrixBuffer);
+    this.gl.bufferData(this.gl.ARRAY_BUFFER, this.instanceData.qtMatrixData, this.gl.DYNAMIC_DRAW);
+ */
+    this.gl.uniformMatrix4fv(this.qtViewLoc, false, this.instanceData.viewMatrix);
+    this.gl.uniformMatrix4fv(this.qtOrthoLoc, false, this.instanceData.orthoMatrix);
+
+    this.gl.drawArraysInstanced(this.gl.LINE_LOOP, 0, 4, this.instanceData.totalQtNode);
 
     this.gl.bindVertexArray(null);
   }

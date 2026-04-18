@@ -10,6 +10,7 @@ export class InstanceData {
     this.uvData = new Float32Array(this.maxProxy * this.uvDataOffSet);
     this.uvRectData = new Float32Array(this.maxProxy * this.uvRectOffSet);
     this.matrixData = new Float32Array(this.maxProxy * this.matrixDataOffSet);
+    this.qtMatrixData = new Float32Array(this.maxProxy * this.matrixDataOffSet);
     this.spriteAtlasDepthData = new Float32Array(this.maxProxy);
     this.outlineColorData = new Float32Array(this.maxProxy);
 
@@ -20,6 +21,7 @@ export class InstanceData {
     this.playerCount = 0;
     this.assetCount = 0;
     this.totalEntity = 0;
+    this.totalQtNode = 0;
     //Camera Data
     this.viewMatrix = [];
     this.orthoMatrix = [];

@@ -11,6 +11,7 @@ import { GlobalData } from "./GameData/globalData.js";
 import { InstanceData } from "./GameData/InstanceData.js";
 import { EntityData } from "./GameData/entityData.js";
 import { AssetData } from "./GameData/assetData.js";
+import { QuadTree } from "./GameSystem/collisionSystem/quadTree.js";
 
 export class Game {
   constructor() {
@@ -36,21 +37,21 @@ export class Game {
     this.clear();
     this.renderer.initGameBuffer();
     this.renderer.initCollisionBuffer();
-    /*    this.collision.checkCollision();
-     */
+    this.renderer.initQtBuffer();
   }
   update() {
     this.background.update();
     this.player.update();
     this.enemy.update();
     this.camera.update();
-    this.collector.update([this.player, this.background, this.enemy]);
-    this.collision.update([this.player, ...this.background.assets, ...this.enemy.enemies]);
+    this.collision.update([this.player, ...this.background.assets /* , ...this.enemy.enemies */]);
+    this.collector.update([this.player, ...this.background.assets /* , ...this.enemy.enemies */], this.collision.giveQuadTree());
   }
   draw() {
     this.renderer.draw();
   }
   clear() {
+    this.collision.clear();
     this.collector.clear();
   }
 }

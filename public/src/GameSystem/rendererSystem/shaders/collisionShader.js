@@ -14,6 +14,9 @@ vOutlineColor = vec4(1.0,0.0,0.0,1.0);
 else if(aOutlineColor == 1.0) {
 vOutlineColor = vec4(0.0,1.0,0.0,1.0);
 }
+else {
+vOutlineColor = vec4(0.0,0.0,0.0,1.0);    
+}
 gl_Position = uOrthoMatrix * uViewMatrix * aModelMatrix * aPosition;
 }
 `;

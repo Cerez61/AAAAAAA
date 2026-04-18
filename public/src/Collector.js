@@ -3,29 +3,19 @@ export class Collector {
     this.instanceData = gameData;
 
     this.currentCount = 0;
+    this.qtNodeCount = 0;
     this.uvRectOffSet;
     this.matrixDataOffSet;
 
     this.totalEntity;
+    this.totalQtNode;
   }
   async init() {
     this.uvRectOffSet = this.instanceData.uvRectOffSet;
     this.matrixDataOffSet = this.instanceData.matrixDataOffSet;
   }
-  updateInstanceData(player, textures, encounters) {
-    this.instanceData.uvRectData.set(player.uvRect, this.currentCount * this.uvRectOffSet);
-    this.instanceData.matrixData.set(player.modelMatrix, this.currentCount * this.matrixDataOffSet);
-    this.instanceData.spriteAtlasDepthData.set([0], this.currentCount);
-    this.instanceData.outlineColorData.set([player.outlineColor], this.currentCount);
-    this.currentCount++;
-    textures.assets.forEach((asset) => {
-      this.instanceData.uvRectData.set(asset.uvRect, this.currentCount * this.uvRectOffSet);
-      this.instanceData.matrixData.set(asset.modelMatrix, this.currentCount * this.matrixDataOffSet);
-      this.instanceData.spriteAtlasDepthData.set([asset.textureDepth], this.currentCount);
-      this.instanceData.outlineColorData.set([asset.outlineColor], this.currentCount);
-      this.currentCount++;
-    });
-    for (const enemy of encounters.enemies) {
+  updateInstanceData(entities) {
+    for (const enemy of entities) {
       this.instanceData.uvRectData.set(enemy.uvRect, this.currentCount * this.uvRectOffSet);
       this.instanceData.matrixData.set(enemy.modelMatrix, this.currentCount * this.matrixDataOffSet);
       this.instanceData.spriteAtlasDepthData.set([0], this.currentCount);
@@ -34,14 +24,29 @@ export class Collector {
     }
 
     this.totalEntity = this.currentCount;
+  }
+  updateQuadTreeData(quadTree) {
+    const boundaryOfQuadTrees = quadTree.giveMatrixData([]);
+
+    for (const boundary of boundaryOfQuadTrees) {
+      this.instanceData.qtMatrixData.set(boundary, this.qtNodeCount * this.matrixDataOffSet);
+      this.qtNodeCount++;
+    }
+
+    this.totalQtNode = this.qtNodeCount;
+  }
+  giveInstanceData() {
     this.instanceData.totalEntity = this.totalEntity;
+    this.instanceData.totalQtNode = this.totalQtNode;
   }
   clear() {
+    this.qtNodeCount = 0;
     this.currentCount = 0;
   }
-  update(entities) {
-    //entities[0] = player, entities[1] = textures,entities[2] = enemies
-    this.updateInstanceData(entities[0], entities[1], entities[2]);
+  update(entities, quadTree) {
+    this.updateInstanceData(entities);
+    this.updateQuadTreeData(quadTree);
+    this.giveInstanceData();
   }
   draw() {}
 }

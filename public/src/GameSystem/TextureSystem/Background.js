@@ -86,9 +86,9 @@ export class BackGround {
 
     this.changeMetaJSON();
 
-    for (let i = 0; i < 40; i++) {
-      for (let k = 0; k < 10; k++) {
-        this.addAssets("...png", [i * 90 + 50, 700 - k * 150, 2]);
+    for (let i = 0; i < 20; i++) {
+      for (let k = 0; k < 5; k++) {
+        this.addAssets("...png", [i * 300 + 50, 700 - k * 150, 2]);
       }
     }
 

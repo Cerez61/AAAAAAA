@@ -1,14 +1,16 @@
 import { QuadTree } from "./quadTree.js";
 import { CollisionSAT } from "./collisionSAT.js";
 import { Rectangle } from "../../utils/rectangle.js";
+import { Point } from "../../utils/point.js";
 import { MAT4 } from "../../utils/matrix.js";
 
 export class Collision {
   constructor(gameData) {
     this.instanceData = gameData;
     this.vertexData = this.instanceData.collisionData;
-    this.w = 7000;
-    this.h = 600;
+    this.w = 6000;
+    this.h = 650;
+    this.points = [];
     this.rects = [];
 
     this.collideCount = 0;
@@ -18,21 +20,41 @@ export class Collision {
   checkCollision(entityA, entityB) {
     const entityAVertices = this.mat4.multiplyVerticesMatrix(new Float32Array(12), this.vertexData, entityA.modelMatrix);
     const entityBVertices = this.mat4.multiplyVerticesMatrix(new Float32Array(12), this.vertexData, entityB.modelMatrix);
+    this.collideCount++;
+
     if (this.collisionSAT.intersectPolygons(entityAVertices, entityBVertices)) {
       entityA.outlineColor = 1;
       entityB.outlineColor = 1;
+      return;
     }
-    this.collideCount++;
   }
   insertEntity(entities) {
     let rectID = 0;
+    let pointID = 0;
+
     for (const entity of entities) {
-      const entityVertices = this.mat4.multiplyVerticesMatrix(new Float32Array(3), [-1, 1, 1], entity.modelMatrix);
+      const entityVertices = this.mat4.multiplyVerticesMatrix(new Float32Array(12), this.vertexData, entity.modelMatrix);
+      const x = entityVertices[3];
+      const y = entityVertices[4];
+      const w = entity.w * 0.5;
+      const h = entity.h * 0.5;
 
-      const aabb = new Rectangle(entityVertices[0], entityVertices[1], entity.w, entity.h, entity, rectID);
+      const entityPoints = [];
 
-      this.quadTree.insert(aabb);
-      this.rects.push(aabb);
+      for (let i = 0; i < entityVertices.length; i += 3) {
+        const vertex = [entityVertices[i], entityVertices[i + 1], entityVertices[i + 2]];
+        const point = new Point(vertex[0], vertex[1], entity, pointID, rectID);
+        entityPoints.push(point);
+
+        this.quadTree.insert(point);
+        this.points.push(point);
+        pointID++;
+      }
+
+      const rect = new Rectangle(x, y, w, h, entity, rectID, entityPoints);
+      /* bidaha bak
+      console.log(rect);
+       */ this.rects.push(rect);
       rectID++;
     }
   }
@@ -40,18 +62,14 @@ export class Collision {
     for (const rect of this.rects) {
       const entityA = rect.entity;
       let founds = [];
-      this.quadTree.query(rect, founds);
-      console.log(founds);
+      this.quadTree.query(rect, founds); /* 
+      console.log(rect.id, rect.entity, founds); */
       for (const found of founds) {
         const entityB = found.entity;
 
-        if (entityA == entityB || rect.id >= found.id) continue;
+        if (entityA === entityB || rect.id < found.rectID) continue;
 
-        if (!rect.collideID.includes(found.id) && !found.collideID.includes(found.id)) {
-          rect.collideID.push(found.id);
-
-          this.checkCollision(entityA, entityB);
-        }
+        this.checkCollision(entityA, entityB);
       }
     }
   }
@@ -59,6 +77,11 @@ export class Collision {
     for (const entity of entities) {
       entity.outlineColor = 0;
     }
+  }
+  clear() {
+    this.points = [];
+    this.rects = [];
+    this.collideCount = 0;
   }
   check(entities) {
     this.resetOutlineColors(entities);
@@ -69,8 +92,10 @@ export class Collision {
     this.quadTree = new QuadTree(new Rectangle(0, this.h, this.w, this.h), 4);
 
     this.check(entities);
-    this.rects = [];
+
     console.log(this.collideCount);
-    this.collideCount = 0;
+  }
+  giveQuadTree() {
+    return this.quadTree;
   }
 }

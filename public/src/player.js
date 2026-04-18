@@ -122,7 +122,8 @@ export class Player {
 
     this.mat4.translate(this.modelMatrix, [this.x, this.y, 0]);
 
-    this.lastPressKeys[0] = null;
+    /*  console.log(this.mat4.multiplyVerticesMatrix(new Float32Array(18), this.instanceData.vertexData));
+     */ this.lastPressKeys[0] = null;
 
     this.entityDataUpdateGive();
   }

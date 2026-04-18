@@ -1,13 +1,21 @@
 import { Rectangle } from "../../utils/rectangle.js";
+import { MAT4 } from "../../utils/matrix.js";
 
 export class QuadTree {
   constructor(boundary, capacity) {
     this.boundary = boundary;
     this.capacity = capacity;
 
-    this.rects = [];
+    this.points = [];
 
     this.divided = false;
+
+    this.mat4 = new MAT4();
+
+    this.modelMatrix = this.mat4.identity();
+
+    this.mat4.scale(this.modelMatrix, [this.boundary.w, this.boundary.h]);
+    this.mat4.translate(this.modelMatrix, [this.boundary.x, this.boundary.y]);
   }
   subDivideTree() {
     const x = this.boundary.x;
@@ -43,9 +51,10 @@ export class QuadTree {
       return;
     }
 
-    for (const rect of this.rects) {
-      if (!found.includes(rect)) {
-        found.push(rect);
+    for (const point of this.points) {
+      if (!range.othersID.includes(point.rectID)) {
+        found.push(point);
+        range.othersID.push(point.rectID);
       }
     }
 
@@ -57,25 +66,44 @@ export class QuadTree {
     }
     return found;
   }
-  insert(aabb) {
-    if (!this.boundary.intersect(aabb)) {
+  insert(point) {
+    if (!point.contains(this.boundary)) {
       return;
     }
 
-    if (this.divided) {
+    /*    if (this.divided) {
       this.tlQuadTree.insert(aabb);
       this.trQuadTree.insert(aabb);
       this.blQuadTree.insert(aabb);
       this.brQuadTree.insert(aabb);
       return;
+    } */
+
+    if (this.points.length < this.capacity) {
+      this.points.push(point);
+    } else {
+      if (!this.divided) {
+        this.subDivideTree();
+      }
+      this.tlQuadTree.insert(point);
+      this.trQuadTree.insert(point);
+      this.blQuadTree.insert(point);
+      this.brQuadTree.insert(point);
+      /* 
+      this.giveAllPointsNodes(); 
+      this.insert(point);*/
+    }
+  }
+  giveMatrixData(arr) {
+    arr.push(this.modelMatrix);
+
+    if (this.divided) {
+      this.tlQuadTree.giveMatrixData(arr);
+      this.trQuadTree.giveMatrixData(arr);
+      this.blQuadTree.giveMatrixData(arr);
+      this.brQuadTree.giveMatrixData(arr);
     }
 
-    if (this.rects.length < this.capacity) {
-      this.rects.push(aabb);
-    } else {
-      this.subDivideTree();
-      this.giveAllPointsNodes();
-      this.insert(aabb);
-    }
+    return arr;
   }
 }
