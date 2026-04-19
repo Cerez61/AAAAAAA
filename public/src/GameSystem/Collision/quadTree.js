@@ -15,7 +15,7 @@ export class QuadTree {
     this.modelMatrix = this.mat4.identity();
 
     this.mat4.scale(this.modelMatrix, [this.boundary.w, this.boundary.h]);
-    this.mat4.translate(this.modelMatrix, [this.boundary.x, this.boundary.y]);
+    this.mat4.translate(this.modelMatrix, [this.boundary.x, this.boundary.y, 5]);
   }
   subDivideTree() {
     const x = this.boundary.x;
@@ -48,9 +48,12 @@ export class QuadTree {
     if (!found) found = [];
 
     if (!this.boundary.intersect(range)) {
+      if (range.id == 10) console.log(this, "dalla çarpışma yok");
+
       return;
     }
 
+    if (range.id == 10) console.log(this, "dalla çarpışma var");
     for (const point of this.points) {
       if (!range.othersID.includes(point.rectID)) {
         found.push(point);
@@ -80,6 +83,7 @@ export class QuadTree {
     } */
 
     if (this.points.length < this.capacity) {
+      if (point.rectID == 26) console.log(this, "enemy point");
       this.points.push(point);
     } else {
       if (!this.divided) {

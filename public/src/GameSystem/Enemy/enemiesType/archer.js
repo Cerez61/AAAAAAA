@@ -26,8 +26,8 @@ export class Archer {
   update(playerPosition) {
     const playerX = playerPosition[0];
     const playerY = playerPosition[1];
-    this.x = this.x + (playerX - this.x) / 20;
-    this.y = this.y + (playerY - this.y) / 25;
+    this.x = this.x + (playerX - this.x) / 100;
+    this.y = this.y + (playerY - this.y) / 100;
     this.mat4.translate(this.modelMatrix, [this.x, this.y]);
   }
 }

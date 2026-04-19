@@ -1,8 +1,5 @@
-export class GlobalData {
+export class SceneData {
   constructor() {
-    //WebGL Data
-    this.program;
-    this.gl;
     //Scene Data
     this.width;
     this.height;

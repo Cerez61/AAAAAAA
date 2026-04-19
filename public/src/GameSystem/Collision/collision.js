@@ -6,10 +6,14 @@ import { MAT4 } from "../../utils/matrix.js";
 
 export class Collision {
   constructor(gameData) {
-    this.instanceData = gameData;
+    this.instanceData = gameData[0];
+    this.sceneData = gameData[1];
+
     this.vertexData = this.instanceData.collisionData;
-    this.w = 6000;
-    this.h = 650;
+
+    this.w;
+    this.h;
+
     this.points = [];
     this.rects = [];
 
@@ -34,10 +38,10 @@ export class Collision {
 
     for (const entity of entities) {
       const entityVertices = this.mat4.multiplyVerticesMatrix(new Float32Array(12), this.vertexData, entity.modelMatrix);
-      const x = entityVertices[3];
-      const y = entityVertices[4];
-      const w = entity.w * 0.5;
-      const h = entity.h * 0.5;
+      const x = entity.x;
+      const y = entity.y;
+      const w = entity.w;
+      const h = entity.h;
 
       const entityPoints = [];
 
@@ -62,12 +66,13 @@ export class Collision {
     for (const rect of this.rects) {
       const entityA = rect.entity;
       let founds = [];
-      this.quadTree.query(rect, founds); /* 
-      console.log(rect.id, rect.entity, founds); */
+      this.quadTree.query(rect, founds);
+      if (rect.id == 10) console.log(rect, founds);
+
       for (const found of founds) {
         const entityB = found.entity;
 
-        if (entityA === entityB || rect.id < found.rectID) continue;
+        if (entityA === entityB) continue;
 
         this.checkCollision(entityA, entityB);
       }
@@ -88,7 +93,12 @@ export class Collision {
     this.insertEntity(entities);
     this.queryEntity();
   }
+  updateSceneBoundary() {
+    this.w = this.sceneData.width;
+    this.h = this.sceneData.height;
+  }
   update(entities) {
+    this.updateSceneBoundary();
     this.quadTree = new QuadTree(new Rectangle(0, this.h, this.w, this.h), 4);
 
     this.check(entities);

@@ -1,0 +1,42 @@
+{
+  "tutorialRoom": {
+    "meta": {
+      "width": 1500,
+      "height": 1000
+    },
+    "entities": [
+      {
+        "id": "player",
+        "type": "PLAYER",
+        "position": [10, 80, 1]
+      },
+      {
+        "id": "texture_0",
+        "type": "TEXTURE",
+        "name": "...png",
+        "position": [150, 200, 2]
+      },
+      {
+        "id": "texture_1",
+        "type": "TEXTURE",
+        "name": "...png",
+        "position": [150, 300, 2]
+      },
+      {
+        "id": "texture_2",
+        "type": "TEXTURE",
+        "name": "kk",
+        "position": [300, 80, 1]
+      },
+      {
+        "id": "enemy_0",
+        "type": "ENEMY",
+        "subType": "Archer",
+        "position": [500, 80, 1]
+      }
+    ]
+  },
+  "rooms": {},
+  "treasureRooms": {},
+  "shop": {}
+}
