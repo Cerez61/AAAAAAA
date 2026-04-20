@@ -86,15 +86,8 @@ export class BackGround {
 
     this.changeMetaJSON();
 
-    for (let i = 0; i < 5; i++) {
-      for (let k = 0; k < 5; k++) {
-        this.addAssets("...png", [i * 150 + 50, 700 - k * 159, 2]);
-      }
-    }
-
     this.initAssetsArray();
-    /*  this.createAssetsData();
-     */
+
     this.update();
 
     console.log(Date.now() - date);
@@ -104,11 +97,11 @@ export class BackGround {
     this.assetData.spriteAtlases = this.spriteAtlases;
   }
   initAssetsArray() {
-    this.layers.forEach((layer) => {
-      layer.assets.forEach((asset) => {
+    for (const layer of this.layers) {
+      for (const asset of layer.assets) {
         this.initAsset(asset);
-      });
-    });
+      }
+    }
   }
   initAsset(asset) {
     this.mat4.scale(asset.modelMatrix, [40, 80, 1]);
@@ -122,6 +115,9 @@ export class BackGround {
         this.mat4.translate(asset.modelMatrix, [asset.x, asset.y, asset.z]);
       });
     });
+  }
+  loadAsset(asset) {
+    this.addAssets(asset.name, asset.position);
   }
   update() {
     this.instanceDataGive();

@@ -7,7 +7,6 @@ export class Scene {
   }
   async init() {
     await this.fetchRoomsJSON(["rooms.json"]);
-    console.log(this.roomsJSON);
   }
   async fetchRoomsJSON(jsonNames) {
     const response = await Promise.all(jsonNames.map((jsonName) => fetch("./src/GameSystem/Scene/Rooms/" + jsonName)));
@@ -16,23 +15,38 @@ export class Scene {
 
     this.roomsJSON.push(...data);
   }
-  loadRoom() {
+  loadRoom(entities) {
     const metaData = this.roomsJSON[0].tutorialRoom.meta;
 
     this.changeGlobalData(metaData.width, metaData.height);
 
-    this.loadEntities();
+    this.loadEntities(entities);
 
     this.changeRoom = false;
   }
-  loadEntities() {}
+  loadEntities(entities) {
+    const player = entities[0];
+    const texture = entities[1];
+    const enemy = entities[2];
+
+    for (const entity of this.roomsJSON[0].tutorialRoom.entities) {
+      if (entity.type == "PLAYER") {
+        player.x = entity.position[0];
+        player.y = entity.position[1];
+        player.z = entity.position[2];
+      } else if (entity.type == "TEXTURE") {
+        texture.loadAsset(entity);
+      } else if (entity.type == "ENEMY") {
+        enemy.loadEnemy(entity);
+      }
+    }
+    texture.initAssetsArray();
+  }
   changeGlobalData(width, height) {
     this.sceneData.width = width;
     this.sceneData.height = height;
   }
-  update() {
-    if (this.changeRoom) this.loadRoom();
-
-    this.changeRoom = false;
+  update(entities) {
+    if (this.changeRoom) this.loadRoom(entities);
   }
 }

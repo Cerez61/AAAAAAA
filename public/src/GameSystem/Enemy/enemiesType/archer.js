@@ -1,6 +1,6 @@
 import { MAT4 } from "../../../utils/matrix.js";
 export class Archer {
-  constructor(enemyID) {
+  constructor(enemyID, position) {
     this.name = "Archer";
 
     this.enemyID = enemyID;
@@ -9,9 +9,9 @@ export class Archer {
     this.h = 50;
     this.depth = 2;
 
-    this.x = 200;
-    this.y = 50;
-    this.z = 1;
+    this.x = position[0];
+    this.y = position[1];
+    this.z = position[2];
 
     this.uvRect = [203, 75, 37, 76];
 

@@ -9,17 +9,20 @@ export class Enemy {
 
     this.mat4 = new MAT4();
 
-    this.enemies.push(new Archer(0));
+    this.enemyCount = 0;
   }
-  init() {
-    this.entityDataTake();
+
+  entityDataTake() {
+    this.playerPosition = this.entityData.playerPosition;
+  }
+  loadEnemy(enemy) {
+    if (enemy.subType == "Archer") this.enemies.push(new Archer(this.enemyCount, enemy.position));
 
     for (const enemy of this.enemies) {
       enemy.init();
     }
-  }
-  entityDataTake() {
-    this.playerPosition = this.entityData.playerPosition;
+
+    this.enemyCount++;
   }
   update() {
     this.entityDataTake();

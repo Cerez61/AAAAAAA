@@ -5,7 +5,7 @@ import { Collector } from "./Collector.js";
 import { Scene } from "./GameSystem/Scene/scene.js";
 import { Renderer } from "./GameSystem/Renderer/renderer.js";
 import { Enemy } from "./GameSystem/Enemy/enemy.js";
-import { BackGround } from "./GameSystem/TextureSystem/Background.js";
+import { BackGround } from "./GameSystem/Texture/Background.js";
 import { CollisionSAT } from "./GameSystem/Collision/collisionSAT.js";
 import { Collision } from "./GameSystem/Collision/collision.js";
 import { QuadTree } from "./GameSystem/Collision/quadTree.js";
@@ -37,9 +37,9 @@ export class Game {
   }
   async init() {
     await this.scene.init();
-    await this.collector.init();
     await this.background.init();
-    this.enemy.init();
+    await this.collector.init();
+
     this.update();
     this.clear();
     this.renderer.initGameBuffer();
@@ -47,7 +47,7 @@ export class Game {
     this.renderer.initQtBuffer();
   }
   update() {
-    this.scene.update();
+    this.scene.update([this.player, this.background, this.enemy]);
 
     this.player.update();
     this.background.update();

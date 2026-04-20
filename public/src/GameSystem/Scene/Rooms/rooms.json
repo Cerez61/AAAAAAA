@@ -32,7 +32,7 @@
         "id": "enemy_0",
         "type": "ENEMY",
         "subType": "Archer",
-        "position": [500, 80, 1]
+        "position": [100, 800, 1]
       }
     ]
   },

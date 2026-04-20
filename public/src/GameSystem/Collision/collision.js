@@ -67,7 +67,6 @@ export class Collision {
       const entityA = rect.entity;
       let founds = [];
       this.quadTree.query(rect, founds);
-      if (rect.id == 10) console.log(rect, founds);
 
       for (const found of founds) {
         const entityB = found.entity;

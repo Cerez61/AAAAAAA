@@ -48,12 +48,9 @@ export class QuadTree {
     if (!found) found = [];
 
     if (!this.boundary.intersect(range)) {
-      if (range.id == 10) console.log(this, "dalla çarpışma yok");
-
       return;
     }
 
-    if (range.id == 10) console.log(this, "dalla çarpışma var");
     for (const point of this.points) {
       if (!range.othersID.includes(point.rectID)) {
         found.push(point);
@@ -74,16 +71,7 @@ export class QuadTree {
       return;
     }
 
-    /*    if (this.divided) {
-      this.tlQuadTree.insert(aabb);
-      this.trQuadTree.insert(aabb);
-      this.blQuadTree.insert(aabb);
-      this.brQuadTree.insert(aabb);
-      return;
-    } */
-
     if (this.points.length < this.capacity) {
-      if (point.rectID == 26) console.log(this, "enemy point");
       this.points.push(point);
     } else {
       if (!this.divided) {
@@ -93,9 +81,6 @@ export class QuadTree {
       this.trQuadTree.insert(point);
       this.blQuadTree.insert(point);
       this.brQuadTree.insert(point);
-      /* 
-      this.giveAllPointsNodes(); 
-      this.insert(point);*/
     }
   }
   giveMatrixData(arr) {
