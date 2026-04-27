@@ -1,6 +1,8 @@
+import { Floor } from "./AssetTypes/floor.js";
 import { Layer } from "./Layer.js";
+import { Asset } from "./Asset.js";
 import { MAT4 } from "../../utils/matrix.js";
-export class BackGround {
+export class Texture {
   constructor(gameData) {
     //intelisense webgl content
     /**
@@ -32,18 +34,19 @@ export class BackGround {
     });
     return targetJSON;
   }
-  addAssets(assetName, worldPosition) {
-    const targetJSON = this.findAssetsFile(assetName);
+  addAssets(asset) {
+    const depth = asset.position[2];
+    const targetJSON = this.findAssetsFile(asset.name);
     if (!targetJSON) return;
-
-    const depth = worldPosition[2];
 
     this.addLayers(depth);
 
+    const assetBox = new Asset(targetJSON, asset, this.assetCount);
+
+    console.log(assetBox);
     this.layers.forEach((layer) => {
       if (layer.z === depth) {
-        layer.addAsset(targetJSON.meta.image, "a.json", targetJSON.meta.size, targetJSON.frames[assetName].frame, this.assetCount++, worldPosition);
-
+        layer.assets.push(assetBox);
         return;
       }
     });
@@ -104,7 +107,7 @@ export class BackGround {
     }
   }
   initAsset(asset) {
-    this.mat4.scale(asset.modelMatrix, [40, 80, 1]);
+    this.mat4.scale(asset.modelMatrix, [asset.w, asset.h, 1]);
     this.mat4.translate(asset.modelMatrix, [asset.x, asset.y, asset.z]);
 
     this.assets.push(asset);
@@ -117,7 +120,7 @@ export class BackGround {
     });
   }
   loadAsset(asset) {
-    this.addAssets(asset.name, asset.position);
+    this.addAssets(asset);
   }
   update() {
     this.instanceDataGive();

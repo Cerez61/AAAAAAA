@@ -40,6 +40,7 @@ export class Scene {
         enemy.loadEnemy(entity);
       }
     }
+    enemy.initEnemy();
     texture.initAssetsArray();
   }
   changeGlobalData(width, height) {

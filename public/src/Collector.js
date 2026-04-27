@@ -15,11 +15,11 @@ export class Collector {
     this.matrixDataOffSet = this.instanceData.matrixDataOffSet;
   }
   updateInstanceData(entities) {
-    for (const enemy of entities) {
-      this.instanceData.uvRectData.set(enemy.uvRect, this.currentCount * this.uvRectOffSet);
-      this.instanceData.matrixData.set(enemy.modelMatrix, this.currentCount * this.matrixDataOffSet);
-      this.instanceData.spriteAtlasDepthData.set([0], this.currentCount);
-      this.instanceData.outlineColorData.set([enemy.outlineColor], this.currentCount);
+    for (const entity of entities) {
+      this.instanceData.uvRectData.set(entity.uvRect, this.currentCount * this.uvRectOffSet);
+      this.instanceData.matrixData.set(entity.modelMatrix, this.currentCount * this.matrixDataOffSet);
+      this.instanceData.spriteAtlasDepthData.set([entity.textureDepth], this.currentCount);
+      this.instanceData.outlineColorData.set([entity.outlineColor], this.currentCount);
       this.currentCount++;
     }
 

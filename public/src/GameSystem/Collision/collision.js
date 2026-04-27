@@ -101,8 +101,8 @@ export class Collision {
     this.quadTree = new QuadTree(new Rectangle(0, this.h, this.w, this.h), 4);
 
     this.check(entities);
-
-    console.log(this.collideCount);
+    /* 
+    console.log(this.collideCount); */
   }
   giveQuadTree() {
     return this.quadTree;

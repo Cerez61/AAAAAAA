@@ -1,6 +1,10 @@
 import { MAT4 } from "../../utils/matrix.js";
-import { Archer } from "./enemiesType/archer.js";
+import { GOAPPlanner } from "../GOAP/planner.js";
+import { Archer } from "./enemyTypes/archer.js";
 
+const ENEMY_REGISTRY = {
+  Archer: Archer,
+};
 export class Enemy {
   constructor(gameData) {
     this.entityData = gameData;
@@ -8,6 +12,11 @@ export class Enemy {
     this.enemies = [];
 
     this.mat4 = new MAT4();
+    this.planner = new GOAPPlanner();
+
+    this.globalState = {
+      playerPosition: [],
+    };
 
     this.enemyCount = 0;
   }
@@ -16,19 +25,30 @@ export class Enemy {
     this.playerPosition = this.entityData.playerPosition;
   }
   loadEnemy(enemy) {
-    if (enemy.subType == "Archer") this.enemies.push(new Archer(this.enemyCount, enemy.position));
-
-    for (const enemy of this.enemies) {
-      enemy.init();
-    }
+    const enemyClass = ENEMY_REGISTRY[enemy.subType];
+    this.enemies.push(new enemyClass(this.enemyCount, enemy.position));
 
     this.enemyCount++;
   }
+  initEnemy() {
+    for (const enemy of this.enemies) {
+      enemy.init();
+    }
+  }
+  updateGlobalState() {
+    this.globalState.playerPosition = this.playerPosition;
+  }
   update() {
     this.entityDataTake();
+    this.updateGlobalState();
 
     for (const enemy of this.enemies) {
-      enemy.update(this.playerPosition);
+      const finalPlan = this.planner.plan(enemy.worldState, enemy.goals[0], enemy.actions);
+      finalPlan.sort((a, b) => a.cost - b.cost);
+
+      console.log(finalPlan, enemy.enemyID);
+      enemy.currentActionList = finalPlan[0].actionList;
+      enemy.update(this.globalState);
     }
   }
 }

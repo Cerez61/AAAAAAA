@@ -30,6 +30,7 @@ export class Player {
     this.w = 20;
     this.h = 40;
     this.depth = 2;
+    this.textureDepth = 0;
     this.x = this.w + this.gl.canvas.width / 4;
     this.y = this.h + 40;
     this.z = this.depth;

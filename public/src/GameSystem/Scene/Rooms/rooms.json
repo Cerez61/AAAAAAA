@@ -1,7 +1,7 @@
 {
   "tutorialRoom": {
     "meta": {
-      "width": 1500,
+      "width": 2500,
       "height": 1000
     },
     "entities": [
@@ -13,26 +13,63 @@
       {
         "id": "texture_0",
         "type": "TEXTURE",
-        "name": "...png",
-        "position": [150, 200, 2]
+        "subType": "image",
+        "name": "floor",
+        "position": [500, 100, 2]
       },
       {
         "id": "texture_1",
         "type": "TEXTURE",
+        "subType": "floor",
         "name": "...png",
-        "position": [150, 300, 2]
+        "position": [150, 350, 2]
       },
       {
         "id": "texture_2",
         "type": "TEXTURE",
-        "name": "kk",
-        "position": [300, 80, 1]
+        "subType": "image",
+        "name": "...png",
+        "position": [150, 500, 1]
+      },
+      {
+        "id": "texture_3",
+        "type": "TEXTURE",
+        "subType": "image",
+        "name": "...png",
+        "position": [150, 650, 1]
+      },
+      {
+        "id": "texture_4",
+        "type": "TEXTURE",
+        "subType": "image",
+        "name": "...png",
+        "position": [300, 150, 1]
+      },
+      {
+        "id": "texture_5",
+        "type": "TEXTURE",
+        "subType": "image",
+        "name": "...png",
+        "position": [300, 300, 1]
+      },
+      {
+        "id": "texture_6",
+        "type": "TEXTURE",
+        "subType": "image",
+        "name": "...png",
+        "position": [300, 450, 1]
       },
       {
         "id": "enemy_0",
         "type": "ENEMY",
         "subType": "Archer",
-        "position": [100, 800, 1]
+        "position": [500, 150, 1]
+      },
+      {
+        "id": "enemy_1",
+        "type": "ENEMY",
+        "subType": "Archer",
+        "position": [100, 550, 1]
       }
     ]
   },
