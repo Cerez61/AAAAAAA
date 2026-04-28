@@ -112,7 +112,7 @@ export class Player {
   entityDataUpdateGive() {
     this.entityData.playerPosition = [this.x, this.y];
   }
-
+  init() {}
   update() {
     this.currentState.updateState();
 

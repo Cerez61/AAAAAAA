@@ -1,7 +1,12 @@
-import { Floor } from "./AssetTypes/floor.js";
+import { Surface } from "./AssetTypes/surface.js";
+import { None } from "./AssetTypes/none.js";
 import { Layer } from "./Layer.js";
 import { Asset } from "./Asset.js";
 import { MAT4 } from "../../utils/matrix.js";
+
+const TEXTURE_TYPE = {
+  Surface: Surface,
+};
 export class Texture {
   constructor(gameData) {
     //intelisense webgl content
@@ -37,16 +42,20 @@ export class Texture {
   addAssets(asset) {
     const depth = asset.position[2];
     const targetJSON = this.findAssetsFile(asset.name);
-    if (!targetJSON) return;
+    if (!targetJSON) {
+      console.log(asset);
+      return;
+    }
 
     this.addLayers(depth);
 
     const assetBox = new Asset(targetJSON, asset, this.assetCount);
 
-    console.log(assetBox);
+    const assetClass = TEXTURE_TYPE[asset.subType];
+
     this.layers.forEach((layer) => {
       if (layer.z === depth) {
-        layer.assets.push(assetBox);
+        layer.assets.push(assetClass ? new assetClass(assetBox) : new None(assetBox));
         return;
       }
     });
@@ -102,7 +111,7 @@ export class Texture {
   initAssetsArray() {
     for (const layer of this.layers) {
       for (const asset of layer.assets) {
-        this.initAsset(asset);
+        this.initAsset(asset.assetInfo);
       }
     }
   }

@@ -1,6 +1,7 @@
 export class Scene {
   constructor(gameData) {
-    this.sceneData = gameData;
+    this.sceneData = gameData[0];
+    this.entityData = gameData[1];
     this.roomsJSON = [];
 
     this.changeRoom = true;
@@ -18,36 +19,27 @@ export class Scene {
   loadRoom(entities) {
     const metaData = this.roomsJSON[0].tutorialRoom.meta;
 
-    this.changeGlobalData(metaData.width, metaData.height);
+    this.updateSceneData(metaData.width, metaData.height);
 
     this.loadEntities(entities);
 
     this.changeRoom = false;
   }
-  loadEntities(entities) {
-    const player = entities[0];
-    const texture = entities[1];
-    const enemy = entities[2];
-
+  loadEntities() {
     for (const entity of this.roomsJSON[0].tutorialRoom.entities) {
-      if (entity.type == "PLAYER") {
-        player.x = entity.position[0];
-        player.y = entity.position[1];
-        player.z = entity.position[2];
-      } else if (entity.type == "TEXTURE") {
-        texture.loadAsset(entity);
-      } else if (entity.type == "ENEMY") {
-        enemy.loadEnemy(entity);
-      }
+      this.updateEntityData(entity);
     }
-    enemy.initEnemy();
-    texture.initAssetsArray();
   }
-  changeGlobalData(width, height) {
+  updateSceneData(width, height) {
     this.sceneData.width = width;
     this.sceneData.height = height;
+
+    this.sceneData.roomChange = true;
   }
-  update(entities) {
-    if (this.changeRoom) this.loadRoom(entities);
+  updateEntityData(entity) {
+    this.entityData.entitySceneData.push(entity);
+  }
+  update() {
+    if (this.changeRoom) this.loadRoom();
   }
 }

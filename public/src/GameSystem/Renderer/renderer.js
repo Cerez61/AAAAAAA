@@ -41,7 +41,7 @@ export class Renderer {
 
     this.indexBuffer = this.gl.createBuffer();
 
-    this.init();
+    this.setup();
 
     this.viewMatrixLoc = this.gl.getUniformLocation(this.program, "uViewMatrix");
     this.orthoMatrixLoc = this.gl.getUniformLocation(this.program, "uOrthoMatrix");
@@ -66,7 +66,7 @@ export class Renderer {
     this.globalData.gl = this.gl;
     this.globalData.program = this.program;
   }
-  init() {
+  setup() {
     this.initProgram(this.program, this.gameVS, this.gameFS, gameVSS, gameFSS);
     this.initProgram(this.collisionProgram, this.collisionVS, this.collisionFS, collisionVSS, collisionFSS);
     this.initProgram(this.qtProgram, this.qtVS, this.qtFS, qtVSS, qtFSS);
@@ -102,6 +102,11 @@ export class Renderer {
     this.gl.depthFunc(this.gl.LEQUAL);
     this.gl.enable(this.gl.BLEND);
     this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
+  }
+  async init() {
+    this.initGameBuffer();
+    this.initCollisionBuffer();
+    this.initQtBuffer();
   }
   initGameBuffer() {
     this.gl.bindVertexArray(this.rendererVAO);

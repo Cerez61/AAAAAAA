@@ -1,6 +1,9 @@
 export class Collector {
   constructor(gameData) {
-    this.instanceData = gameData;
+    this.instanceData = gameData[0];
+    this.entityData = gameData[1];
+
+    this.entities = [];
 
     this.currentCount = 0;
     this.qtNodeCount = 0;
@@ -14,8 +17,8 @@ export class Collector {
     this.uvRectOffSet = this.instanceData.uvRectOffSet;
     this.matrixDataOffSet = this.instanceData.matrixDataOffSet;
   }
-  updateInstanceData(entities) {
-    for (const entity of entities) {
+  updateInstanceData() {
+    for (const entity of this.entityData.entities) {
       this.instanceData.uvRectData.set(entity.uvRect, this.currentCount * this.uvRectOffSet);
       this.instanceData.matrixData.set(entity.modelMatrix, this.currentCount * this.matrixDataOffSet);
       this.instanceData.spriteAtlasDepthData.set([entity.textureDepth], this.currentCount);
@@ -24,6 +27,8 @@ export class Collector {
     }
 
     this.totalEntity = this.currentCount;
+    this.instanceData.totalEntity = this.totalEntity;
+    this.instanceData.totalQtNode = this.totalQtNode;
   }
   updateQuadTreeData(quadTree) {
     const boundaryOfQuadTrees = quadTree.giveMatrixData([]);
@@ -35,18 +40,18 @@ export class Collector {
 
     this.totalQtNode = this.qtNodeCount;
   }
-  giveInstanceData() {
-    this.instanceData.totalEntity = this.totalEntity;
-    this.instanceData.totalQtNode = this.totalQtNode;
+  takeEntityData() {
+    this.entities = this.entityData.entities;
   }
   clear() {
     this.qtNodeCount = 0;
     this.currentCount = 0;
   }
-  update(entities, quadTree) {
-    this.updateInstanceData(entities);
+  update(quadTree) {
+    this.takeEntityData();
+
+    this.updateInstanceData();
     this.updateQuadTreeData(quadTree);
-    this.giveInstanceData();
   }
   draw() {}
 }

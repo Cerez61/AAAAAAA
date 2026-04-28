@@ -2,7 +2,7 @@ import { MAT4 } from "../../utils/matrix.js";
 import { GOAPPlanner } from "../GOAP/planner.js";
 import { Archer } from "./enemyTypes/archer.js";
 
-const ENEMY_REGISTRY = {
+const ENEMY_TYPE = {
   Archer: Archer,
 };
 export class Enemy {
@@ -25,7 +25,7 @@ export class Enemy {
     this.playerPosition = this.entityData.playerPosition;
   }
   loadEnemy(enemy) {
-    const enemyClass = ENEMY_REGISTRY[enemy.subType];
+    const enemyClass = ENEMY_TYPE[enemy.subType];
     this.enemies.push(new enemyClass(this.enemyCount, enemy.position));
 
     this.enemyCount++;
@@ -38,6 +38,7 @@ export class Enemy {
   updateGlobalState() {
     this.globalState.playerPosition = this.playerPosition;
   }
+  async init() {}
   update() {
     this.entityDataTake();
     this.updateGlobalState();
@@ -46,8 +47,8 @@ export class Enemy {
       const finalPlan = this.planner.plan(enemy.worldState, enemy.goals[0], enemy.actions);
       finalPlan.sort((a, b) => a.cost - b.cost);
 
-      console.log(finalPlan, enemy.enemyID);
-      enemy.currentActionList = finalPlan[0].actionList;
+      /* console.log(finalPlan, enemy.enemyID);
+       */ enemy.currentActionList = finalPlan[0].actionList;
       enemy.update(this.globalState);
     }
   }

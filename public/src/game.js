@@ -4,6 +4,7 @@ import { InputHandler } from "./inputHandler.js";
 import { Collector } from "./Collector.js";
 import { Scene } from "./GameSystem/Scene/scene.js";
 import { Renderer } from "./GameSystem/Renderer/renderer.js";
+import { Entity } from "./GameSystem/Entity/entity.js";
 import { Enemy } from "./GameSystem/Enemy/enemy.js";
 import { Texture } from "./GameSystem/Texture/Texture.js";
 import { CollisionSAT } from "./GameSystem/Collision/collisionSAT.js";
@@ -23,38 +24,32 @@ export class Game {
     this.entityData = new EntityData();
     this.assetData = new AssetData();
 
-    this.scene = new Scene(this.sceneData);
+    this.scene = new Scene([this.sceneData, this.entityData]);
 
     this.renderer = new Renderer([this.globalData, this.instanceData, this.assetData]);
-    this.collector = new Collector(this.instanceData);
+    this.collector = new Collector([this.instanceData, this.entityData]);
     this.inputHandler = new InputHandler(this.entityData);
-    this.collision = new Collision([this.instanceData, this.sceneData]);
+    this.collision = new Collision([this.instanceData, this.sceneData, this.entityData]);
 
-    this.camera = new Camera([this.globalData, this.instanceData, this.entityData]);
-    this.player = new Player([this.globalData, this.instanceData, this.entityData]);
-    this.enemy = new Enemy(this.entityData);
-    this.texture = new Texture([this.instanceData, this.assetData]);
+    this.entity = new Entity([this.globalData, this.sceneData, this.instanceData, this.entityData, this.assetData]);
   }
   async init() {
     await this.scene.init();
-    await this.texture.init();
+    await this.entity.init();
     await this.collector.init();
 
     this.update();
     this.clear();
-    this.renderer.initGameBuffer();
-    this.renderer.initCollisionBuffer();
-    this.renderer.initQtBuffer();
+
+    await this.renderer.init();
   }
   update() {
-    this.scene.update([this.player, this.texture, this.enemy]);
+    this.scene.update();
 
-    this.player.update();
-    this.texture.update();
-    this.enemy.update();
-    this.camera.update();
-    this.collision.update([this.player, ...this.texture.assets, ...this.enemy.enemies]);
-    this.collector.update([this.player, ...this.texture.assets, ...this.enemy.enemies], this.collision.giveQuadTree());
+    this.entity.update();
+
+    this.collision.update();
+    this.collector.update(this.collision.giveQuadTree());
   }
   draw() {
     this.renderer.draw();

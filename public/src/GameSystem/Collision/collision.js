@@ -8,6 +8,7 @@ export class Collision {
   constructor(gameData) {
     this.instanceData = gameData[0];
     this.sceneData = gameData[1];
+    this.entityData = gameData[2];
 
     this.vertexData = this.instanceData.collisionData;
 
@@ -56,9 +57,7 @@ export class Collision {
       }
 
       const rect = new Rectangle(x, y, w, h, entity, rectID, entityPoints);
-      /* bidaha bak
-      console.log(rect);
-       */ this.rects.push(rect);
+      this.rects.push(rect);
       rectID++;
     }
   }
@@ -87,7 +86,8 @@ export class Collision {
     this.rects = [];
     this.collideCount = 0;
   }
-  check(entities) {
+  check() {
+    const entities = this.entityData.entities;
     this.resetOutlineColors(entities);
     this.insertEntity(entities);
     this.queryEntity();
@@ -96,11 +96,11 @@ export class Collision {
     this.w = this.sceneData.width;
     this.h = this.sceneData.height;
   }
-  update(entities) {
+  update() {
     this.updateSceneBoundary();
     this.quadTree = new QuadTree(new Rectangle(0, this.h, this.w, this.h), 4);
 
-    this.check(entities);
+    this.check();
     /* 
     console.log(this.collideCount); */
   }

@@ -20,9 +20,9 @@
       {
         "id": "texture_1",
         "type": "TEXTURE",
-        "subType": "floor",
+        "subType": "Surface",
         "name": "...png",
-        "position": [150, 350, 2]
+        "position": [150, 350, 1]
       },
       {
         "id": "texture_2",
