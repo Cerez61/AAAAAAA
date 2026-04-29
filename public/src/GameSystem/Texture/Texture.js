@@ -1,7 +1,7 @@
-import { Surface } from "./AssetTypes/surface.js";
-import { None } from "./AssetTypes/none.js";
+import { Surface } from "../Entity/Asset/AssetTypes/surface.js";
+import { None } from "../Entity/Asset/AssetTypes/none.js";
 import { Layer } from "./Layer.js";
-import { Asset } from "./Asset.js";
+import { Asset } from "../Entity/Asset/asset.js";
 import { MAT4 } from "../../utils/matrix.js";
 
 const TEXTURE_TYPE = {
@@ -28,11 +28,6 @@ export class Texture {
     this.assetCount = 0;
   }
 
-  changeMetaJSON() {
-    this.spriteAtlasesJSON.forEach((jsonFile, index) => {
-      jsonFile.meta.size.d = index;
-    });
-  }
   findAssetsFile(assetName) {
     const targetJSON = this.spriteAtlasesJSON.find((jsonFile) => {
       return jsonFile.frames && jsonFile.frames[assetName];
@@ -69,44 +64,8 @@ export class Texture {
     }
   }
 
-  async fetchSpriteSheet(spriteNames) {
-    const responses = await Promise.all(spriteNames.map((textureName) => fetch("./assets/textures/" + textureName)));
-
-    const blobs = await Promise.all(
-      responses.map((res) => {
-        if (!res.ok) throw new Error("Yükleme hatası");
-        return res.blob();
-      }),
-    );
-
-    const bitmaps = await Promise.all(blobs.map((blob) => createImageBitmap(blob)));
-
-    this.spriteAtlases.push(...bitmaps);
-  }
-  async fetchSpriteSheetJSON(jsonNames) {
-    const responses = await Promise.all(jsonNames.map((jsonName) => fetch("./assets/data/" + jsonName)));
-
-    const data = await Promise.all(responses.map((res) => res.json()));
-
-    this.spriteAtlasesJSON.push(...data);
-  }
-  async init() {
-    const date = Date.now();
-
-    await this.fetchSpriteSheet(this.assetData.textureNames);
-    await this.fetchSpriteSheetJSON(this.assetData.jsonNames);
-
-    this.changeMetaJSON();
-
-    this.initAssetsArray();
-
-    this.update();
-
-    console.log(Date.now() - date);
-  }
   instanceDataGive() {
     this.instanceData.assetCount = this.assetCount;
-    this.assetData.spriteAtlases = this.spriteAtlases;
   }
   initAssetsArray() {
     for (const layer of this.layers) {
@@ -131,7 +90,17 @@ export class Texture {
   loadAsset(asset) {
     this.addAssets(asset);
   }
-  update() {
+  updateAssetData() {
+    this.spriteAtlases = this.assetData.spriteAtlases;
+    this.spriteAtlasesJSON = this.assetData.spriteAtlasesJSON;
+  }
+
+  async init() {
+    this.update();
+    this.initAssetsArray();
     this.instanceDataGive();
+  }
+  update() {
+    this.updateAssetData();
   }
 }

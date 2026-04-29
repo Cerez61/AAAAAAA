@@ -12,10 +12,11 @@ import {
   FallRunningLeft,
   FallRunningRight,
 } from "./playerStateManagement.js";
-import { MAT4 } from "./utils/matrix.js";
-
-export class Player {
+import { MAT4 } from "../../../utils/matrix.js";
+import { EntityBox } from "../entityBox.js";
+export class Player extends EntityBox {
   constructor(gameData) {
+    super();
     //intelisense webgl content
     /**
      * @type {WebGL2RenderingContext}
@@ -112,7 +113,7 @@ export class Player {
   entityDataUpdateGive() {
     this.entityData.playerPosition = [this.x, this.y];
   }
-  init() {}
+  async init() {}
   update() {
     this.currentState.updateState();
 

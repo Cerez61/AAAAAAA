@@ -1,7 +1,7 @@
-import { Player } from "../../player.js";
+import { Player } from "./Player/player.js";
 import { Texture } from "../Texture/Texture.js";
-import { Enemy } from "../Enemy/enemy.js";
-import { Camera } from "../../camera.js";
+import { Enemy } from "./Enemy/enemy.js";
+import { Camera } from "./Camera/camera.js";
 
 const ENTITY_TYPE = {};
 export class Entity {

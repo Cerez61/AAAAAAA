@@ -1,15 +1,10 @@
-import { Player } from "./player.js";
-import { Camera } from "./camera.js";
-import { InputHandler } from "./inputHandler.js";
-import { Collector } from "./Collector.js";
 import { Scene } from "./GameSystem/Scene/scene.js";
 import { Renderer } from "./GameSystem/Renderer/renderer.js";
+import { TextureLoader } from "./GameSystem/Texture/textureLoader.js";
 import { Entity } from "./GameSystem/Entity/entity.js";
-import { Enemy } from "./GameSystem/Enemy/enemy.js";
-import { Texture } from "./GameSystem/Texture/Texture.js";
-import { CollisionSAT } from "./GameSystem/Collision/collisionSAT.js";
+import { Collector } from "./GameSystem/Collector/collector.js";
 import { Collision } from "./GameSystem/Collision/collision.js";
-import { QuadTree } from "./GameSystem/Collision/quadTree.js";
+import { InputHandler } from "./GameSystem/Input/inputHandler.js";
 import { GlobalData } from "./GameData/globalData.js";
 import { InstanceData } from "./GameData/InstanceData.js";
 import { EntityData } from "./GameData/entityData.js";
@@ -24,6 +19,7 @@ export class Game {
     this.entityData = new EntityData();
     this.assetData = new AssetData();
 
+    this.textureLoader = new TextureLoader(this.assetData);
     this.scene = new Scene([this.sceneData, this.entityData]);
 
     this.renderer = new Renderer([this.globalData, this.instanceData, this.assetData]);
@@ -34,6 +30,7 @@ export class Game {
     this.entity = new Entity([this.globalData, this.sceneData, this.instanceData, this.entityData, this.assetData]);
   }
   async init() {
+    await this.textureLoader.init();
     await this.scene.init();
     await this.entity.init();
     await this.collector.init();

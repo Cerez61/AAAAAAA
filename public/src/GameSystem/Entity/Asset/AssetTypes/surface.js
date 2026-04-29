@@ -1,4 +1,4 @@
-import { MAT4 } from "../../../utils/matrix.js";
+import { MAT4 } from "../../../../utils/matrix.js";
 
 export class Surface {
   constructor(assetInfo) {

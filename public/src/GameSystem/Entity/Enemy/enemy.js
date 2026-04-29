@@ -1,5 +1,5 @@
-import { MAT4 } from "../../utils/matrix.js";
-import { GOAPPlanner } from "../GOAP/planner.js";
+import { MAT4 } from "../../../utils/matrix.js";
+import { GOAPPlanner } from "./GOAP/planner.js";
 import { Archer } from "./enemyTypes/archer.js";
 
 const ENEMY_TYPE = {

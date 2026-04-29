@@ -4,6 +4,6 @@ export class AssetData {
     this.jsonNames = ["a.json", "assets.json", "Cizgi.json", "kucukKiz.json", "floor.json"];
 
     this.spriteAtlases = [];
-    this.spriteJSONFiles = [];
+    this.spriteAtlasesJSON = [];
   }
 }

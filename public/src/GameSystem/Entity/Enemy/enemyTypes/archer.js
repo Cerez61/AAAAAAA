@@ -1,6 +1,8 @@
-import { MAT4 } from "../../../utils/matrix.js";
-export class Archer {
+import { MAT4 } from "../../../../utils/matrix.js";
+import { EntityBox } from "../../entityBox.js";
+export class Archer extends EntityBox {
   constructor(enemyID, position) {
+    super();
     this.name = "Archer";
 
     this.enemyID = enemyID;

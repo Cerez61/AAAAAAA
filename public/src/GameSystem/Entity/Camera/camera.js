@@ -1,4 +1,4 @@
-import { MAT4 } from "./utils/matrix.js";
+import { MAT4 } from "../../../utils/matrix.js";
 export class Camera {
   constructor(gameData) {
     this.globalData = gameData[0];
