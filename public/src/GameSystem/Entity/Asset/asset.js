@@ -1,31 +1,40 @@
-import { MAT4 } from "../../../utils/matrix.js";
-const mat4 = new MAT4();
+import { Surface } from "./AssetTypes/surface.js";
+import { None } from "./AssetTypes/none.js";
+import { Layer } from "./Layer.js";
+
+const TEXTURE_TYPE = {
+  Surface: Surface,
+};
 export class Asset {
-  constructor(targetJSON, asset, assetID) {
-    this.assetID = assetID;
-    this.type = asset.type;
-    this.subType = asset.subType;
-    this.assetName = asset.name;
-    this.textureName = targetJSON.meta.image;
-    /* this.textureJSON = textureJSON; */
-    this.textureWidth = targetJSON.meta.size.w;
-    this.textureHeight = targetJSON.meta.size.h;
-    this.textureDepth = targetJSON.meta.size.d;
+  constructor() {
+    this.layers = [];
+    this.assets = [];
+  }
 
-    this.frame = targetJSON.frames[this.assetName].frame;
-    this.u = this.frame.x;
-    this.v = this.frame.y;
-    this.w = this.frame.w;
-    this.h = this.frame.h;
+  addLayers(depth) {
+    const targetLayer = this.layers.find((layer) => layer.z === depth);
 
-    this.uvRect = [this.u, this.v, this.w, this.h];
+    if (!targetLayer) {
+      this.layers.push(new Layer(depth));
+      this.layers.sort((a, b) => a.z - b.z);
+    }
+  }
+  loadAsset(entityInfo, targetJSON) {
+    const depth = entityInfo.position[2];
 
-    this.x = asset.position[0];
-    this.y = asset.position[1];
-    this.z = asset.position[2];
+    this.addLayers(depth);
 
-    this.modelMatrix = mat4.identity();
+    const assetClass = TEXTURE_TYPE[entityInfo.subType];
 
-    this.outlineColor = 0;
+    const asset = assetClass ? new assetClass(entityInfo, targetJSON) : new None(entityInfo, targetJSON);
+
+    this.assets.push(asset);
+
+    this.layers.forEach((layer) => {
+      if (layer.z === depth) {
+        layer.assets.push(asset);
+        return;
+      }
+    });
   }
 }

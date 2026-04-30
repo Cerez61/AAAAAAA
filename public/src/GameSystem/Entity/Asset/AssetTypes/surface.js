@@ -1,12 +1,12 @@
 import { MAT4 } from "../../../../utils/matrix.js";
+import { EntityBox } from "../../entityBox.js";
 
-export class Surface {
-  constructor(assetInfo) {
-    this.assetInfo = assetInfo;
-
-    this.outlineColor = 0;
-
-    this.mat4 = new MAT4();
-    this.modelMatrix = this.mat4.identity();
+export class Surface extends EntityBox {
+  constructor(assetInfo, targetJSON) {
+    super(assetInfo, targetJSON);
   }
+  init() {
+    this.mat4.translate(this.modelMatrix, [this.x, this.y, this.z]);
+  }
+  update() {}
 }

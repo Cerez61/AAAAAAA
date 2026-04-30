@@ -8,7 +8,8 @@
       {
         "id": "player",
         "type": "PLAYER",
-        "position": [10, 80, 1]
+        "position": [10, 80, 1],
+        "name": "kk"
       },
       {
         "id": "texture_0",
@@ -63,13 +64,15 @@
         "id": "enemy_0",
         "type": "ENEMY",
         "subType": "Archer",
-        "position": [500, 150, 1]
+        "position": [500, 150, 1],
+        "name": "kk"
       },
       {
         "id": "enemy_1",
         "type": "ENEMY",
         "subType": "Archer",
-        "position": [100, 550, 1]
+        "position": [100, 550, 1],
+        "name": "kk"
       }
     ]
   },

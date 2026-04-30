@@ -1,24 +1,8 @@
 import { MAT4 } from "../../../../utils/matrix.js";
 import { EntityBox } from "../../entityBox.js";
 export class Archer extends EntityBox {
-  constructor(enemyID, position) {
-    super();
-    this.name = "Archer";
-
-    this.enemyID = enemyID;
-
-    this.w = 25;
-    this.h = 50;
-    this.depth = 2;
-    this.textureDepth = 0;
-
-    this.x = position[0];
-    this.y = position[1];
-    this.z = position[2];
-
-    this.uvRect = [203, 75, 37, 76];
-
-    this.outlineColor = 0;
+  constructor(enemyInfo, targetJSON) {
+    super(enemyInfo, targetJSON);
 
     this.currentActionList;
     this.currentAction;
@@ -53,8 +37,6 @@ export class Archer extends EntityBox {
         state: { isPatrolling: true },
       },
     ];
-    this.mat4 = new MAT4();
-    this.modelMatrix = this.mat4.identity();
   }
   onGround() {
     return this.y - 10 <= this.h;
@@ -79,9 +61,7 @@ export class Archer extends EntityBox {
     /*   console.log("melee attack");
      */
   }
-  init() {
-    this.mat4.scale(this.modelMatrix, [this.w, this.h]);
-  }
+  init() {}
   updateGlobalState(globalState) {
     this.globalState = globalState;
   }

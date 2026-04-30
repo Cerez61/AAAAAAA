@@ -15,8 +15,8 @@ import {
 import { MAT4 } from "../../../utils/matrix.js";
 import { EntityBox } from "../entityBox.js";
 export class Player extends EntityBox {
-  constructor(gameData) {
-    super();
+  constructor(gameData, entityInfo, targetJSON) {
+    super(entityInfo, targetJSON);
     //intelisense webgl content
     /**
      * @type {WebGL2RenderingContext}
@@ -27,14 +27,6 @@ export class Player extends EntityBox {
     this.gl = this.globalData.gl;
     this.keys = this.entityData.keys;
     this.lastPressKeys = this.entityData.lastPressKeys;
-    this.mat4 = new MAT4();
-    this.w = 20;
-    this.h = 40;
-    this.depth = 2;
-    this.textureDepth = 0;
-    this.x = this.w + this.gl.canvas.width / 4;
-    this.y = this.h + 40;
-    this.z = this.depth;
 
     this.speed = 1.5;
     this.maxSpeed = 10;
@@ -62,13 +54,6 @@ export class Player extends EntityBox {
     ];
     this.currentState = this.states[1];
     this.currentState.enter();
-
-    this.modelMatrix = this.mat4.identity();
-
-    this.uvRect = [203, 75, 37, 76];
-
-    this.outlineColor = 0;
-    this.mat4.scale(this.modelMatrix, [this.w, this.h]);
   }
   setState(player, state) {
     player.currentState = player.states[state];

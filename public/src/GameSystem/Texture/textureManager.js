@@ -1,0 +1,20 @@
+export class TextureManager {
+  constructor(gameData) {
+    this.assetData = gameData;
+    this.spriteAtlases = [];
+    this.spriteAtlasesJSON = [];
+  }
+  findEntityFile(entityName) {
+    const targetJSON = this.spriteAtlasesJSON.find((jsonFile) => {
+      return jsonFile.frames && jsonFile.frames[entityName];
+    });
+    return targetJSON;
+  }
+  takeAssetData() {
+    this.spriteAtlases = this.assetData.spriteAtlases;
+    this.spriteAtlasesJSON = this.assetData.spriteAtlasesJSON;
+  }
+  update() {
+    this.takeAssetData();
+  }
+}
