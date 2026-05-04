@@ -33,10 +33,12 @@ export class Player extends EntityBox {
     this.vx = 0;
     this.xSpeedMultiplier = 1;
 
-    this.vy = 0;
+    this.vy = 1;
     this.jumpCount = 2;
     this.jumpHeight = 10;
     this.weight = 0;
+
+    this.collideDirections = [];
 
     this.states = [
       new IdleLeft(this),
@@ -59,8 +61,35 @@ export class Player extends EntityBox {
     player.currentState = player.states[state];
     player.currentState.enter();
   }
-  onGround() {
-    return this.y <= this.h;
+  collide(mtv, collisionDirection) {
+    this.x += mtv[0];
+    this.y += mtv[1];
+    this.outlineColor = 1;
+
+    if (!this.collideDirections.includes(collisionDirection)) this.collideDirections.push(collisionDirection);
+
+    this.mat4.translate(this.modelMatrix, [this.x, this.y, 0]);
+
+    this.entityDataUpdateGive();
+  }
+  collision() {
+    if (!this.collideDirections[0]) return;
+    if (this.collideDirections.includes("BOTTOM")) {
+      if (this.weight <= 0) {
+        this.vy = 0;
+        this.weight = 0;
+        this.jumpHeight = 10;
+        this.jumpCount = 2;
+      }
+    } else this.vy = 1;
+    if (this.collideDirections.includes("TOP")) {
+    }
+    if (this.collideDirections.includes("LEFT")) {
+      if (this.vx <= 0) this.vx = 0;
+    }
+    if (this.collideDirections.includes("RIGHT")) {
+      if (this.vx >= 0) this.vx = 0;
+    }
   }
   horizontalMovement() {
     if (this.keys.includes("d") && !this.keys.includes("a") && this.vx < this.maxSpeed) this.vx += this.xSpeedMultiplier;
@@ -68,19 +97,9 @@ export class Player extends EntityBox {
     else if (!this.keys.includes("d") && this.vx > 0) this.vx -= this.xSpeedMultiplier;
     else if (!this.keys.includes("a") && this.vx < 0) this.vx += this.xSpeedMultiplier;
     else if (!this.keys.includes("d") && !this.keys.includes("a")) this.vx = 0;
-
     this.x += this.vx * this.speed;
   }
   verticalMovement() {
-    if (this.y + this.weight <= this.h) this.y = this.h;
-
-    if (this.onGround()) {
-      this.vy = 0;
-      this.weight = 0;
-      this.jumpHeight = 10;
-      this.jumpCount = 2;
-    }
-
     if (this.lastPressKeys[0] === "w" && this.jumpCount > 0) {
       this.jumpCount--;
       this.vy = 1;
@@ -101,17 +120,17 @@ export class Player extends EntityBox {
   async init() {}
   update() {
     this.currentState.updateState();
-
-    // this.x += horizontalMovement();
+    this.collision();
 
     this.horizontalMovement();
     this.verticalMovement();
 
     this.mat4.translate(this.modelMatrix, [this.x, this.y, 0]);
-
-    /*  console.log(this.mat4.multiplyVerticesMatrix(new Float32Array(18), this.instanceData.vertexData));
-     */ this.lastPressKeys[0] = null;
-
     this.entityDataUpdateGive();
+    this.clear();
+  }
+  clear() {
+    this.lastPressKeys[0] = null;
+    this.collideDirections = [];
   }
 }

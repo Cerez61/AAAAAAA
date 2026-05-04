@@ -66,6 +66,9 @@ export class Camera {
       this.eye[1] = 0;
       this.at[1] = 0;
     }
+    /* 
+    this.eye[1] = this.playerPosition[1] - this.offsetY;
+    this.at[1] = this.playerPosition[1] - this.offsetY; */
   }
   pixelSnapping() {
     this.eye = [Math.floor(this.eye[0]), Math.floor(this.eye[1]), Math.floor(this.eye[2])];

@@ -27,9 +27,12 @@ export class Collision {
     const entityBVertices = this.mat4.multiplyVerticesMatrix(new Float32Array(12), this.vertexData, entityB.modelMatrix);
     this.collideCount++;
 
-    if (this.collisionSAT.intersectPolygons(entityAVertices, entityBVertices)) {
-      entityA.outlineColor = 1;
-      entityB.outlineColor = 1;
+    const result = this.collisionSAT.intersectPolygons(entityAVertices, entityBVertices);
+    const mtv = result.mtv;
+    const collisionDirection = result.collisionDirection;
+    if (mtv) {
+      entityA.collide(mtv[0], collisionDirection[0]);
+      entityB.collide(mtv[1], collisionDirection[1]);
       return;
     }
   }
@@ -70,7 +73,7 @@ export class Collision {
       for (const found of founds) {
         const entityB = found.entity;
 
-        if (entityA === entityB) continue;
+        if (entityA === entityB || entityA.entityID > entityB.entityID) continue;
 
         this.checkCollision(entityA, entityB);
       }

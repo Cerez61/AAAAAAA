@@ -44,7 +44,7 @@ export class Entity {
     this.sceneData.roomChange = false;
   }
   updateEntityData() {
-    this.entitiesClass = [this.player, this.enemy, this.camera];
+    this.entitiesClass = [this.camera, this.player, this.enemy];
     this.entities = [this.player, ...this.asset.assets, ...this.enemy.enemies];
     this.entityData.entities = [this.player, ...this.asset.assets, ...this.enemy.enemies];
   }
