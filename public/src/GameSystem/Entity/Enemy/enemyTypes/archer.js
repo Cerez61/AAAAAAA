@@ -46,20 +46,14 @@ export class Archer extends EntityBox {
 
     this.x += mtv[0];
     this.y += mtv[1];
-
-    console.log(mtv, minEdge);
-    if (!mtv[0]) this.horizontalCollide = true;
-    if (!mtv[1]) this.verticalCollide = true;
   }
   horizontalMovement() {
-    if (this.horizontalCollide) this.horizontalCollide = false;
     const playerX = this.globalState.playerPosition[0];
     if (this.x - playerX > 0) this.x -= 5;
     else this.x += 5;
   }
   verticalMovement() {
-    if (this.verticalCollide) this.verticalCollide = false;
-    else this.y -= 10;
+    this.y -= 10;
   }
   chasePlayer() {
     this.horizontalMovement();

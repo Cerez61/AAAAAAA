@@ -69,7 +69,6 @@ export class Player extends EntityBox {
     if (!this.collideDirections.includes(collisionDirection)) this.collideDirections.push(collisionDirection);
 
     this.mat4.translate(this.modelMatrix, [this.x, this.y, 0]);
-
     this.entityDataUpdateGive();
   }
   collision() {
