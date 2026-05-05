@@ -6,8 +6,9 @@
     },
     "entities": [
       {
-        "id": "player",
+        "id": "player_0",
         "type": "PLAYER",
+        "subType": "Player",
         "position": [50, 500, 1],
         "name": "kk"
       },
@@ -45,6 +46,13 @@
         "subType": "image",
         "name": "floor",
         "position": [1050, 0, 2]
+      },
+      {
+        "id": "enemy_0",
+        "type": "ENEMY",
+        "subType": "Archer",
+        "name": "kk",
+        "position": [700, 700, 2]
       }
     ]
   },

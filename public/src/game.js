@@ -33,6 +33,7 @@ export class Game {
     await this.textureLoader.init();
     await this.scene.init();
     await this.collector.init();
+    await this.entity.init();
 
     this.update();
     this.clear();

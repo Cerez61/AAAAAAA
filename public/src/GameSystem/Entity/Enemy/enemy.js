@@ -20,9 +20,9 @@ export class Enemy {
   entityDataTake() {
     this.playerPosition = this.entityData.playerPosition;
   }
-  loadEnemy(enemyInfo, targetJSON) {
+  loadEnemy(enemyInfo, targetJSON, targetStat) {
     const enemyClass = ENEMY_TYPE[enemyInfo.subType];
-    this.enemies.push(new enemyClass(enemyInfo, targetJSON));
+    this.enemies.push(new enemyClass(enemyInfo, targetJSON, targetStat));
   }
   updateGlobalState() {
     this.globalState.playerPosition = this.playerPosition;

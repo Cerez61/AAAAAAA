@@ -1,7 +1,7 @@
 import { MAT4 } from "../../utils/matrix.js";
 
 export class EntityBox {
-  constructor(entityInfo, targetJSON) {
+  constructor(entityInfo, targetJSON, targetStat) {
     this.entityInfo = entityInfo;
     this.entityID = this.entityInfo.id;
     this.type = this.entityInfo.type;
@@ -28,11 +28,11 @@ export class EntityBox {
     this.z = this.entityInfo.position[2];
 
     this.mat4 = new MAT4();
-
     this.modelMatrix = this.mat4.identity();
-
     this.mat4.scale(this.modelMatrix, [this.w, this.h, 1]);
 
     this.outlineColor = 0;
+
+    this.stats = targetStat;
   }
 }

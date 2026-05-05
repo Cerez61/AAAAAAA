@@ -1,8 +1,8 @@
 import { MAT4 } from "../../../../utils/matrix.js";
 import { EntityBox } from "../../entityBox.js";
 export class Archer extends EntityBox {
-  constructor(enemyInfo, targetJSON) {
-    super(enemyInfo, targetJSON);
+  constructor(enemyInfo, targetJSON, targetStat) {
+    super(enemyInfo, targetJSON, targetStat);
 
     this.horizontalCollide;
     this.verticalCollide;

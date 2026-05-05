@@ -15,8 +15,8 @@ import {
 import { MAT4 } from "../../../utils/matrix.js";
 import { EntityBox } from "../entityBox.js";
 export class Player extends EntityBox {
-  constructor(gameData, entityInfo, targetJSON) {
-    super(entityInfo, targetJSON);
+  constructor(gameData, entityInfo, targetJSON, targetStat) {
+    super(entityInfo, targetJSON, targetStat);
     //intelisense webgl content
     /**
      * @type {WebGL2RenderingContext}
@@ -74,6 +74,7 @@ export class Player extends EntityBox {
   }
   collision() {
     if (!this.collideDirections[0]) return;
+
     if (this.collideDirections.includes("BOTTOM")) {
       if (this.weight <= 0) {
         this.vy = 0;
@@ -81,7 +82,7 @@ export class Player extends EntityBox {
         this.jumpHeight = 10;
         this.jumpCount = 2;
       }
-    } else this.vy = 1;
+    }
     if (this.collideDirections.includes("TOP")) {
     }
     if (this.collideDirections.includes("LEFT")) {
@@ -100,6 +101,7 @@ export class Player extends EntityBox {
     this.x += this.vx * this.speed;
   }
   verticalMovement() {
+    if (!this.collideDirections[0]) this.vy = 1;
     if (this.lastPressKeys[0] === "w" && this.jumpCount > 0) {
       this.jumpCount--;
       this.vy = 1;

@@ -16,8 +16,6 @@ export class CollisionSAT {
     axises[0] = resultA.minAxis;
     axises[1] = resultB.minAxis;
 
-    collisionDirection[0] = resultA.collisionDirection;
-    collisionDirection[1] = resultB.collisionDirection;
 
     collisionDirection[0] = this.findDirection(axises[0], resultA.collisionDirection);
     collisionDirection[1] = this.findDirection(axises[1], resultB.collisionDirection);
@@ -25,8 +23,8 @@ export class CollisionSAT {
     minOverlap = resultA.minOverlap;
 
     const mtv = [];
-    mtv[0] = this.mtv(axises[0], minOverlap, collisionDirection[0]);
-    mtv[1] = this.mtv(axises[1], minOverlap, collisionDirection[1]);
+    mtv[0] = this.mtv(axises[0], minOverlap);
+    mtv[1] = this.mtv(axises[1], minOverlap);
 
     return { mtv, collisionDirection };
   }
@@ -105,7 +103,7 @@ export class CollisionSAT {
   dotProduct(vertex, axis) {
     return axis[0] * vertex[0] + axis[1] * vertex[1];
   }
-  mtv(axis, overlap, collisionDirection) {
+  mtv(axis, overlap) {
     return [axis[0] * overlap, axis[1] * overlap];
   }
   dot(axis, number) {

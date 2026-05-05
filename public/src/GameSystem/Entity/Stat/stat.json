@@ -1,0 +1,12 @@
+{
+  "Player": {
+    "healt": 100,
+    "damage": 50,
+    "regen": 1
+  },
+  "Archer": {
+    "healt": 100,
+    "damage": 10,
+    "regen": 0
+  }
+}
