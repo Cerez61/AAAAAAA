@@ -42,10 +42,10 @@ export class Collision {
 
     for (const entity of entities) {
       const entityVertices = this.mat4.multiplyVerticesMatrix(new Float32Array(12), this.vertexData, entity.modelMatrix);
-      const x = entity.x;
-      const y = entity.y;
-      const w = entity.w;
-      const h = entity.h;
+      const x = entity.p.x;
+      const y = entity.p.y;
+      const w = entity.s.w;
+      const h = entity.s.h;
 
       const entityPoints = [];
 

@@ -44,7 +44,6 @@ export class Game {
     this.scene.update();
 
     this.entity.update();
-
     this.collision.update();
     this.collector.update(this.collision.giveQuadTree());
   }

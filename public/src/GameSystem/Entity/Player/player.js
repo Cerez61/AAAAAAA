@@ -14,6 +14,8 @@ import {
 } from "./playerStateManagement.js";
 import { MAT4 } from "../../../utils/matrix.js";
 import { EntityBox } from "../entityBox.js";
+import { Movement } from "../../../utils/movement.js";
+
 export class Player extends EntityBox {
   constructor(gameData, entityInfo, targetJSON, targetStat) {
     super(entityInfo, targetJSON, targetStat);
@@ -28,6 +30,8 @@ export class Player extends EntityBox {
     this.keys = this.entityData.keys;
     this.lastPressKeys = this.entityData.lastPressKeys;
 
+    this.xSpeed = 0;
+    this.ySpeed = -3;
     this.speed = 1.5;
     this.maxSpeed = 10;
     this.vx = 0;
@@ -40,6 +44,13 @@ export class Player extends EntityBox {
 
     this.collideDirections = [];
 
+    this.verticalStates = {
+      vy: 1,
+      weight: 0,
+      ySpeed: -3,
+      jumpCount: 2,
+      jumpHeight: 10,
+    };
     this.states = [
       new IdleLeft(this),
       new IdleRight(this),
@@ -62,24 +73,23 @@ export class Player extends EntityBox {
     player.currentState.enter();
   }
   collide(mtv, collisionDirection) {
-    this.x += mtv[0];
-    this.y += mtv[1];
+    this.p.x += mtv[0];
+    this.p.y += mtv[1];
     this.outlineColor = 1;
 
     if (!this.collideDirections.includes(collisionDirection)) this.collideDirections.push(collisionDirection);
 
-    this.mat4.translate(this.modelMatrix, [this.x, this.y, 0]);
+    this.mat4.translate(this.modelMatrix, [this.p.x, this.p.y, 0]);
     this.entityDataUpdateGive();
   }
   collision() {
     if (!this.collideDirections[0]) return;
 
     if (this.collideDirections.includes("BOTTOM")) {
-      if (this.weight <= 0) {
-        this.vy = 0;
-        this.weight = 0;
-        this.jumpHeight = 10;
-        this.jumpCount = 2;
+      if (this.verticalStates.weight >= 0) {
+        this.verticalStates.weight = 0;
+        this.verticalStates.jumpHeight = 10;
+        this.verticalStates.jumpCount = 2;
       }
     }
     if (this.collideDirections.includes("TOP")) {
@@ -92,31 +102,17 @@ export class Player extends EntityBox {
     }
   }
   horizontalMovement() {
-    if (this.keys.includes("d") && !this.keys.includes("a") && this.vx < this.maxSpeed) this.vx += this.xSpeedMultiplier;
-    else if (this.keys.includes("a") && !this.keys.includes("d") && this.vx > -this.maxSpeed) this.vx -= this.xSpeedMultiplier;
-    else if (!this.keys.includes("d") && this.vx > 0) this.vx -= this.xSpeedMultiplier;
-    else if (!this.keys.includes("a") && this.vx < 0) this.vx += this.xSpeedMultiplier;
-    else if (!this.keys.includes("d") && !this.keys.includes("a")) this.vx = 0;
-    this.x += this.vx * this.speed;
+    if (this.keys.includes("d") && !this.keys.includes("a") && this.xSpeed < this.maxSpeed) this.xSpeed += this.xSpeedMultiplier;
+    else if (this.keys.includes("a") && !this.keys.includes("d") && this.xSpeed > -this.maxSpeed) this.xSpeed -= this.xSpeedMultiplier;
+    else if (!this.keys.includes("d") && this.xSpeed > 0) this.xSpeed -= this.xSpeedMultiplier;
+    else if (!this.keys.includes("a") && this.xSpeed < 0) this.xSpeed += this.xSpeedMultiplier;
+    else if (!this.keys.includes("d") && !this.keys.includes("a")) this.xSpeed = 0;
+    this.vx = this.xSpeed * this.speed;
+    this.p.x += this.vx;
   }
-  verticalMovement() {
-    if (!this.collideDirections[0]) this.vy = 1;
-    if (this.lastPressKeys[0] === "w" && this.jumpCount > 0) {
-      this.jumpCount--;
-      this.vy = 1;
-      this.jumpHeight = 10;
-      this.weight = 0;
-      this.lastPressKeys[0] = null;
-    }
-    if (this.keys.includes("w") && this.jumpHeight > 0) {
-      this.jumpHeight--;
-      this.weight += 3;
-    } else this.weight -= 3;
 
-    this.y += this.vy * this.weight;
-  }
   entityDataUpdateGive() {
-    this.entityData.playerPosition = [this.x, this.y];
+    this.entityData.playerPosition = [this.p.x, this.p.y];
   }
   async init() {}
   update() {
@@ -124,9 +120,11 @@ export class Player extends EntityBox {
     this.collision();
 
     this.horizontalMovement();
-    this.verticalMovement();
+    Movement.playerVerticalMovement(this.p, this.verticalStates, this.keys, this.lastPressKeys);
+    Movement.getNextPosition(this.p, this.p2, this.s, this.s2, this.vx, this.vy, this.nextModelMatrix);
 
-    this.mat4.translate(this.modelMatrix, [this.x, this.y, 0]);
+    this.mat4.translate(this.modelMatrix, [this.p.x, this.p.y, 0]);
+
     this.entityDataUpdateGive();
     this.clear();
   }

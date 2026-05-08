@@ -9,7 +9,7 @@ export class Surface extends EntityBox {
     this.outlineColor = 1;
   }
   init() {
-    this.mat4.translate(this.modelMatrix, [this.x, this.y, this.z]);
+    this.mat4.translate(this.modelMatrix, [this.p.x, this.p.y, this.p.z]);
   }
   update() {}
 }

@@ -75,9 +75,9 @@ export class MAT4 {
     const y = n[1] || 1;
     const z = n[2] || 1;
 
-    out[0] *= x;
-    out[5] *= y;
-    out[10] *= z;
+    out[0] = x;
+    out[5] = y;
+    out[10] = z;
   }
   translate(out, n) {
     const x = n[0] || 0;

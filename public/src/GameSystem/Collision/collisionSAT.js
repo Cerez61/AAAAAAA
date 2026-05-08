@@ -16,7 +16,6 @@ export class CollisionSAT {
     axises[0] = resultA.minAxis;
     axises[1] = resultB.minAxis;
 
-
     collisionDirection[0] = this.findDirection(axises[0], resultA.collisionDirection);
     collisionDirection[1] = this.findDirection(axises[1], resultB.collisionDirection);
 
@@ -54,8 +53,11 @@ export class CollisionSAT {
       if (overlap <= minOverlap) {
         minOverlap = overlap;
         minAxis = axis;
-        if (i % 2 === 0) collisionDirection = "horizontal";
-        else collisionDirection = "vertical";
+        if (Math.abs(axis[1]) > Math.abs(axis[0])) {
+          collisionDirection = "vertical";
+        } else {
+          collisionDirection = "horizontal";
+        }
       }
 
       if (a.max < b.max) {

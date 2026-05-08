@@ -9,7 +9,11 @@
         "id": "player_0",
         "type": "PLAYER",
         "subType": "Player",
-        "position": [50, 500, 1],
+        "p": {
+          "x": 50,
+          "y": 500,
+          "z": 1
+        },
         "name": "chain"
       },
       {
@@ -17,42 +21,33 @@
         "type": "TEXTURE",
         "subType": "Surface",
         "name": "floor",
-        "position": [500, 300, 2]
-      },
-      {
-        "id": "texture_1",
-        "type": "TEXTURE",
-        "subType": "Surface",
-        "name": "floor",
-        "position": [1050, 400, 2]
+        "p": {
+          "x": 500,
+          "y": 300,
+          "z": 1
+        }
       },
       {
         "id": "texture_2",
         "type": "TEXTURE",
         "subType": "Surface",
         "name": "floor",
-        "position": [0, 0, 2]
+        "p": {
+          "x": 150,
+          "y": 0,
+          "z": 1
+        }
       },
       {
         "id": "texture_3",
         "type": "TEXTURE",
         "subType": "Surface",
         "name": "floor",
-        "position": [530, 0, 2]
-      },
-      {
-        "id": "texture_4",
-        "type": "TEXTURE",
-        "subType": "Surface",
-        "name": "floor",
-        "position": [1050, 0, 2]
-      },
-      {
-        "id": "enemy_0",
-        "type": "ENEMY",
-        "subType": "Archer",
-        "name": "chain",
-        "position": [700, 700, 2]
+        "p": {
+          "x": 700,
+          "y": 0,
+          "z": 1
+        }
       }
     ]
   },

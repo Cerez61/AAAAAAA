@@ -20,7 +20,7 @@ export class Asset {
     }
   }
   loadAsset(entityInfo, targetJSON, targetStat) {
-    const depth = entityInfo.position[2];
+    const depth = entityInfo.p.z;
 
     this.addLayers(depth);
 
