@@ -2,20 +2,28 @@ import { MAT4 } from "./matrix.js";
 const mat4 = new MAT4();
 
 export class Movement {
-  static playerHorizontalMovement() {}
+  static playerHorizontalMovement(p, v, keys) {
+    if (keys.includes("d") && !keys.includes("a") && v.xSpeed < v.maxSpeed) v.xSpeed += v.xSpeedMultiplier;
+    else if (keys.includes("a") && !keys.includes("d") && v.xSpeed > -v.maxSpeed) v.xSpeed -= v.xSpeedMultiplier;
+    else if (!keys.includes("d") && v.xSpeed > 0) v.xSpeed -= v.xSpeedMultiplier;
+    else if (!keys.includes("a") && v.xSpeed < 0) v.xSpeed += v.xSpeedMultiplier;
+    else if (!keys.includes("d") && !keys.includes("a")) v.xSpeed = 0;
+    v.vx = v.xSpeed * v.speed;
+    p.x += v.vx;
+  }
   static playerVerticalMovement(p, v, keys, lastPressKeys) {
     if (lastPressKeys[0] === "w" && v.jumpCount > 0) {
       v.jumpCount--;
       v.jumpHeight = 10;
-      v.weight = 0;
+      v.ySpeed = 0;
       lastPressKeys[0] = null;
     }
     if (keys.includes("w") && v.jumpHeight > 0) {
       v.jumpHeight--;
-      v.weight--;
-    } else v.weight++;
+      v.ySpeed += v.weight;
+    } else v.ySpeed -= v.weight;
 
-    v.vy = v.ySpeed * v.weight;
+    v.vy = v.ySpeed;
     p.y += v.vy;
   }
   static getNextPosition(p, p2, s, s2, vx, vy, modelMatrix) {

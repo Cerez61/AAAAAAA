@@ -50,6 +50,8 @@ export class EntityBox {
     this.nextModelMatrix = this.mat4.identity();
     this.mat4.scale(this.modelMatrix, [this.s.w, this.s.h, 1]);
     this.mat4.scale(this.nextModelMatrix, [this.s2.w, this.s2.h, 1]);
+    this.mat4.translate(this.modelMatrix, [this.p.x, this.p.y, this.p.z]);
+    this.mat4.translate(this.nextModelMatrix, [this.p2.x, this.p2.y, this.p2.z]);
 
     //Collision Color
     this.outlineColor = 0;

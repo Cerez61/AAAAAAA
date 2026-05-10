@@ -209,4 +209,9 @@ export class MAT4 {
     out[15] = (a20 * b03 - a21 * b01 + a22 * b00) * det;
     return out;
   }
+  copy(m) {
+    const out = new Float32Array(16);
+    out.set(m);
+    return out;
+  }
 }

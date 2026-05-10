@@ -23,7 +23,18 @@
         "name": "floor",
         "p": {
           "x": 500,
-          "y": 300,
+          "y": 240,
+          "z": 1
+        }
+      },
+      {
+        "id": "texture_0",
+        "type": "TEXTURE",
+        "subType": "Surface",
+        "name": "floor",
+        "p": {
+          "x": 700,
+          "y": 150,
           "z": 1
         }
       },
