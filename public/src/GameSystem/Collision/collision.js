@@ -20,12 +20,14 @@ export class Collision {
     this.rects = [];
 
     this.collideCount = 0;
+    this.satCollideCount = 0;
     this.collisionSAT = new CollisionSAT();
     this.mat4 = new MAT4();
   }
   checkCollision(entityA, entityB) {
     this.collideCount++;
-
+    if (!AABB.aabb(entityA, entityB, this.vertexData)) return;
+    this.satCollideCount++;
     const result = this.collisionSAT.intersectPolygons(entityA, entityB, this.vertexData);
     const mtv = result.mtv;
     const directions = result.directions;
@@ -87,6 +89,7 @@ export class Collision {
     this.points = [];
     this.rects = [];
     this.collideCount = 0;
+    this.satCollideCount = 0;
   }
   check() {
     const entities = this.entityData.entities;
@@ -102,9 +105,10 @@ export class Collision {
     this.updateSceneBoundary();
     this.quadTree = new QuadTree(new Rectangle(0, this.h, this.w, this.h), 4);
 
-    this.check();
-    /* 
-    console.log(this.collideCount); */
+    this.check(); /* 
+
+    console.log(this.collideCount);
+    console.log(this.satCollideCount); */
   }
   giveQuadTree() {
     return this.quadTree;

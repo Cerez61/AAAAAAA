@@ -31,7 +31,12 @@ export class CollisionSAT {
       const verticesA = mat4.multiplyVerticesMatrix(new Float32Array(12), vertexData, currentMatrixA);
 
       const result = this.checkSat(verticesA, verticesB, entityA, entityB);
-      if (result) return result;
+      if (result) {
+        //When entities collide happens sub-step then update entities position to that sub-step
+        entityA.p.x = x;
+        entityA.p.y = y;
+        return result;
+      }
     }
 
     return null;

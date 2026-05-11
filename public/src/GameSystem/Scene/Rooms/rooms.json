@@ -22,19 +22,19 @@
         "subType": "Surface",
         "name": "floor",
         "p": {
-          "x": 500,
-          "y": 240,
+          "x": 700,
+          "y": 300,
           "z": 1
         }
       },
       {
-        "id": "texture_0",
+        "id": "texture_1",
         "type": "TEXTURE",
         "subType": "Surface",
         "name": "floor",
         "p": {
-          "x": 700,
-          "y": 150,
+          "x": 0,
+          "y": 0,
           "z": 1
         }
       },
@@ -44,7 +44,7 @@
         "subType": "Surface",
         "name": "floor",
         "p": {
-          "x": 150,
+          "x": 510,
           "y": 0,
           "z": 1
         }
@@ -55,8 +55,41 @@
         "subType": "Surface",
         "name": "floor",
         "p": {
-          "x": 700,
+          "x": 1020,
           "y": 0,
+          "z": 1
+        }
+      },
+      {
+        "id": "texture_4",
+        "type": "TEXTURE",
+        "subType": "Surface",
+        "name": "floor",
+        "p": {
+          "x": 1530,
+          "y": 0,
+          "z": 1
+        }
+      },
+      {
+        "id": "texture_5",
+        "type": "TEXTURE",
+        "subType": "Surface",
+        "name": "floor",
+        "p": {
+          "x": 1400,
+          "y": 600,
+          "z": 1
+        }
+      },
+      {
+        "id": "Enemy_0",
+        "type": "ENEMY",
+        "subType": "Archer",
+        "name": "chain",
+        "p": {
+          "x": 500,
+          "y": 500,
           "z": 1
         }
       }

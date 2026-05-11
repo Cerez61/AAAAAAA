@@ -1,5 +1,6 @@
 import { MAT4 } from "../../../../utils/matrix.js";
 import { EntityBox } from "../../entityBox.js";
+import { Movement } from "../../../../utils/movement.js";
 export class Archer extends EntityBox {
   constructor(enemyInfo, targetJSON, targetStat) {
     super(enemyInfo, targetJSON, targetStat);
@@ -44,16 +45,18 @@ export class Archer extends EntityBox {
   collide(mtv, minEdge) {
     this.outlineColor = 1;
 
-    this.x += mtv[0];
-    this.y += mtv[1];
+    this.p.x += mtv[0];
+    this.p.y += mtv[1];
+
+    this.mat4.translate(this.modelMatrix, [this.p.x, this.p.y]);
   }
   horizontalMovement() {
     const playerX = this.globalState.playerPosition[0];
-    if (this.x - playerX > 0) this.x -= 5;
-    else this.x += 5;
+    if (this.p.x - playerX > 0) this.p.x -= 5;
+    else this.p.x += 5;
   }
   verticalMovement() {
-    this.y -= 10;
+    this.p.y -= 10;
   }
   chasePlayer() {
     this.horizontalMovement();
@@ -71,7 +74,7 @@ export class Archer extends EntityBox {
   }
   updateWorldStates() {
     const playerX = this.globalState.playerPosition[0];
-    if (Math.abs(this.x - playerX) > 100) this.worldState.playerNear = false;
+    if (Math.abs(this.p.x - playerX) > 100) this.worldState.playerNear = false;
     else this.worldState.playerNear = true;
   }
   update(globalState) {
@@ -88,6 +91,7 @@ export class Archer extends EntityBox {
     }
 
     this.updateWorldStates(globalState);
-    this.mat4.translate(this.modelMatrix, [this.x, this.y]);
+    this.mat4.translate(this.modelMatrix, [this.p.x, this.p.y]);
+    Movement.getNextPosition(this.p, this.p2, this.s, this.s2, 1, 5, this.nextModelMatrix);
   }
 }

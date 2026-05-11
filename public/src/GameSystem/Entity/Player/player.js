@@ -72,7 +72,6 @@ export class Player extends EntityBox {
     this.p.y += mtv[1];
     this.outlineColor = 1;
 
-    console.log(collisionDirection);
     this.collideDirections.push(collisionDirection);
     this.collision(collisionDirection);
 
