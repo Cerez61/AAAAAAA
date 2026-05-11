@@ -14,15 +14,36 @@ const stateNum = {
 };
 
 class playerStates {
-  constructor(keys) {}
-}
-export class IdleLeft extends playerStates {
   constructor(player) {
-    super();
     this.player = player;
+
     this.keys = this.player.keys;
     this.lastPressKeys = this.player.lastPressKeys;
     this.lastReleaseKeys = this.player.lastReleaseKeys;
+
+    this.targetJSON = this.player.targetJSON;
+    this.entityFrames = this.player.entityFrames;
+
+    this.targetFrames;
+    this.frame;
+  }
+  getEntityFrame(frameName) {
+    for (const value of this.entityFrames) {
+      if (value.name === frameName) {
+        this.targetFrames = value;
+      }
+    }
+    this.frame = this.targetFrames.from;
+  }
+  updateFrame() {
+    if (this.targetFrames.to > this.frame) this.frame++;
+
+    this.player.updateFrame(this.targetJSON.frames[this.frame].frame);
+  }
+}
+export class IdleLeft extends playerStates {
+  constructor(player) {
+    super(player);
   }
   enter() {
     checkStatement.innerHTML = "IdleLeft";
@@ -37,11 +58,7 @@ export class IdleLeft extends playerStates {
 
 export class IdleRight extends playerStates {
   constructor(player) {
-    super();
-    this.player = player;
-    this.keys = this.player.keys;
-    this.lastPressKeys = this.player.lastPressKeys;
-    this.lastReleaseKeys = this.player.lastReleaseKeys;
+    super(player);
   }
   enter() {
     checkStatement.innerHTML = "IdleRight";
@@ -56,18 +73,18 @@ export class IdleRight extends playerStates {
 }
 export class RunningLeft extends playerStates {
   constructor(player) {
-    super();
-    this.player = player;
-    this.keys = this.player.keys;
-    this.lastPressKeys = this.player.lastPressKeys;
-    this.lastReleaseKeys = this.player.lastReleaseKeys;
+    super(player);
   }
   enter() {
     checkStatement.innerHTML = "RunningLeft";
     this.player.ySpeed = 0;
     this.player.weight = 20;
+
+    super.getEntityFrame("PLAYER_RUNNING_LEFT");
   }
   updateState() {
+    super.updateFrame();
+
     if (!this.keys.includes("a") && !this.keys.includes("d")) this.player.setState(this.player, stateNum.IDLE_LEFT);
     if (!this.keys.includes("a") && this.keys.includes("d")) this.player.setState(this.player, stateNum.RUNNING_RIGHT);
     if (this.lastPressKeys[0] === "w" && this.player.collideDirections.includes("BOTTOM"))
@@ -78,16 +95,16 @@ export class RunningLeft extends playerStates {
 
 export class RunningRight extends playerStates {
   constructor(player) {
-    super();
-    this.player = player;
-    this.keys = this.player.keys;
-    this.lastPressKeys = this.player.lastPressKeys;
-    this.lastReleaseKeys = this.player.lastReleaseKeys;
+    super(player);
   }
   enter() {
     checkStatement.innerHTML = "RunningRight";
+
+    super.getEntityFrame("PLAYER_RUNNING_RIGHT");
   }
   updateState() {
+    super.updateFrame();
+
     if (!this.keys.includes("d") && !this.keys.includes("a")) this.player.setState(this.player, stateNum.IDLE_RIGHT);
     if (!this.keys.includes("d") && this.keys.includes("a")) this.player.setState(this.player, stateNum.RUNNING_LEFT);
     if (this.lastPressKeys[0] === "w" && this.player.collideDirections.includes("BOTTOM"))
@@ -98,31 +115,25 @@ export class RunningRight extends playerStates {
 
 export class JumpIdleLeft extends playerStates {
   constructor(player) {
-    super();
-    this.player = player;
-    this.keys = this.player.keys;
-    this.jumpCount = this.player.jumpCount;
-    this.lastPressKeys = this.player.lastPressKeys;
-    this.lastReleaseKeys = this.player.lastReleaseKeys;
+    super(player);
   }
   enter() {
     checkStatement.innerHTML = "JumpIdleLeft";
+
+    super.getEntityFrame("PLAYER_JUMPING");
   }
   updateState() {
+    super.updateFrame();
+
     if (!this.keys.includes("a") && this.keys.includes("d")) this.player.setState(this.player, stateNum.FALL_RUNNING_RIGHT);
     if (this.keys.includes("a") && !this.player.collideDirections.includes("BOTTOM")) this.player.setState(this.player, stateNum.JUMP_RUNNING_LEFT);
-    if (this.player.weight < 0) this.player.setState(this.player, stateNum.FALL_IDLE_LEFT);
+    if (this.player.verticalStates.vy < 0) this.player.setState(this.player, stateNum.FALL_IDLE_LEFT);
   }
 }
 
 export class JumpIdleRight extends playerStates {
   constructor(player) {
-    super();
-    this.player = player;
-    this.keys = this.player.keys;
-    this.jumpCount = this.player.jumpCount;
-    this.lastPressKeys = this.player.lastPressKeys;
-    this.lastReleaseKeys = this.player.lastReleaseKeys;
+    super(player);
   }
   enter() {
     checkStatement.innerHTML = "JumpIdleRight";
@@ -130,18 +141,13 @@ export class JumpIdleRight extends playerStates {
   updateState() {
     if (this.keys.includes("d")) this.player.setState(this.player, stateNum.JUMP_RUNNING_RIGHT);
     if (!this.keys.includes("d") && this.keys.includes("a")) this.player.setState(this.player, stateNum.JUMP_RUNNING_LEFT);
-    if (this.player.weight < 0) this.player.setState(this.player, stateNum.FALL_IDLE_RIGHT);
+    if (this.player.verticalStates.vy < 0) this.player.setState(this.player, stateNum.FALL_IDLE_RIGHT);
   }
 }
 
 export class JumpRunningLeft extends playerStates {
   constructor(player) {
-    super();
-    this.player = player;
-    this.keys = this.player.keys;
-    this.jumpCount = this.player.jumpCount;
-    this.lastPressKeys = this.player.lastPressKeys;
-    this.lastReleaseKeys = this.player.lastReleaseKeys;
+    super(player);
   }
   enter() {
     checkStatement.innerHTML = "JumpRunningLeft";
@@ -149,18 +155,13 @@ export class JumpRunningLeft extends playerStates {
   updateState() {
     if (!this.keys.includes("a") && !this.keys.includes("d")) this.player.setState(this.player, stateNum.JUMP_IDLE_LEFT);
     if (!this.keys.includes("a") && this.keys.includes("d")) this.player.setState(this.player, stateNum.JUMP_RUNNING_RIGHT);
-    if (this.player.weight < 0) this.player.setState(this.player, stateNum.FALL_RUNNING_LEFT);
+    if (this.player.verticalStates.vy < 0) this.player.setState(this.player, stateNum.FALL_RUNNING_LEFT);
   }
 }
 
 export class JumpRunningRight extends playerStates {
   constructor(player) {
-    super();
-    this.player = player;
-    this.keys = this.player.keys;
-    this.jumpCount = this.player.jumpCount;
-    this.lastPressKeys = this.player.lastPressKeys;
-    this.lastReleaseKeys = this.player.lastReleaseKeys;
+    super(player);
   }
   enter() {
     checkStatement.innerHTML = "JumpRunningRight";
@@ -168,22 +169,21 @@ export class JumpRunningRight extends playerStates {
   updateState() {
     if (!this.keys.includes("d") && !this.keys.includes("a")) this.player.setState(this.player, stateNum.JUMP_IDLE_RIGHT);
     if (!this.keys.includes("d") && this.keys.includes("a")) this.player.setState(this.player, stateNum.JUMP_RUNNING_LEFT);
-    if (this.player.weight < 0) this.player.setState(this.player, stateNum.FALL_RUNNING_RIGHT);
+    if (this.player.verticalStates.vy < 0) this.player.setState(this.player, stateNum.FALL_RUNNING_RIGHT);
   }
 }
 export class FallIdleLeft extends playerStates {
   constructor(player) {
-    super();
-    this.player = player;
-    this.keys = this.player.keys;
-    this.jumpCount = this.player.jumpCount;
-    this.lastPressKeys = this.player.lastPressKeys;
-    this.lastReleaseKeys = this.player.lastReleaseKeys;
+    super(player);
   }
   enter() {
     checkStatement.innerHTML = "FallIdleLeft";
+
+    super.getEntityFrame("PLAYER_FALLING");
   }
   updateState() {
+    super.updateFrame();
+
     if (this.keys.includes("a") && !this.keys.includes("d")) this.player.setState(this.player, stateNum.FALL_RUNNING_LEFT);
     if (!this.keys.includes("a") && this.keys.includes("d")) this.player.setState(this.player, stateNum.FALL_RUNNING_RIGHT);
     if (this.lastPressKeys[0] === "w" && this.player.jumpCount > 0 && !this.player.collideDirections.includes("BOTTOM"))
@@ -193,12 +193,7 @@ export class FallIdleLeft extends playerStates {
 }
 export class FallIdleRight extends playerStates {
   constructor(player) {
-    super();
-    this.player = player;
-    this.keys = this.player.keys;
-    this.jumpCount = this.player.jumpCount;
-    this.lastPressKeys = this.player.lastPressKeys;
-    this.lastReleaseKeys = this.player.lastReleaseKeys;
+    super(player);
   }
   enter() {
     checkStatement.innerHTML = "FallIdleRight";
@@ -213,12 +208,7 @@ export class FallIdleRight extends playerStates {
 }
 export class FallRunningLeft extends playerStates {
   constructor(player) {
-    super();
-    this.player = player;
-    this.keys = this.player.keys;
-    this.jumpCount = this.player.jumpCount;
-    this.lastPressKeys = this.player.lastPressKeys;
-    this.lastReleaseKeys = this.player.lastReleaseKeys;
+    super(player);
   }
   enter() {
     checkStatement.innerHTML = "FallRunningLeft";
@@ -233,12 +223,7 @@ export class FallRunningLeft extends playerStates {
 }
 export class FallRunningRight extends playerStates {
   constructor(player) {
-    super();
-    this.player = player;
-    this.keys = this.player.keys;
-    this.jumpCount = this.player.jumpCount;
-    this.lastPressKeys = this.player.lastPressKeys;
-    this.lastReleaseKeys = this.player.lastReleaseKeys;
+    super(player);
   }
   enter() {
     checkStatement.innerHTML = "FallRunningRight";

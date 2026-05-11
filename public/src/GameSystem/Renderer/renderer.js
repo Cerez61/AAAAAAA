@@ -161,7 +161,7 @@ export class Renderer {
     this.gl.vertexAttribDivisor(9, this.instanceData.totalEntity);
 
     this.gl.bindTexture(this.gl.TEXTURE_2D_ARRAY, this.textureBuffer);
-    this.gl.texStorage3D(this.gl.TEXTURE_2D_ARRAY, 1, this.gl.RGBA8, 256, 256, this.assetData.spriteAtlases.length);
+    this.gl.texStorage3D(this.gl.TEXTURE_2D_ARRAY, 1, this.gl.RGBA8, 512, 512, this.assetData.spriteAtlases.length);
     this.assetData.spriteAtlases.forEach((spriteAtlas, index) => {
       this.gl.texSubImage3D(
         this.gl.TEXTURE_2D_ARRAY,

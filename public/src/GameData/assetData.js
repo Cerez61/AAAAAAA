@@ -1,7 +1,7 @@
 export class AssetData {
   constructor() {
-    this.textureNames = ["assets.png", "Cizgi.png", "floor.png"];
-    this.jsonNames = ["assets.json", "Cizgi.json", "floor.json"];
+    this.textureNames = ["f.png", "player.png"];
+    this.jsonNames = ["f.json", "player.json"];
 
     this.spriteAtlases = [];
     this.spriteAtlasesJSON = [];

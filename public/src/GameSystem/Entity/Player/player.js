@@ -104,6 +104,9 @@ export class Player extends EntityBox {
 
     this.updateModelData();
   }
+  updateFrame(uvRect) {
+    this.uvRect = [uvRect.x, uvRect.y, uvRect.w, uvRect.h];
+  }
   updateModelData() {
     this.mat4.translate(this.modelMatrix, [this.p.x, this.p.y, 0]);
   }

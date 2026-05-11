@@ -10,14 +10,15 @@ export class EntityBox {
 
     //SpriteSheet Data
     this.assetName = this.entityInfo.name;
-    this.textureName = targetJSON.meta.image;
-    this.textureJSON = targetJSON;
-    this.textureWidth = targetJSON.meta.size.w;
-    this.textureHeight = targetJSON.meta.size.h;
-    this.textureDepth = targetJSON.meta.size.d;
+    this.targetJSON = targetJSON;
+    this.textureName = this.targetJSON.meta.image;
+    this.textureWidth = this.targetJSON.meta.size.w;
+    this.textureHeight = this.targetJSON.meta.size.h;
+    this.textureDepth = this.targetJSON.meta.size.d;
 
     //Texture Data
-    this.frame = targetJSON.frames[this.assetName].frame;
+    this.entityFrames = this.targetJSON.meta.assets[this.assetName].frameTags;
+    this.frame = this.targetJSON.frames[this.entityFrames[0].from].frame;
     this.u = this.frame.x;
     this.v = this.frame.y;
     this.s = {

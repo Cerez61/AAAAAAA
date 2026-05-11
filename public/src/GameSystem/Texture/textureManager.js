@@ -6,7 +6,7 @@ export class TextureManager {
   }
   findEntityFile(entityName) {
     const targetJSON = this.spriteAtlasesJSON.find((jsonFile) => {
-      return jsonFile.frames && jsonFile.frames[entityName];
+      return jsonFile.meta.assets && jsonFile.meta.assets[entityName];
     });
     return targetJSON;
   }

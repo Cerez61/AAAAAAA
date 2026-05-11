@@ -31,6 +31,7 @@ export class Entity {
     for (const entityInfo of this.entityData.entitySceneData) {
       const targetJSON = this.textureManager.findEntityFile(entityInfo.name);
       const targetStat = this.statManager.findEntityStat(entityInfo.subType);
+
       /*  const entityStat = */
       if (entityInfo.type == "PLAYER") {
         this.player = new Player([this.globalData, this.instanceData, this.entityData], entityInfo, targetJSON, targetStat);

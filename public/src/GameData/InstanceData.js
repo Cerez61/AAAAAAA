@@ -14,7 +14,7 @@ export class InstanceData {
     this.spriteAtlasDepthData = new Float32Array(this.maxProxy);
     this.outlineColorData = new Float32Array(this.maxProxy);
 
-    this.spriteAtlasSizeData = new Float32Array([256, 256]);
+    this.spriteAtlasSizeData = new Float32Array([512, 512]);
     this.indexData = new Float32Array([1, 2, 3, 3, 2, 4]);
 
     //Count Data

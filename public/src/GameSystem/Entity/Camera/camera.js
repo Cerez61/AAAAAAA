@@ -65,8 +65,8 @@ export class Camera {
     } else {
       this.eye[1] = 0;
       this.at[1] = 0;
-    }
-    /* 
+    } /* 
+
     this.eye[1] = this.playerPosition[1] - this.offsetY;
     this.at[1] = this.playerPosition[1] - this.offsetY; */
   }
