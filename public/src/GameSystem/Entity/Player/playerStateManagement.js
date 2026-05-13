@@ -1,3 +1,4 @@
+import { DeltaTime } from "../../../components/deltaTime.js";
 const stateNum = {
   IDLE_LEFT: 0,
   IDLE_RIGHT: 1,
@@ -26,6 +27,9 @@ class playerStates {
 
     this.targetFrames;
     this.frame;
+
+    this.lastTime = 0;
+    this.frameDuration = 100;
   }
   getEntityFrame(frameName) {
     for (const value of this.entityFrames) {
@@ -36,9 +40,13 @@ class playerStates {
     this.frame = this.targetFrames.from;
   }
   updateFrame() {
-    if (this.targetFrames.to > this.frame) this.frame++;
+    if (this.lastTime > this.frameDuration) {
+      if (this.targetFrames.to > this.frame) this.frame++;
 
-    this.player.updateFrame(this.targetJSON.frames[this.frame].frame);
+      this.player.updateFrame(this.targetJSON.frames[this.frame].frame);
+
+      this.lastTime = 0;
+    } else this.lastTime += DeltaTime.get();
   }
 }
 export class IdleLeft extends playerStates {
@@ -186,7 +194,7 @@ export class FallIdleLeft extends playerStates {
 
     if (this.keys.includes("a") && !this.keys.includes("d")) this.player.setState(this.player, stateNum.FALL_RUNNING_LEFT);
     if (!this.keys.includes("a") && this.keys.includes("d")) this.player.setState(this.player, stateNum.FALL_RUNNING_RIGHT);
-    if (this.lastPressKeys[0] === "w" && this.player.jumpCount > 0 && !this.player.collideDirections.includes("BOTTOM"))
+    if (this.lastPressKeys[0] === "w" && this.player.verticalStates.jumpCount > 0 && !this.player.collideDirections.includes("BOTTOM"))
       this.player.setState(this.player, stateNum.JUMP_IDLE_LEFT);
     if (this.player.collideDirections.includes("BOTTOM")) this.player.setState(this.player, stateNum.IDLE_LEFT);
   }

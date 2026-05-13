@@ -33,6 +33,7 @@ export class Enemy {
     this.updateGlobalState();
 
     for (const enemy of this.enemies) {
+      const enemyGoal = this.planner.goal(enemy.goals[0]);
       const finalPlan = this.planner.plan(enemy.worldState, enemy.goals[0], enemy.actions);
       finalPlan.sort((a, b) => a.cost - b.cost);
 
