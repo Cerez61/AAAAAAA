@@ -29,14 +29,20 @@ class playerStates {
     this.frame;
 
     this.lastTime = 0;
-    this.frameDuration = 100;
+    this.frameDuration = 50;
   }
-  getEntityFrame(frameName) {
+  getEntityFrame(frameName, currentFrame) {
     for (const value of this.entityFrames) {
       if (value.name === frameName) {
         this.targetFrames = value;
       }
     }
+
+    if (this.targetFrames.from <= currentFrame && this.targetFrames.to >= currentFrame) {
+      this.frame = currentFrame;
+      return;
+    }
+
     this.frame = this.targetFrames.from;
   }
   updateFrame() {
@@ -53,14 +59,17 @@ export class IdleLeft extends playerStates {
   constructor(player) {
     super(player);
   }
-  enter() {
+  enter(currentFrame) {
     checkStatement.innerHTML = "IdleLeft";
+    super.getEntityFrame("PLAYER_RUNNING_LEFT", currentFrame);
   }
   updateState() {
-    if (this.keys.includes("d") && !this.keys.includes("a")) this.player.setState(this.player, stateNum.RUNNING_RIGHT);
-    if (this.keys.includes("a") && !this.keys.includes("d")) this.player.setState(this.player, stateNum.RUNNING_LEFT);
-    if (this.lastPressKeys[0] === "w" && this.player.collideDirections.includes("BOTTOM")) this.player.setState(this.player, stateNum.JUMP_IDLE_LEFT);
-    if (!this.player.collideDirections.includes("BOTTOM")) this.player.setState(this.player, stateNum.JUMP_IDLE_LEFT);
+    super.updateFrame();
+
+    if (this.keys.includes("d") && !this.keys.includes("a")) this.player.setState(stateNum.RUNNING_RIGHT, this.frame);
+    if (this.keys.includes("a") && !this.keys.includes("d")) this.player.setState(stateNum.RUNNING_LEFT, this.frame);
+    if (this.lastPressKeys[0] === "w" && this.player.collideDirections.includes("BOTTOM")) this.player.setState(stateNum.JUMP_IDLE_LEFT, this.frame);
+    if (!this.player.collideDirections.includes("BOTTOM")) this.player.setState(stateNum.JUMP_IDLE_LEFT, this.frame);
   }
 }
 
@@ -68,36 +77,36 @@ export class IdleRight extends playerStates {
   constructor(player) {
     super(player);
   }
-  enter() {
+  enter(currentFrame) {
     checkStatement.innerHTML = "IdleRight";
+    super.getEntityFrame("PLAYER_RUNNING_RIGHT", currentFrame);
   }
   updateState() {
-    if (this.keys.includes("d") && !this.keys.includes("a")) this.player.setState(this.player, stateNum.RUNNING_RIGHT);
-    if (this.keys.includes("a") && !this.keys.includes("d")) this.player.setState(this.player, stateNum.RUNNING_LEFT);
-    if (this.lastPressKeys[0] === "w" && this.player.collideDirections.includes("BOTTOM"))
-      this.player.setState(this.player, stateNum.JUMP_IDLE_RIGHT);
-    if (!this.player.collideDirections.includes("BOTTOM")) this.player.setState(this.player, stateNum.JUMP_IDLE_RIGHT);
+    super.updateFrame();
+
+    if (this.keys.includes("d") && !this.keys.includes("a")) this.player.setState(stateNum.RUNNING_RIGHT, this.frame);
+    if (this.keys.includes("a") && !this.keys.includes("d")) this.player.setState(stateNum.RUNNING_LEFT, this.frame);
+    if (this.lastPressKeys[0] === "w" && this.player.collideDirections.includes("BOTTOM")) this.player.setState(stateNum.JUMP_IDLE_RIGHT, this.frame);
+    if (!this.player.collideDirections.includes("BOTTOM")) this.player.setState(stateNum.JUMP_IDLE_RIGHT, this.frame);
   }
 }
 export class RunningLeft extends playerStates {
   constructor(player) {
     super(player);
   }
-  enter() {
+  enter(currentFrame) {
     checkStatement.innerHTML = "RunningLeft";
-    this.player.ySpeed = 0;
-    this.player.weight = 20;
 
-    super.getEntityFrame("PLAYER_RUNNING_LEFT");
+    super.getEntityFrame("PLAYER_RUNNING_LEFT", currentFrame);
   }
   updateState() {
     super.updateFrame();
 
-    if (!this.keys.includes("a") && !this.keys.includes("d")) this.player.setState(this.player, stateNum.IDLE_LEFT);
-    if (!this.keys.includes("a") && this.keys.includes("d")) this.player.setState(this.player, stateNum.RUNNING_RIGHT);
+    if (!this.keys.includes("a") && !this.keys.includes("d")) this.player.setState(stateNum.IDLE_LEFT, this.frame);
+    if (!this.keys.includes("a") && this.keys.includes("d")) this.player.setState(stateNum.RUNNING_RIGHT, this.frame);
     if (this.lastPressKeys[0] === "w" && this.player.collideDirections.includes("BOTTOM"))
-      this.player.setState(this.player, stateNum.JUMP_RUNNING_LEFT);
-    if (!this.player.collideDirections.includes("BOTTOM")) this.player.setState(this.player, stateNum.JUMP_RUNNING_LEFT);
+      this.player.setState(stateNum.JUMP_RUNNING_LEFT, this.frame);
+    if (!this.player.collideDirections.includes("BOTTOM")) this.player.setState(stateNum.JUMP_RUNNING_LEFT, this.frame);
   }
 }
 
@@ -105,19 +114,19 @@ export class RunningRight extends playerStates {
   constructor(player) {
     super(player);
   }
-  enter() {
+  enter(currentFrame) {
     checkStatement.innerHTML = "RunningRight";
 
-    super.getEntityFrame("PLAYER_RUNNING_RIGHT");
+    super.getEntityFrame("PLAYER_RUNNING_RIGHT", currentFrame);
   }
   updateState() {
     super.updateFrame();
 
-    if (!this.keys.includes("d") && !this.keys.includes("a")) this.player.setState(this.player, stateNum.IDLE_RIGHT);
-    if (!this.keys.includes("d") && this.keys.includes("a")) this.player.setState(this.player, stateNum.RUNNING_LEFT);
+    if (!this.keys.includes("d") && !this.keys.includes("a")) this.player.setState(stateNum.IDLE_RIGHT, this.frame);
+    if (!this.keys.includes("d") && this.keys.includes("a")) this.player.setState(stateNum.RUNNING_LEFT, this.frame);
     if (this.lastPressKeys[0] === "w" && this.player.collideDirections.includes("BOTTOM"))
-      this.player.setState(this.player, stateNum.JUMP_RUNNING_RIGHT);
-    if (!this.player.collideDirections.includes("BOTTOM")) this.player.setState(this.player, stateNum.JUMP_RUNNING_RIGHT);
+      this.player.setState(stateNum.JUMP_RUNNING_RIGHT, this.frame);
+    if (!this.player.collideDirections.includes("BOTTOM")) this.player.setState(stateNum.JUMP_RUNNING_RIGHT, this.frame);
   }
 }
 
@@ -125,17 +134,17 @@ export class JumpIdleLeft extends playerStates {
   constructor(player) {
     super(player);
   }
-  enter() {
+  enter(currentFrame) {
     checkStatement.innerHTML = "JumpIdleLeft";
 
-    super.getEntityFrame("PLAYER_JUMPING");
+    super.getEntityFrame("PLAYER_JUMPING", currentFrame);
   }
   updateState() {
     super.updateFrame();
 
-    if (!this.keys.includes("a") && this.keys.includes("d")) this.player.setState(this.player, stateNum.FALL_RUNNING_RIGHT);
-    if (this.keys.includes("a") && !this.player.collideDirections.includes("BOTTOM")) this.player.setState(this.player, stateNum.JUMP_RUNNING_LEFT);
-    if (this.player.verticalStates.vy < 0) this.player.setState(this.player, stateNum.FALL_IDLE_LEFT);
+    if (!this.keys.includes("a") && this.keys.includes("d")) this.player.setState(stateNum.FALL_RUNNING_RIGHT, this.frame);
+    if (this.keys.includes("a") && !this.player.collideDirections.includes("BOTTOM")) this.player.setState(stateNum.JUMP_RUNNING_LEFT, this.frame);
+    if (this.player.verticalStates.vy < 0) this.player.setState(stateNum.FALL_IDLE_LEFT, this.frame);
   }
 }
 
@@ -143,13 +152,16 @@ export class JumpIdleRight extends playerStates {
   constructor(player) {
     super(player);
   }
-  enter() {
+  enter(currentFrame) {
     checkStatement.innerHTML = "JumpIdleRight";
+    super.getEntityFrame("PLAYER_JUMPING", currentFrame);
   }
   updateState() {
-    if (this.keys.includes("d")) this.player.setState(this.player, stateNum.JUMP_RUNNING_RIGHT);
-    if (!this.keys.includes("d") && this.keys.includes("a")) this.player.setState(this.player, stateNum.JUMP_RUNNING_LEFT);
-    if (this.player.verticalStates.vy < 0) this.player.setState(this.player, stateNum.FALL_IDLE_RIGHT);
+    super.updateFrame();
+
+    if (this.keys.includes("d")) this.player.setState(stateNum.JUMP_RUNNING_RIGHT, this.frame);
+    if (!this.keys.includes("d") && this.keys.includes("a")) this.player.setState(stateNum.JUMP_RUNNING_LEFT, this.frame);
+    if (this.player.verticalStates.vy < 0) this.player.setState(stateNum.FALL_IDLE_RIGHT, this.frame);
   }
 }
 
@@ -157,13 +169,16 @@ export class JumpRunningLeft extends playerStates {
   constructor(player) {
     super(player);
   }
-  enter() {
+  enter(currentFrame) {
     checkStatement.innerHTML = "JumpRunningLeft";
+    super.getEntityFrame("PLAYER_JUMPING", currentFrame);
   }
   updateState() {
-    if (!this.keys.includes("a") && !this.keys.includes("d")) this.player.setState(this.player, stateNum.JUMP_IDLE_LEFT);
-    if (!this.keys.includes("a") && this.keys.includes("d")) this.player.setState(this.player, stateNum.JUMP_RUNNING_RIGHT);
-    if (this.player.verticalStates.vy < 0) this.player.setState(this.player, stateNum.FALL_RUNNING_LEFT);
+    super.updateFrame();
+
+    if (!this.keys.includes("a") && !this.keys.includes("d")) this.player.setState(stateNum.JUMP_IDLE_LEFT, this.frame);
+    if (!this.keys.includes("a") && this.keys.includes("d")) this.player.setState(stateNum.JUMP_RUNNING_RIGHT, this.frame);
+    if (this.player.verticalStates.vy < 0) this.player.setState(stateNum.FALL_RUNNING_LEFT, this.frame);
   }
 }
 
@@ -171,76 +186,88 @@ export class JumpRunningRight extends playerStates {
   constructor(player) {
     super(player);
   }
-  enter() {
+  enter(currentFrame) {
     checkStatement.innerHTML = "JumpRunningRight";
+    super.getEntityFrame("PLAYER_JUMPING", currentFrame);
   }
   updateState() {
-    if (!this.keys.includes("d") && !this.keys.includes("a")) this.player.setState(this.player, stateNum.JUMP_IDLE_RIGHT);
-    if (!this.keys.includes("d") && this.keys.includes("a")) this.player.setState(this.player, stateNum.JUMP_RUNNING_LEFT);
-    if (this.player.verticalStates.vy < 0) this.player.setState(this.player, stateNum.FALL_RUNNING_RIGHT);
+    super.updateFrame();
+
+    if (!this.keys.includes("d") && !this.keys.includes("a")) this.player.setState(stateNum.JUMP_IDLE_RIGHT, this.frame);
+    if (!this.keys.includes("d") && this.keys.includes("a")) this.player.setState(stateNum.JUMP_RUNNING_LEFT, this.frame);
+    if (this.player.verticalStates.vy < 0) this.player.setState(stateNum.FALL_RUNNING_RIGHT, this.frame);
   }
 }
 export class FallIdleLeft extends playerStates {
   constructor(player) {
     super(player);
   }
-  enter() {
+  enter(currentFrame) {
     checkStatement.innerHTML = "FallIdleLeft";
 
-    super.getEntityFrame("PLAYER_FALLING");
+    super.getEntityFrame("PLAYER_FALLING", currentFrame);
   }
   updateState() {
     super.updateFrame();
 
-    if (this.keys.includes("a") && !this.keys.includes("d")) this.player.setState(this.player, stateNum.FALL_RUNNING_LEFT);
-    if (!this.keys.includes("a") && this.keys.includes("d")) this.player.setState(this.player, stateNum.FALL_RUNNING_RIGHT);
+    if (this.keys.includes("a") && !this.keys.includes("d")) this.player.setState(stateNum.FALL_RUNNING_LEFT, this.frame);
+    if (!this.keys.includes("a") && this.keys.includes("d")) this.player.setState(stateNum.FALL_RUNNING_RIGHT, this.frame);
     if (this.lastPressKeys[0] === "w" && this.player.verticalStates.jumpCount > 0 && !this.player.collideDirections.includes("BOTTOM"))
-      this.player.setState(this.player, stateNum.JUMP_IDLE_LEFT);
-    if (this.player.collideDirections.includes("BOTTOM")) this.player.setState(this.player, stateNum.IDLE_LEFT);
+      this.player.setState(stateNum.JUMP_IDLE_LEFT, this.frame);
+    if (this.player.collideDirections.includes("BOTTOM")) this.player.setState(stateNum.IDLE_LEFT, this.frame);
   }
 }
 export class FallIdleRight extends playerStates {
   constructor(player) {
     super(player);
   }
-  enter() {
+  enter(currentFrame) {
     checkStatement.innerHTML = "FallIdleRight";
+    super.getEntityFrame("PLAYER_FALLING", currentFrame);
   }
   updateState() {
-    if (this.keys.includes("d") && !this.keys.includes("a")) this.player.setState(this.player, stateNum.FALL_RUNNING_RIGHT);
-    if (!this.keys.includes("d") && this.keys.includes("a")) this.player.setState(this.player, stateNum.FALL_RUNNING_LEFT);
-    if (this.lastPressKeys[0] === "w" && this.player.jumpCount > 0 && !this.player.collideDirections.includes("BOTTOM"))
-      this.player.setState(this.player, stateNum.JUMP_IDLE_RIGHT);
-    if (this.player.collideDirections.includes("BOTTOM")) this.player.setState(this.player, stateNum.IDLE_RIGHT);
+    super.updateFrame();
+
+    if (this.keys.includes("d") && !this.keys.includes("a")) this.player.setState(stateNum.FALL_RUNNING_RIGHT, this.frame);
+    if (!this.keys.includes("d") && this.keys.includes("a")) this.player.setState(stateNum.FALL_RUNNING_LEFT, this.frame);
+    if (this.lastPressKeys[0] === "w" && this.player.verticalStates.jumpCount > 0 && !this.player.collideDirections.includes("BOTTOM"))
+      this.player.setState(stateNum.JUMP_IDLE_RIGHT, this.frame);
+    if (this.player.collideDirections.includes("BOTTOM")) this.player.setState(stateNum.IDLE_RIGHT, this.frame);
   }
 }
 export class FallRunningLeft extends playerStates {
   constructor(player) {
     super(player);
   }
-  enter() {
+  enter(currentFrame) {
     checkStatement.innerHTML = "FallRunningLeft";
+    super.getEntityFrame("PLAYER_FALLING", currentFrame);
   }
   updateState() {
-    if (!this.keys.includes("a") && !this.keys.includes("d")) this.player.setState(this.player, stateNum.FALL_IDLE_LEFT);
-    if (!this.keys.includes("a") && this.keys.includes("d")) this.player.setState(this.player, stateNum.FALL_RUNNING_RIGHT);
-    if (this.lastPressKeys[0] === "w" && this.player.jumpCount > 0 && !this.player.collideDirections.includes("BOTTOM"))
-      this.player.setState(this.player, stateNum.JUMP_RUNNING_LEFT);
-    if (this.player.collideDirections.includes("BOTTOM")) this.player.setState(this.player, stateNum.RUNNING_LEFT);
+    super.updateFrame();
+
+    if (!this.keys.includes("a") && !this.keys.includes("d")) this.player.setState(stateNum.FALL_IDLE_LEFT, this.frame);
+    if (!this.keys.includes("a") && this.keys.includes("d")) this.player.setState(stateNum.FALL_RUNNING_RIGHT, this.frame);
+    if (this.lastPressKeys[0] === "w" && this.player.verticalStates.jumpCount > 0 && !this.player.collideDirections.includes("BOTTOM"))
+      this.player.setState(stateNum.JUMP_RUNNING_LEFT, this.frame);
+    if (this.player.collideDirections.includes("BOTTOM")) this.player.setState(stateNum.RUNNING_LEFT, this.frame);
   }
 }
 export class FallRunningRight extends playerStates {
   constructor(player) {
     super(player);
   }
-  enter() {
+  enter(currentFrame) {
     checkStatement.innerHTML = "FallRunningRight";
+    super.getEntityFrame("PLAYER_FALLING", currentFrame);
   }
   updateState() {
-    if (!this.keys.includes("d") && !this.keys.includes("a")) this.player.setState(this.player, stateNum.FALL_IDLE_RIGHT);
-    if (!this.keys.includes("d") && this.keys.includes("a")) this.player.setState(this.player, stateNum.FALL_RUNNING_LEFT);
-    if (this.lastPressKeys[0] === "w" && this.player.jumpCount > 0 && !this.player.collideDirections.includes("BOTTOM"))
-      this.player.setState(this.player, stateNum.JUMP_RUNNING_RIGHT);
-    if (this.player.collideDirections.includes("BOTTOM")) this.player.setState(this.player, stateNum.RUNNING_RIGHT);
+    super.updateFrame();
+
+    if (!this.keys.includes("d") && !this.keys.includes("a")) this.player.setState(stateNum.FALL_IDLE_RIGHT, this.frame);
+    if (!this.keys.includes("d") && this.keys.includes("a")) this.player.setState(stateNum.FALL_RUNNING_LEFT, this.frame);
+    if (this.lastPressKeys[0] === "w" && this.player.verticalStates.jumpCount > 0 && !this.player.collideDirections.includes("BOTTOM"))
+      this.player.setState(stateNum.JUMP_RUNNING_RIGHT, this.frame);
+    if (this.player.collideDirections.includes("BOTTOM")) this.player.setState(stateNum.RUNNING_RIGHT, this.frame);
   }
 }

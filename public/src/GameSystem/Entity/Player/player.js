@@ -63,9 +63,9 @@ export class Player extends EntityBox {
     this.currentState = this.states[1];
     this.currentState.enter();
   }
-  setState(player, state) {
-    player.currentState = player.states[state];
-    player.currentState.enter();
+  setState(state, currentFrame) {
+    this.currentState = this.states[state];
+    this.currentState.enter(currentFrame);
   }
   collide(mtv, collisionDirection) {
     this.p.x += mtv[0];
