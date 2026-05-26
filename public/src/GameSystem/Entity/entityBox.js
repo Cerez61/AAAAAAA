@@ -45,7 +45,7 @@ export class EntityBox {
       z: this.p.z,
     };
 
-    //Matrixs
+    //Matrixes
     this.mat4 = new MAT4();
     this.modelMatrix = this.mat4.identity();
     this.nextModelMatrix = this.mat4.identity();
@@ -59,5 +59,10 @@ export class EntityBox {
 
     //Stats
     this.stats = targetStat;
+
+    //childClasses
+    this.abilities = [];
+
+    this.usedSkill = false;
   }
 }

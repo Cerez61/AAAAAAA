@@ -4,7 +4,7 @@ export class InputHandler {
     this.keys = this.entityData.keys;
 
     window.addEventListener("keydown", (e) => {
-      if ((e.key === "a" || e.key === "d" || e.key === "w" || e.key === "s") && this.keys.indexOf(e.key) === -1) {
+      if (this.keys.indexOf(e.key) === -1) {
         this.entityData.keys.push(e.key);
         this.entityData.lastPressKeys[0] = e.key;
 
@@ -15,12 +15,10 @@ export class InputHandler {
     window.addEventListener("keyup", (e) => {
       const index = this.keys.indexOf(e.key);
 
-      if (e.key === "a" || e.key === "d" || e.key === "w" || e.key === "s") {
-        this.entityData.keys.splice(index, 1);
-        this.entityData.lastReleaseKeys[0] = e.key;
+      this.entityData.keys.splice(index, 1);
+      this.entityData.lastReleaseKeys[0] = e.key;
 
-        checkLastRelease.innerHTML = this.entityData.lastReleaseKeys[0];
-      }
+      checkLastRelease.innerHTML = this.entityData.lastReleaseKeys[0];
     });
   }
 }

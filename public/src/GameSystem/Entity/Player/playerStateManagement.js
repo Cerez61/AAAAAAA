@@ -29,7 +29,7 @@ class playerStates {
     this.frame;
 
     this.lastTime = 0;
-    this.frameDuration = 50;
+    this.frameDuration = 70;
   }
   getEntityFrame(frameName, currentFrame) {
     for (const value of this.entityFrames) {

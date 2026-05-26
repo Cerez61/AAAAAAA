@@ -104,6 +104,11 @@ export class Player extends EntityBox {
 
     this.updateModelData();
   }
+  ability() {
+    if (this.keys.includes("x")) {
+      this.entityData.abilitiesInfo.push(["MeleeAttack", this]);
+    }
+  }
   updateFrame(uvRect) {
     this.uvRect = [uvRect.x, uvRect.y, uvRect.w, uvRect.h];
   }
@@ -118,7 +123,7 @@ export class Player extends EntityBox {
     this.currentState.updateState();
 
     this.movement();
-
+    this.ability();
     this.updateEntityData();
     this.clear();
   }

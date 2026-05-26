@@ -6,6 +6,9 @@ export class EntityData {
     this.entities = [];
     //Player Data
     this.playerPosition = [0, 0];
+    //Ability Data
+    this.abilities = [];
+    this.abilitiesInfo = [];
 
     //Input Data
     this.keys = [];
