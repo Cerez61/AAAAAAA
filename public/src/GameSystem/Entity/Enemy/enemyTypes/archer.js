@@ -1,7 +1,7 @@
 import { MAT4 } from "../../../../utils/matrix.js";
-import { EntityBox } from "../../entityBox.js";
+import { EnemyObject } from "../../EntityObject/enemyObject.js";
 import { Movement } from "../../../../utils/movement.js";
-export class Archer extends EntityBox {
+export class Archer extends EnemyObject {
   constructor(enemyInfo, targetJSON, targetStat) {
     super(enemyInfo, targetJSON, targetStat);
 

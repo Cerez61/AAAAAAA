@@ -1,4 +1,4 @@
-import { Rectangle } from "../../utils/rectangle.js";
+import { Rectangle } from "./rectangle.js";
 import { MAT4 } from "../../utils/matrix.js";
 
 export class QuadTree {

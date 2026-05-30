@@ -13,10 +13,12 @@ import {
   FallRunningRight,
 } from "./playerStateManagement.js";
 import { MAT4 } from "../../../utils/matrix.js";
-import { EntityBox } from "../entityBox.js";
+import { PlayerObject } from "../EntityObject/playerObject.js";
 import { Movement } from "../../../utils/movement.js";
+import { Ability } from "../../../utils/Ability/ability.js";
+import { DeltaTime } from "../../../utils/deltaTime.js";
 
-export class Player extends EntityBox {
+export class Player extends PlayerObject {
   constructor(gameData, entityInfo, targetJSON, targetStat) {
     super(entityInfo, targetJSON, targetStat);
     //intelisense webgl content
@@ -29,6 +31,17 @@ export class Player extends EntityBox {
     this.gl = this.globalData.gl;
     this.keys = this.entityData.keys;
     this.lastPressKeys = this.entityData.lastPressKeys;
+
+    this.s.w = 32;
+    this.s.h = 32;
+    this.s2.w = 32;
+    this.s2.h = 32;
+    this.mat4.scale(this.modelMatrix, [this.s.w, this.s.h, 1]);
+    this.mat4.scale(this.nextModelMatrix, [this.s2.w, this.s2.h, 1]);
+
+    this.abilityCooldown = 0;
+    this.skilTime = 1000;
+    this.skilUsed = false;
 
     this.collideDirections = [];
 
@@ -105,8 +118,19 @@ export class Player extends EntityBox {
     this.updateModelData();
   }
   ability() {
+    if (this.skilUsed) {
+      if (this.abilityCooldown > 1000) {
+        this.abilityCooldown = 0;
+        this.skilUsed = false;
+      } else {
+        this.abilityCooldown += DeltaTime.get();
+      }
+      return;
+    }
+
     if (this.keys.includes("x")) {
-      this.entityData.abilitiesInfo.push(["MeleeAttack", this]);
+      Ability.castAbilities("MeleeAttack", this);
+      this.skilUsed = true;
     }
   }
   updateFrame(uvRect) {

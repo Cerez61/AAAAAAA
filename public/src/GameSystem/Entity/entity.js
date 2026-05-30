@@ -2,8 +2,9 @@ import { Player } from "./Player/player.js";
 import { Asset } from "./Asset/asset.js";
 import { Enemy } from "./Enemy/enemy.js";
 import { Camera } from "./Camera/camera.js";
-import { Ability } from "./Ability/ability.js";
-import { TextureManager } from "../Texture/textureManager.js";
+import { Ability } from "../../utils/Ability/ability.js";
+import { TextureManager } from "../TextureManagement/textureManager.js";
+import { DataManager } from "../DataManagement/dataManager.js";
 import { Stat } from "./Stat/stat.js";
 
 const ENTITY_TYPE = {};
@@ -15,7 +16,9 @@ export class Entity {
     this.instanceData = gameData[2];
     this.entityData = gameData[3];
     this.assetData = gameData[4];
+    this.infoData = gameData[5];
 
+    this.dataManager = new DataManager(this.infoData);
     this.textureManager = new TextureManager(this.assetData);
     this.statManager = new Stat();
 
@@ -23,14 +26,14 @@ export class Entity {
     this.asset = new Asset();
     this.enemy = new Enemy(this.entityData);
     this.camera = new Camera([this.globalData, this.instanceData, this.entityData]);
-    this.ability = new Ability(this.entityData);
     this.entitiesClass = [];
 
     this.entities = [];
   }
   loadEntity(entities) {
     for (const entityInfo of this.entityData.entitySceneData) {
-      const targetJSON = this.textureManager.findEntityFile(entityInfo.name);
+      const targetData = this.dataManager.findEntityData(entityInfo.name);
+      const targetJSON = this.textureManager.findEntityJSON(entityInfo.name);
       const targetStat = this.statManager.findEntityStat(entityInfo.subType);
 
       /*  const entityStat = */
@@ -50,9 +53,9 @@ export class Entity {
     this.sceneData.roomChange = false;
   }
   updateEntityData() {
-    this.entitiesClass = [this.camera, this.player, this.enemy, this.ability];
-    this.entities = [this.player, ...this.asset.assets, ...this.enemy.enemies, ...this.ability.abilities];
-    this.entityData.entities = [this.player, ...this.asset.assets, ...this.enemy.enemies, ...this.ability.abilities];
+    this.entitiesClass = [this.camera, this.player, this.enemy, Ability];
+    this.entities = [this.player, ...this.asset.assets, ...this.enemy.enemies, ...Ability.abilities];
+    this.entityData.entities = [this.player, ...this.asset.assets, ...this.enemy.enemies, ...Ability.abilities];
   }
   initEntity() {
     for (const entity of this.entities) {
@@ -61,9 +64,12 @@ export class Entity {
   }
   async init() {
     await this.statManager.init();
+    this.dataManager.init();
+    this.textureManager.init();
   }
   update(entities) {
-    this.textureManager.update();
+    this.updateEntityData();
+
     if (this.sceneData.roomChange) this.loadEntity(entities);
 
     for (const entity of this.entitiesClass) {

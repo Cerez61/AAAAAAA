@@ -1,5 +1,5 @@
 import { Game } from "./Game.js";
-import { DeltaTime } from "./components/deltaTime.js";
+import { DeltaTime } from "./utils/deltaTime.js";
 
 const game = new Game();
 

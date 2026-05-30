@@ -1,7 +1,6 @@
 import { MAT4 } from "../../../../utils/matrix.js";
-import { EntityBox } from "../../entityBox.js";
-
-export class Surface extends EntityBox {
+import { AssetObject } from "../../EntityObject/assetObject.js";
+export class Surface extends AssetObject {
   constructor(assetInfo, targetJSON) {
     super(assetInfo, targetJSON);
   }

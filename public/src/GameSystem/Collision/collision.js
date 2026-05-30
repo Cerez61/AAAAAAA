@@ -1,8 +1,8 @@
 import { QuadTree } from "./quadTree.js";
-import { CollisionSAT } from "./collisionSAT.js";
-import { AABB } from "./aabb.js";
-import { Rectangle } from "../../utils/rectangle.js";
-import { Point } from "../../utils/point.js";
+import { SAT } from "./Physics/sat.js";
+import { AABB } from "./Physics/aabb.js";
+import { Rectangle } from "./rectangle.js";
+import { Point } from "./point.js";
 import { MAT4 } from "../../utils/matrix.js";
 
 export class Collision {
@@ -21,14 +21,14 @@ export class Collision {
 
     this.collideCount = 0;
     this.satCollideCount = 0;
-    this.collisionSAT = new CollisionSAT();
+    this.sat = new SAT();
     this.mat4 = new MAT4();
   }
   checkCollision(entityA, entityB) {
     this.collideCount++;
     if (!AABB.aabb(entityA, entityB, this.vertexData)) return;
     this.satCollideCount++;
-    const result = this.collisionSAT.intersectPolygons(entityA, entityB, this.vertexData);
+    const result = this.sat.intersectPolygons(entityA, entityB, this.vertexData);
     const mtv = result.mtv;
     const directions = result.directions;
     if (mtv) {

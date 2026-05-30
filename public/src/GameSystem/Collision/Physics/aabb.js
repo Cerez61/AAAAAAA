@@ -1,4 +1,4 @@
-import { MAT4 } from "../../utils/matrix.js";
+import { MAT4 } from "../../../utils/matrix.js";
 const mat4 = new MAT4();
 export class AABB {
   static aabb(entityA, entityB, vertexData) {

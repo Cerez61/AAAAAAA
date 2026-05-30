@@ -1,7 +1,7 @@
-import { MAT4 } from "../../utils/matrix.js";
+import { MAT4 } from "../../../utils/matrix.js";
 
-export class EntityBox {
-  constructor(entityInfo, targetJSON, targetStat) {
+export class EntityObject {
+  constructor(entityInfo, targetJSON) {
     //Entity Data
     this.entityInfo = entityInfo;
     this.entityID = this.entityInfo.id;
@@ -21,17 +21,17 @@ export class EntityBox {
     this.frame = this.targetJSON.frames[this.entityFrames[0].from].frame;
     this.u = this.frame.x;
     this.v = this.frame.y;
+
+    //size
     this.s = {
       w: this.frame.w,
       h: this.frame.h,
     };
-    this.uvRect = [this.u, this.v, this.s.w, this.s.h];
-
-    //size
     this.s2 = {
       w: this.s.w,
       h: this.s.h,
     };
+    this.uvRect = [this.u, this.v, this.s.w, this.s.h];
 
     //Positions
     this.p = {
@@ -53,16 +53,5 @@ export class EntityBox {
     this.mat4.scale(this.nextModelMatrix, [this.s2.w, this.s2.h, 1]);
     this.mat4.translate(this.modelMatrix, [this.p.x, this.p.y, this.p.z]);
     this.mat4.translate(this.nextModelMatrix, [this.p2.x, this.p2.y, this.p2.z]);
-
-    //Collision Color
-    this.outlineColor = 0;
-
-    //Stats
-    this.stats = targetStat;
-
-    //childClasses
-    this.abilities = [];
-
-    this.usedSkill = false;
   }
 }

@@ -19,14 +19,14 @@ export class Asset {
       this.layers.sort((a, b) => a.z - b.z);
     }
   }
-  loadAsset(entityInfo, targetJSON, targetStat) {
+  loadAsset(entityInfo, targetJSON) {
     const depth = entityInfo.p.z;
 
     this.addLayers(depth);
 
     const assetClass = TEXTURE_TYPE[entityInfo.subType];
 
-    const asset = assetClass ? new assetClass(entityInfo, targetJSON, targetStat) : new None(entityInfo, targetJSON, targetStat);
+    const asset = assetClass ? new assetClass(entityInfo, targetJSON) : new None(entityInfo, targetJSON);
 
     this.assets.push(asset);
 

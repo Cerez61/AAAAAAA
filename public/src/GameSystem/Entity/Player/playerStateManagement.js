@@ -1,4 +1,4 @@
-import { DeltaTime } from "../../../components/deltaTime.js";
+import { DeltaTime } from "../../../utils/deltaTime.js";
 const stateNum = {
   IDLE_LEFT: 0,
   IDLE_RIGHT: 1,

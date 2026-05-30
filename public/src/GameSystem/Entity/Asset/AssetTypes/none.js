@@ -1,5 +1,5 @@
-import { EntityBox } from "../../entityBox.js";
-export class None extends EntityBox {
+import { AssetObject } from "../../EntityObject/assetObject.js";
+export class None extends AssetObject {
   constructor(assetInfo, targetJSON) {
     super(assetInfo, targetJSON);
   }

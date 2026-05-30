@@ -1,7 +1,7 @@
-import { MAT4 } from "../../utils/matrix.js";
+import { MAT4 } from "../../../utils/matrix.js";
 
 const mat4 = new MAT4();
-export class CollisionSAT {
+export class SAT {
   intersectPolygons(entityA, entityB, vertexData) {
     const finalPosA = this.getPositionDiff(entityA.p, entityA.p2);
     const subStepA = this.getSubStep(finalPosA, entityA.s2);
