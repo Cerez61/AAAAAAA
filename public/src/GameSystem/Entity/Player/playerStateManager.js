@@ -54,6 +54,10 @@ class PlayerStates {
       this.lastTime = 0;
     } else this.lastTime += DeltaTime.get();
   }
+  getEntityDirection(frameName) {
+    if (frameName === "PLAYER_RUNNING_LEFT") this.player.direction = "Left";
+    else if (frameName === "PLAYER_RUNNING_RIGHT") this.player.direction = "Right";
+  }
 }
 export class IdleLeft extends PlayerStates {
   constructor(player) {
@@ -62,6 +66,7 @@ export class IdleLeft extends PlayerStates {
   enter(currentFrame) {
     checkStatement.innerHTML = "IdleLeft";
     super.getEntityFrame("PLAYER_RUNNING_LEFT", currentFrame);
+    super.getEntityDirection("PLAYER_RUNNING_LEFT");
   }
   updateState() {
     super.updateFrame();
@@ -80,6 +85,7 @@ export class IdleRight extends PlayerStates {
   enter(currentFrame) {
     checkStatement.innerHTML = "IdleRight";
     super.getEntityFrame("PLAYER_RUNNING_RIGHT", currentFrame);
+    super.getEntityDirection("PLAYER_RUNNING_RIGHT");
   }
   updateState() {
     super.updateFrame();
@@ -98,6 +104,7 @@ export class RunningLeft extends PlayerStates {
     checkStatement.innerHTML = "RunningLeft";
 
     super.getEntityFrame("PLAYER_RUNNING_LEFT", currentFrame);
+    super.getEntityDirection("PLAYER_RUNNING_LEFT");
   }
   updateState() {
     super.updateFrame();
@@ -118,6 +125,7 @@ export class RunningRight extends PlayerStates {
     checkStatement.innerHTML = "RunningRight";
 
     super.getEntityFrame("PLAYER_RUNNING_RIGHT", currentFrame);
+    super.getEntityDirection("PLAYER_RUNNING_RIGHT");
   }
   updateState() {
     super.updateFrame();

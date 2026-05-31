@@ -3,15 +3,11 @@
     "name": "MeleeAttack",
     "type": "Ability",
     "subType": "melee",
-    "id": 1,
-    "p": {
-      "x": 100,
-      "y": 200,
-      "z": 1
-    },
+    "id": "ability_1",
+
     "s": {
-      "w": 16,
-      "h": 32
+      "w": 32,
+      "h": 16
     },
     "cooldown": 1000
   }

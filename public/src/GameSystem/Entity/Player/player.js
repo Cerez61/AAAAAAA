@@ -20,45 +20,8 @@ import { DeltaTime } from "../../../utils/deltaTime.js";
 
 export class Player extends PlayerObject {
   constructor(gameData, targetData, targetJSON, targetStat) {
-    super(targetData, targetJSON, targetStat);
-    //intelisense webgl content
-    /**
-     * @type {WebGL2RenderingContext}
-     */
-    this.globalData = gameData[0];
-    this.instanceData = gameData[1];
-    this.entityData = gameData[2];
-    this.gl = this.globalData.gl;
-    this.keys = this.entityData.keys;
-    this.lastPressKeys = this.entityData.lastPressKeys;
+    super(gameData, targetData, targetJSON, targetStat);
 
-    this.s.w = 32;
-    this.s.h = 32;
-    this.s2.w = 32;
-    this.s2.h = 32;
-    this.mat4.scale(this.modelMatrix, [this.s.w, this.s.h, 1]);
-    this.mat4.scale(this.nextModelMatrix, [this.s2.w, this.s2.h, 1]);
-
-    this.abilityCooldown = 0;
-    this.skilTime = 1000;
-    this.skilUsed = false;
-
-    this.collideDirections = [];
-
-    this.horizontalStates = {
-      vx: 0,
-      speed: 1.5,
-      xSpeed: 0,
-      maxSpeed: 10,
-      xSpeedMultiplier: 1,
-    };
-    this.verticalStates = {
-      vy: 1,
-      weight: 3,
-      ySpeed: 0,
-      jumpCount: 2,
-      jumpHeight: 10,
-    };
     this.states = [
       new IdleLeft(this),
       new IdleRight(this),
@@ -80,7 +43,8 @@ export class Player extends PlayerObject {
     this.currentState = this.states[state];
     this.currentState.enter(currentFrame);
   }
-  collide(mtv, collisionDirection) {
+  collide(mtv, collisionDirection, targetEntity) {
+    if (targetEntity.type === "Ability") return;
     this.p.x += mtv[0];
     this.p.y += mtv[1];
     this.outlineColor = 1;
@@ -119,7 +83,7 @@ export class Player extends PlayerObject {
   }
   ability() {
     if (this.skilUsed) {
-      if (this.abilityCooldown > 1000) {
+      if (this.abilityCooldown > 500) {
         this.abilityCooldown = 0;
         this.skilUsed = false;
       } else {

@@ -14,9 +14,13 @@ export class Ability {
   }
 
   castAbilities(targetData, targetJSON, abilityCaster) {
-    const ability = abilityEnum[targetData.name];
+    const abilityClass = abilityEnum[targetData.name];
 
-    this.abilities.push(new ability(targetData, targetJSON, abilityCaster, this.abilityCount));
+    const ability = new abilityClass(targetData, targetJSON, abilityCaster, this.abilityCount);
+
+    ability.init();
+    this.abilities.push(ability);
+
     this.abilityCount++;
   }
 
@@ -34,8 +38,16 @@ export class Ability {
     }
   }
 
+  findAbilityCaster(casterId) {
+    for (const entity of this.entityData.entities) {
+      if (casterId === entity.id) return entity;
+    }
+  }
+
   updateAbilities() {
     for (const ability of this.abilities) {
+      /* 
+      ability.caster = this.findAbilityCaster(ability.caster.id); */
       if (!ability.isDead) ability.update();
     }
   }
