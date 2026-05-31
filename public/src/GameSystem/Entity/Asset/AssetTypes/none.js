@@ -1,7 +1,7 @@
 import { AssetObject } from "../../EntityObject/assetObject.js";
 export class None extends AssetObject {
-  constructor(assetInfo, targetJSON) {
-    super(assetInfo, targetJSON);
+  constructor(targetData, targetJSON) {
+    super(targetData, targetJSON);
   }
   collide() {
     this.outlineColor = 1;

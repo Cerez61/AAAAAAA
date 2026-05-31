@@ -43,15 +43,15 @@ export class Collector {
   takeEntityData() {
     this.entities = this.entityData.entities;
   }
-  clear() {
-    this.qtNodeCount = 0;
-    this.currentCount = 0;
-  }
+
   update(quadTree) {
     this.takeEntityData();
 
     this.updateInstanceData();
     this.updateQuadTreeData(quadTree);
   }
-  draw() {}
+  clear() {
+    this.qtNodeCount = 0;
+    this.currentCount = 0;
+  }
 }

@@ -2,7 +2,7 @@ import { Player } from "./Player/player.js";
 import { Asset } from "./Asset/asset.js";
 import { Enemy } from "./Enemy/enemy.js";
 import { Camera } from "./Camera/camera.js";
-import { Ability } from "../../utils/Ability/ability.js";
+import { Ability } from "./Ability/ability.js";
 import { TextureManager } from "../TextureManagement/textureManager.js";
 import { DataManager } from "../DataManagement/dataManager.js";
 import { Stat } from "./Stat/stat.js";
@@ -22,6 +22,8 @@ export class Entity {
     this.textureManager = new TextureManager(this.assetData);
     this.statManager = new Stat();
 
+    this.ability = new Ability(this.entityData, this.dataManager, this.textureManager);
+
     this.player;
     this.asset = new Asset();
     this.enemy = new Enemy(this.entityData);
@@ -30,19 +32,18 @@ export class Entity {
 
     this.entities = [];
   }
-  loadEntity(entities) {
-    for (const entityInfo of this.entityData.entitySceneData) {
-      const targetData = this.dataManager.findEntityData(entityInfo.name);
-      const targetJSON = this.textureManager.findEntityJSON(entityInfo.name);
-      const targetStat = this.statManager.findEntityStat(entityInfo.subType);
+  loadEntity() {
+    for (const targetData of this.entityData.entitySceneData) {
+      const targetJSON = this.textureManager.findEntityJSON(targetData.name);
+      const targetStat = this.statManager.findEntityStat(targetData.subType);
 
       /*  const entityStat = */
-      if (entityInfo.type == "PLAYER") {
-        this.player = new Player([this.globalData, this.instanceData, this.entityData], entityInfo, targetJSON, targetStat);
-      } else if (entityInfo.type == "TEXTURE") {
-        this.asset.loadAsset(entityInfo, targetJSON);
-      } else if (entityInfo.type == "ENEMY") {
-        this.enemy.loadEnemy(entityInfo, targetJSON, targetStat);
+      if (targetData.type == "PLAYER") {
+        this.player = new Player([this.globalData, this.instanceData, this.entityData], targetData, targetJSON, targetStat);
+      } else if (targetData.type == "TEXTURE") {
+        this.asset.loadAsset(targetData, targetJSON);
+      } else if (targetData.type == "ENEMY") {
+        this.enemy.loadEnemy(targetData, targetJSON, targetStat);
       }
     }
 
@@ -53,9 +54,9 @@ export class Entity {
     this.sceneData.roomChange = false;
   }
   updateEntityData() {
-    this.entitiesClass = [this.camera, this.player, this.enemy, Ability];
-    this.entities = [this.player, ...this.asset.assets, ...this.enemy.enemies, ...Ability.abilities];
-    this.entityData.entities = [this.player, ...this.asset.assets, ...this.enemy.enemies, ...Ability.abilities];
+    this.entitiesClass = [this.player, this.camera, this.enemy, this.ability];
+    this.entities = [this.player, ...this.asset.assets, ...this.enemy.enemies, ...this.ability.abilities];
+    this.entityData.entities = [this.player, ...this.asset.assets, ...this.enemy.enemies, ...this.ability.abilities];
   }
   initEntity() {
     for (const entity of this.entities) {
@@ -67,10 +68,10 @@ export class Entity {
     this.dataManager.init();
     this.textureManager.init();
   }
-  update(entities) {
+  update() {
     this.updateEntityData();
 
-    if (this.sceneData.roomChange) this.loadEntity(entities);
+    if (this.sceneData.roomChange) this.loadEntity();
 
     for (const entity of this.entitiesClass) {
       entity.update();

@@ -2,8 +2,8 @@ import { MAT4 } from "../../../../utils/matrix.js";
 import { EnemyObject } from "../../EntityObject/enemyObject.js";
 import { Movement } from "../../../../utils/movement.js";
 export class Archer extends EnemyObject {
-  constructor(enemyInfo, targetJSON, targetStat) {
-    super(enemyInfo, targetJSON, targetStat);
+  constructor(targetData, targetJSON, targetStat) {
+    super(targetData, targetJSON, targetStat);
 
     this.horizontalCollide;
     this.verticalCollide;

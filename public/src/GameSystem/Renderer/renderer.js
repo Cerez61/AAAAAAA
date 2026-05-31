@@ -116,11 +116,6 @@ export class Renderer {
     this.gl.vertexAttribPointer(0, 3, this.gl.FLOAT, false, 0, 0);
     this.gl.enableVertexAttribArray(0);
 
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.uvBuffer);
-    this.gl.bufferData(this.gl.ARRAY_BUFFER, this.instanceData.uvData, this.gl.DYNAMIC_DRAW);
-    this.gl.vertexAttribPointer(1, 2, this.gl.FLOAT, false, 0, 0);
-    this.gl.enableVertexAttribArray(1);
-
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.spriteAtlasDepthBuffer);
     this.gl.bufferData(this.gl.ARRAY_BUFFER, this.instanceData.spriteAtlasDepthData, this.gl.DYNAMIC_DRAW);
     this.gl.vertexAttribPointer(2, 1, this.gl.FLOAT, false, 0, 0);
@@ -160,6 +155,7 @@ export class Renderer {
     this.gl.enableVertexAttribArray(9);
     this.gl.vertexAttribDivisor(9, this.instanceData.totalEntity);
 
+    console.log(this.assetData);
     this.gl.bindTexture(this.gl.TEXTURE_2D_ARRAY, this.textureBuffer);
     this.gl.texStorage3D(this.gl.TEXTURE_2D_ARRAY, 1, this.gl.RGBA8, 512, 512, this.assetData.spriteAtlases.length);
     this.assetData.spriteAtlases.forEach((spriteAtlas, index) => {
@@ -249,6 +245,12 @@ export class Renderer {
     this.gl.useProgram(this.program);
 
     this.gl.bindVertexArray(this.rendererVAO);
+
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.spriteAtlasSizeBuffer);
+    this.gl.bufferData(this.gl.ARRAY_BUFFER, this.instanceData.spriteAtlasSizeData, this.gl.DYNAMIC_DRAW);
+    this.gl.vertexAttribPointer(9, 2, this.gl.FLOAT, false, 0, 0);
+    this.gl.enableVertexAttribArray(9);
+    this.gl.vertexAttribDivisor(9, this.instanceData.totalEntity);
 
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.spriteAtlasDepthBuffer);
     this.gl.bufferSubData(this.gl.ARRAY_BUFFER, 0, this.instanceData.spriteAtlasDepthData);

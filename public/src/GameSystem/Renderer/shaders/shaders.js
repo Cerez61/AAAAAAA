@@ -3,7 +3,6 @@ export const gameVSS = `#version 300 es
 precision mediump float;
 
 layout(location = 0) in vec4 aPosition;
-layout(location = 1) in vec2 aUVCoord;
 layout(location = 2) in float aDepth;
 layout(location = 3) in mat4 aModelMatrix;
 layout(location = 7) in vec4 aUVRect;

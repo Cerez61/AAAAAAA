@@ -85,12 +85,6 @@ export class Collision {
       entity.outlineColor = 0;
     }
   }
-  clear() {
-    this.points = [];
-    this.rects = [];
-    this.collideCount = 0;
-    this.satCollideCount = 0;
-  }
   check() {
     const entities = this.entityData.entities;
     this.resetOutlineColors(entities);
@@ -112,5 +106,11 @@ export class Collision {
   }
   giveQuadTree() {
     return this.quadTree;
+  }
+  clear() {
+    this.points = [];
+    this.rects = [];
+    this.collideCount = 0;
+    this.satCollideCount = 0;
   }
 }

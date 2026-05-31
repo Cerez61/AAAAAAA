@@ -12,6 +12,8 @@ export class EntityData {
     this.playerPosition = [0, 0];
 
     //Ability Data
+    this.abilities = [];
+    this.abilityRequest = [];
     this.abilityInfoData = [];
     this.abilityInfoJSONNames = ["abilities.json"];
 

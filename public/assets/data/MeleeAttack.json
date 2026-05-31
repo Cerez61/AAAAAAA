@@ -1,0 +1,37 @@
+{
+  "frames": [
+    {
+      "filename": "Sprite-0001 0.",
+      "frame": { "x": 0, "y": 0, "w": 64, "h": 32 }
+    },
+    {
+      "filename": "Sprite-0001 1.",
+      "frame": { "x": 64, "y": 0, "w": 64, "h": 32 }
+    },
+    {
+      "filename": "Sprite-0001 2.",
+      "frame": { "x": 128, "y": 0, "w": 64, "h": 32 }
+    },
+    {
+      "filename": "Sprite-0001 3.",
+      "frame": { "x": 192, "y": 0, "w": 64, "h": 32 }
+    },
+    {
+      "filename": "Sprite-0001 4.",
+      "frame": { "x": 256, "y": 0, "w": 64, "h": 32 }
+    }
+  ],
+  "meta": {
+    "app": "https://www.aseprite.org/",
+    "version": "1.3.17.2-x64",
+    "image": "MeleeAttack.png",
+    "format": "RGBA8888",
+    "size": { "w": 512, "h": 512 },
+    "scale": "1",
+    "assets": {
+      "MeleeAttack": {
+        "frameTags": [{ "name": "Right", "from": 0, "to": 4, "direction": "forward", "color": "#000000ff" }]
+      }
+    }
+  }
+}

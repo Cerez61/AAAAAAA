@@ -1,8 +1,8 @@
 import { MAT4 } from "../../../../utils/matrix.js";
 import { AssetObject } from "../../EntityObject/assetObject.js";
 export class Surface extends AssetObject {
-  constructor(assetInfo, targetJSON) {
-    super(assetInfo, targetJSON);
+  constructor(targetData, targetJSON) {
+    super(targetData, targetJSON);
   }
   collide() {
     this.outlineColor = 1;

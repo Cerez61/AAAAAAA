@@ -12,4 +12,8 @@ export class EnemyObject extends EntityObject {
 
     this.usedSkill = false;
   }
+
+  init() {
+    // Initialize enemy object if needed
+  }
 }

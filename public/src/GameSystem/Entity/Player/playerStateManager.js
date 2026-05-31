@@ -14,7 +14,7 @@ const stateNum = {
   FALL_RUNNING_RIGHT: 11,
 };
 
-class playerStates {
+class PlayerStates {
   constructor(player) {
     this.player = player;
 
@@ -55,7 +55,7 @@ class playerStates {
     } else this.lastTime += DeltaTime.get();
   }
 }
-export class IdleLeft extends playerStates {
+export class IdleLeft extends PlayerStates {
   constructor(player) {
     super(player);
   }
@@ -73,7 +73,7 @@ export class IdleLeft extends playerStates {
   }
 }
 
-export class IdleRight extends playerStates {
+export class IdleRight extends PlayerStates {
   constructor(player) {
     super(player);
   }
@@ -90,7 +90,7 @@ export class IdleRight extends playerStates {
     if (!this.player.collideDirections.includes("BOTTOM")) this.player.setState(stateNum.JUMP_IDLE_RIGHT, this.frame);
   }
 }
-export class RunningLeft extends playerStates {
+export class RunningLeft extends PlayerStates {
   constructor(player) {
     super(player);
   }
@@ -110,7 +110,7 @@ export class RunningLeft extends playerStates {
   }
 }
 
-export class RunningRight extends playerStates {
+export class RunningRight extends PlayerStates {
   constructor(player) {
     super(player);
   }
@@ -130,7 +130,7 @@ export class RunningRight extends playerStates {
   }
 }
 
-export class JumpIdleLeft extends playerStates {
+export class JumpIdleLeft extends PlayerStates {
   constructor(player) {
     super(player);
   }
@@ -148,7 +148,7 @@ export class JumpIdleLeft extends playerStates {
   }
 }
 
-export class JumpIdleRight extends playerStates {
+export class JumpIdleRight extends PlayerStates {
   constructor(player) {
     super(player);
   }
@@ -165,7 +165,7 @@ export class JumpIdleRight extends playerStates {
   }
 }
 
-export class JumpRunningLeft extends playerStates {
+export class JumpRunningLeft extends PlayerStates {
   constructor(player) {
     super(player);
   }
@@ -182,7 +182,7 @@ export class JumpRunningLeft extends playerStates {
   }
 }
 
-export class JumpRunningRight extends playerStates {
+export class JumpRunningRight extends PlayerStates {
   constructor(player) {
     super(player);
   }
@@ -198,7 +198,7 @@ export class JumpRunningRight extends playerStates {
     if (this.player.verticalStates.vy < 0) this.player.setState(stateNum.FALL_RUNNING_RIGHT, this.frame);
   }
 }
-export class FallIdleLeft extends playerStates {
+export class FallIdleLeft extends PlayerStates {
   constructor(player) {
     super(player);
   }
@@ -217,7 +217,7 @@ export class FallIdleLeft extends playerStates {
     if (this.player.collideDirections.includes("BOTTOM")) this.player.setState(stateNum.IDLE_LEFT, this.frame);
   }
 }
-export class FallIdleRight extends playerStates {
+export class FallIdleRight extends PlayerStates {
   constructor(player) {
     super(player);
   }
@@ -235,7 +235,7 @@ export class FallIdleRight extends playerStates {
     if (this.player.collideDirections.includes("BOTTOM")) this.player.setState(stateNum.IDLE_RIGHT, this.frame);
   }
 }
-export class FallRunningLeft extends playerStates {
+export class FallRunningLeft extends PlayerStates {
   constructor(player) {
     super(player);
   }
@@ -253,7 +253,7 @@ export class FallRunningLeft extends playerStates {
     if (this.player.collideDirections.includes("BOTTOM")) this.player.setState(stateNum.RUNNING_LEFT, this.frame);
   }
 }
-export class FallRunningRight extends playerStates {
+export class FallRunningRight extends PlayerStates {
   constructor(player) {
     super(player);
   }

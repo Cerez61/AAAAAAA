@@ -11,16 +11,16 @@ import {
   FallIdleRight,
   FallRunningLeft,
   FallRunningRight,
-} from "./playerStateManagement.js";
+} from "./playerStateManager.js";
 import { MAT4 } from "../../../utils/matrix.js";
 import { PlayerObject } from "../EntityObject/playerObject.js";
 import { Movement } from "../../../utils/movement.js";
-import { Ability } from "../../../utils/Ability/ability.js";
+import { Ability } from "../Ability/ability.js";
 import { DeltaTime } from "../../../utils/deltaTime.js";
 
 export class Player extends PlayerObject {
-  constructor(gameData, entityInfo, targetJSON, targetStat) {
-    super(entityInfo, targetJSON, targetStat);
+  constructor(gameData, targetData, targetJSON, targetStat) {
+    super(targetData, targetJSON, targetStat);
     //intelisense webgl content
     /**
      * @type {WebGL2RenderingContext}
@@ -73,8 +73,8 @@ export class Player extends PlayerObject {
       new FallRunningLeft(this),
       new FallRunningRight(this),
     ];
-    this.currentState = this.states[1];
-    this.currentState.enter();
+    this.currentState = this.states[0];
+    this.currentState.enter(0);
   }
   setState(state, currentFrame) {
     this.currentState = this.states[state];
@@ -129,7 +129,7 @@ export class Player extends PlayerObject {
     }
 
     if (this.keys.includes("x")) {
-      Ability.castAbilities("MeleeAttack", this);
+      this.entityData.abilityRequest.push(["MeleeAttack", this]);
       this.skilUsed = true;
     }
   }

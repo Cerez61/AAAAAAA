@@ -1,8 +1,8 @@
 import { EntityObject } from "./entityObject.js";
 
 export class PlayerObject extends EntityObject {
-  constructor(entityInfo, targetJSON, targetStat) {
-    super(entityInfo, targetJSON);
+  constructor(targetData, targetJSON, targetStat) {
+    super(targetData, targetJSON);
 
     //Stats
     this.stats = targetStat;
@@ -11,5 +11,9 @@ export class PlayerObject extends EntityObject {
     this.abilities = [];
 
     this.usedSkill = false;
+  }
+
+  init() {
+    // Initialize player object if needed
   }
 }

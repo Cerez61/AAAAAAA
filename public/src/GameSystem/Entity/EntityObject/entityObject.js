@@ -1,15 +1,15 @@
 import { MAT4 } from "../../../utils/matrix.js";
 
 export class EntityObject {
-  constructor(entityInfo, targetJSON) {
+  constructor(targetData, targetJSON) {
     //Entity Data
-    this.entityInfo = entityInfo;
-    this.entityID = this.entityInfo.id;
-    this.type = this.entityInfo.type;
-    this.subType = this.entityInfo.subType;
+    this.targetData = targetData;
+    this.entityID = this.targetData.id;
+    this.type = this.targetData.type;
+    this.subType = this.targetData.subType;
 
     //SpriteSheet Data
-    this.assetName = this.entityInfo.name;
+    this.assetName = this.targetData.name;
     this.targetJSON = targetJSON;
     this.textureName = this.targetJSON.meta.image;
     this.textureWidth = this.targetJSON.meta.size.w;
@@ -24,8 +24,8 @@ export class EntityObject {
 
     //size
     this.s = {
-      w: this.frame.w,
-      h: this.frame.h,
+      w: this.targetData.w || this.frame.w,
+      h: this.targetData.h || this.frame.h,
     };
     this.s2 = {
       w: this.s.w,
@@ -35,9 +35,9 @@ export class EntityObject {
 
     //Positions
     this.p = {
-      x: this.entityInfo.p.x,
-      y: this.entityInfo.p.y,
-      z: this.entityInfo.p.z,
+      x: this.targetData.p.x,
+      y: this.targetData.p.y,
+      z: this.targetData.p.z,
     };
     this.p2 = {
       x: this.p.x,

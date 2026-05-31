@@ -1,0 +1,18 @@
+{
+  "MeleeAttack": {
+    "name": "MeleeAttack",
+    "type": "Ability",
+    "subType": "melee",
+    "id": 1,
+    "p": {
+      "x": 100,
+      "y": 200,
+      "z": 1
+    },
+    "s": {
+      "w": 16,
+      "h": 32
+    },
+    "cooldown": 1000
+  }
+}

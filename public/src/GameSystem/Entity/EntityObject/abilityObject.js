@@ -1,7 +1,13 @@
 import { EntityObject } from "./entityObject.js";
 
 export class AbilityObject extends EntityObject {
-  constructor(entityInfo, targetJSON) {
-    super(entityInfo, targetJSON);
+  constructor(targetData, targetJSON, caster) {
+    super(targetData, targetJSON);
+
+    this.caster = caster;
+  }
+
+  init() {
+    // Initialize ability if needed
   }
 }
