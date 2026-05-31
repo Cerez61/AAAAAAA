@@ -12,6 +12,8 @@ export class Archer extends EnemyObject {
     this.currentAction;
     this.currentGoal;
 
+    this.healt = 20;
+
     this.globalState;
     this.worldState = {
       playerDead: false,
@@ -42,13 +44,32 @@ export class Archer extends EnemyObject {
       },
     ];
   }
-  collide(mtv, minEdge) {
+  collide(mtv, collisionDirection, targetEntity) {
+    if (targetEntity.type === "Ability") {
+      this.abilityCollision(targetEntity);
+      this.outlineColor = 1;
+      return;
+    }
     this.outlineColor = 1;
 
     this.p.x += mtv[0];
     this.p.y += mtv[1];
 
     this.mat4.translate(this.modelMatrix, [this.p.x, this.p.y]);
+  }
+  abilityCollision(ability) {
+    const abilityCaster = ability.caster;
+    const abilityDamage = ability.damage;
+
+    if (abilityCaster.subType === "Player" && !ability.damagedEntity.includes(this.id)) {
+      this.healt -= abilityDamage;
+      ability.damagedEntity.push(this.id);
+    }
+
+    this.getHealtState();
+  }
+  getHealtState() {
+    if (0 >= this.healt) this.isDead = true;
   }
   horizontalMovement() {
     const playerX = this.globalState.playerPosition[0];

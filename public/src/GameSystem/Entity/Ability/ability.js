@@ -32,8 +32,6 @@ export class Ability {
       const targetData = this.dataManager.findEntityData(abilityName);
       const targetJSON = this.textureManager.findEntityJSON(abilityName);
 
-      console.log(targetJSON);
-
       this.castAbilities(targetData, targetJSON, abilityCaster);
     }
   }

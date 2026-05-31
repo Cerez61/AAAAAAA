@@ -22,6 +22,7 @@ export class Player extends PlayerObject {
   constructor(gameData, targetData, targetJSON, targetStat) {
     super(gameData, targetData, targetJSON, targetStat);
 
+    console.log(this.s);
     this.states = [
       new IdleLeft(this),
       new IdleRight(this),

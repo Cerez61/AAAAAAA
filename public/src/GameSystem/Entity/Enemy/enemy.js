@@ -27,11 +27,7 @@ export class Enemy {
   updateGlobalState() {
     this.globalState.playerPosition = this.playerPosition;
   }
-  async init() {}
-  update() {
-    this.entityDataTake();
-    this.updateGlobalState();
-
+  updateEnemies() {
     for (const enemy of this.enemies) {
       const enemyGoal = this.planner.goal(enemy.goals[0]);
       const finalPlan = this.planner.plan(enemy.worldState, enemy.goals[0], enemy.actions);
@@ -42,5 +38,20 @@ export class Enemy {
       enemy.currentActionList = finalPlan[0].actionList;
       enemy.update(this.globalState);
     }
+  }
+  destroyEnemies() {
+    for (let i = this.enemies.length - 1; i >= 0; i--) {
+      if (this.enemies[i].isDead) {
+        this.enemies.splice(i, 1);
+      }
+    }
+  }
+  async init() {}
+  update() {
+    this.entityDataTake();
+    this.updateGlobalState();
+
+    this.updateEnemies();
+    this.destroyEnemies();
   }
 }

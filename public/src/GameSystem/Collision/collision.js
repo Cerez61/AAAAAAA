@@ -31,6 +31,7 @@ export class Collision {
     const result = this.sat.intersectPolygons(entityA, entityB, this.vertexData);
     const mtv = result.mtv;
     const directions = result.directions;
+
     if (mtv) {
       entityA.collide(mtv, directions[0], entityB);
       entityB.collide(mtv, directions[1], entityA);

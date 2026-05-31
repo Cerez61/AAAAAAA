@@ -1,8 +1,10 @@
 import { EntityObject } from "./entityObject.js";
 
 export class EnemyObject extends EntityObject {
-  constructor(entityInfo, targetJSON, targetStat) {
-    super(entityInfo, targetJSON);
+  constructor(targetData, targetJSON, targetStat) {
+    super(targetData, targetJSON);
+
+    this.isDead = false;
 
     //Positions
     this.p = {
