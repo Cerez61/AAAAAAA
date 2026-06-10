@@ -10,7 +10,7 @@ export class AbilityStates {
     this.frame;
 
     this.lastTime = 0;
-    this.frameDuration = 50;
+    this.frameDuration = 30;
   }
   getEntityFrame(frameName, currentFrame) {
     for (const value of this.entityFrames) {

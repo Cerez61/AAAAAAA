@@ -20,13 +20,3 @@ vOutlineColor = vec4(0.0,0.0,0.0,1.0);
 gl_Position = uOrthoMatrix * uViewMatrix * aModelMatrix * aPosition;
 }
 `;
-export const collisionFSS = `#version 300 es
-precision mediump float;
-
-in vec4 vOutlineColor;
-
-out vec4 FragColor;
-void main() {
-FragColor = vOutlineColor;
-}
-`;

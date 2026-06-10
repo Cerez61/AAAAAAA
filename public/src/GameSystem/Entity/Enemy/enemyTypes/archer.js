@@ -63,6 +63,7 @@ export class Archer extends EnemyObject {
 
     if (abilityCaster.subType === "Player" && !ability.damagedEntity.includes(this.id)) {
       this.healt -= abilityDamage;
+      this.p.x += 50;
       ability.damagedEntity.push(this.id);
     }
 

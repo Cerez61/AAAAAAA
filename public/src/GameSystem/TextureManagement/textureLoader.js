@@ -54,7 +54,5 @@ export class TextureLoader {
     this.instanceDataGive();
 
     console.log(Date.now() - date);
-    console.log(this.spriteAtlases);
-    console.log(this.spriteAtlasesJSON);
   }
 }
