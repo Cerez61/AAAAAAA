@@ -4,6 +4,8 @@ export class AssetObject extends EntityObject {
   constructor(entityInfo, targetJSON) {
     super(entityInfo, targetJSON);
 
+    this.isDynamic = false;
+
     //Positions
     this.p = {
       x: this.targetData.p.x,

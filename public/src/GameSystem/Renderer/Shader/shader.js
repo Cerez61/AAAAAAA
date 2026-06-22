@@ -23,6 +23,7 @@ export class Shader {
     this.collisionFS = this.gl.createShader(this.gl.FRAGMENT_SHADER);
     this.qtFS = this.gl.createShader(this.gl.FRAGMENT_SHADER);
   }
+
   initGameShader() {
     const vs = this.gameVS;
     const fs = this.gameFS;

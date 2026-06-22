@@ -33,8 +33,8 @@ export class Collision {
     const directions = result.directions;
 
     if (mtv) {
-      entityA.collide(mtv, directions[0], entityB);
-      entityB.collide(mtv, directions[1], entityA);
+      entityA.collide(mtv[0], directions[0], entityB);
+      entityB.collide(mtv[1], directions[1], entityA);
       return;
     }
   }

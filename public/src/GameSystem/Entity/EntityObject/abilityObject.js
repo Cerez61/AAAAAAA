@@ -4,6 +4,7 @@ export class AbilityObject extends EntityObject {
   constructor(targetData, targetJSON, caster) {
     super(targetData, targetJSON);
 
+    this.isDynamic = true;
     this.caster = caster;
 
     this.direction;

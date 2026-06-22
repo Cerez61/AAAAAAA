@@ -34,9 +34,9 @@ export class Renderer {
     this.collisionShader = this.shader.initCollisionShader();
     this.qtShader = this.shader.initQtShader();
 
-    this.gameProgram = this.program.initGameProgram();
-    this.collisionProgram = this.program.initCollisionProgram();
-    this.qtProgram = this.program.initQtProgram();
+    this.gameProgram = this.program.createProgram();
+    this.collisionProgram = this.program.createProgram();
+    this.qtProgram = this.program.createProgram();
 
     this.rendererVAO = this.vertexArray.createVertexArray();
     this.collisionVAO = this.vertexArray.createVertexArray();
@@ -58,14 +58,14 @@ export class Renderer {
 
     this.setup();
 
-    this.viewMatrixLoc = this.uniform.getUniformLocation(this.gameProgram, "uViewMatrix");
-    this.orthoMatrixLoc = this.uniform.getUniformLocation(this.gameProgram, "uOrthoMatrix");
+    this.viewMatrixLoc = this.uniform.getUniformLocation(this.gameProgram.program, "uViewMatrix");
+    this.orthoMatrixLoc = this.uniform.getUniformLocation(this.gameProgram.program, "uOrthoMatrix");
 
-    this.collisionViewLoc = this.uniform.getUniformLocation(this.collisionProgram, "uViewMatrix");
-    this.collisionOrthoLoc = this.uniform.getUniformLocation(this.collisionProgram, "uOrthoMatrix");
+    this.collisionViewLoc = this.uniform.getUniformLocation(this.collisionProgram.program, "uViewMatrix");
+    this.collisionOrthoLoc = this.uniform.getUniformLocation(this.collisionProgram.program, "uOrthoMatrix");
 
-    this.qtViewLoc = this.uniform.getUniformLocation(this.qtProgram, "uViewMatrix");
-    this.qtOrthoLoc = this.uniform.getUniformLocation(this.qtProgram, "uOrthoMatrix");
+    this.qtViewLoc = this.uniform.getUniformLocation(this.qtProgram.program, "uViewMatrix");
+    this.qtOrthoLoc = this.uniform.getUniformLocation(this.qtProgram.program, "uOrthoMatrix");
 
     this.gameDataGive();
   }
@@ -78,9 +78,9 @@ export class Renderer {
     this.globalData.program = this.gameProgram;
   }
   setup() {
-    this.initProgram(this.gameProgram, this.gameShader);
-    this.initProgram(this.collisionProgram, this.collisionShader);
-    this.initProgram(this.qtProgram, this.qtShader);
+    this.initProgram(this.gameProgram.program, this.gameShader);
+    this.initProgram(this.collisionProgram.program, this.collisionShader);
+    this.initProgram(this.qtProgram.program, this.qtShader);
   }
   initProgram(program, shader) {
     this.gl.viewport(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
@@ -172,7 +172,7 @@ export class Renderer {
   draw() {
     this.buffer.bindSubData(this.matrixBuffer.buffer, this.instanceData.matrixData);
 
-    this.gl.useProgram(this.gameProgram);
+    this.gl.useProgram(this.gameProgram.program);
 
     this.gl.bindVertexArray(this.rendererVAO.vertexArray);
 
@@ -180,19 +180,17 @@ export class Renderer {
     this.vertexAttrib.bindVertex(9, 2, this.gl.FLOAT, false, 0, 0, this.instanceData.totalEntity);
 
     this.buffer.bindSubData(this.spriteAtlasDepthBuffer.buffer, this.instanceData.spriteAtlasDepthData);
-
     this.buffer.bindSubData(this.uvRectBuffer.buffer, this.instanceData.uvRectData);
-
     this.buffer.bindSubData(this.spriteAtlasSizeBuffer.buffer, this.instanceData.spriteAtlasSizeData);
 
-    this.gl.uniformMatrix4fv(this.viewMatrixLoc.uniform, false, this.instanceData.viewMatrix);
-    this.gl.uniformMatrix4fv(this.orthoMatrixLoc.uniform, false, this.instanceData.orthoMatrix);
+    this.uniform.uniformMatrix4fv(this.viewMatrixLoc.uniform, this.instanceData.viewMatrix);
+    this.uniform.uniformMatrix4fv(this.orthoMatrixLoc.uniform, this.instanceData.orthoMatrix);
 
     this.gl.drawArraysInstanced(this.gl.TRIANGLES, 0, 6, this.instanceData.totalEntity);
 
     this.gl.bindVertexArray(null);
 
-    this.gl.useProgram(this.collisionProgram);
+    this.gl.useProgram(this.collisionProgram.program);
 
     this.gl.bindVertexArray(this.collisionVAO.vertexArray);
 
@@ -205,7 +203,7 @@ export class Renderer {
 
     this.gl.bindVertexArray(null);
 
-    this.gl.useProgram(this.qtProgram);
+    this.gl.useProgram(this.qtProgram.program);
 
     this.gl.bindVertexArray(this.qtVAO.vertexArray);
 

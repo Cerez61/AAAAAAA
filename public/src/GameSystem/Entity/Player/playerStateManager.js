@@ -13,7 +13,20 @@ const stateNum = {
   FALL_RUNNING_LEFT: 10,
   FALL_RUNNING_RIGHT: 11,
 };
-
+const leftFramesEnum = {
+  IDLE_LEFT: true,
+  RUNNING_LEFT: true,
+  JUMP_IDLE_LEFT: true,
+  JUMP_RUNNING_LEFT: true,
+  FALL_IDLE_LEFT: true,
+  FALL_RUNNING_LEFT: true,
+  IDLE_RIGHT: false,
+  RUNNING_RIGHT: false,
+  JUMP_IDLE_RIGHT: false,
+  JUMP_RUNNING_RIGHT: false,
+  FALL_IDLE_RIGHT: false,
+  FALL_RUNNING_RIGHT: false,
+};
 class PlayerStates {
   constructor(player) {
     this.player = player;
@@ -55,18 +68,20 @@ class PlayerStates {
     } else this.lastTime += DeltaTime.get();
   }
   getEntityDirection(frameName) {
-    if (frameName === "PLAYER_RUNNING_LEFT") this.player.direction = "Left";
-    else if (frameName === "PLAYER_RUNNING_RIGHT") this.player.direction = "Right";
+    console.log(leftFramesEnum[frameName]);
+    if (leftFramesEnum[frameName]) this.player.direction = "Left";
+    else this.player.direction = "Right";
   }
 }
 export class IdleLeft extends PlayerStates {
   constructor(player) {
     super(player);
+    this.name = "IDLE_LEFT";
   }
   enter(currentFrame) {
-    checkStatement.innerHTML = "IdleLeft";
+    checkStatement.innerHTML = this.name;
     super.getEntityFrame("PLAYER_RUNNING_LEFT", currentFrame);
-    super.getEntityDirection("PLAYER_RUNNING_LEFT");
+    super.getEntityDirection(this.name);
   }
   updateState() {
     super.updateFrame();
@@ -81,11 +96,12 @@ export class IdleLeft extends PlayerStates {
 export class IdleRight extends PlayerStates {
   constructor(player) {
     super(player);
+    this.name = "IDLE_RIGHT";
   }
   enter(currentFrame) {
-    checkStatement.innerHTML = "IdleRight";
+    checkStatement.innerHTML = this.name;
     super.getEntityFrame("PLAYER_RUNNING_RIGHT", currentFrame);
-    super.getEntityDirection("PLAYER_RUNNING_RIGHT");
+    super.getEntityDirection(this.name);
   }
   updateState() {
     super.updateFrame();
@@ -99,12 +115,13 @@ export class IdleRight extends PlayerStates {
 export class RunningLeft extends PlayerStates {
   constructor(player) {
     super(player);
+    this.name = "RUNNING_LEFT";
   }
   enter(currentFrame) {
-    checkStatement.innerHTML = "RunningLeft";
+    checkStatement.innerHTML = this.name;
 
     super.getEntityFrame("PLAYER_RUNNING_LEFT", currentFrame);
-    super.getEntityDirection("PLAYER_RUNNING_LEFT");
+    super.getEntityDirection(this.name);
   }
   updateState() {
     super.updateFrame();
@@ -120,12 +137,13 @@ export class RunningLeft extends PlayerStates {
 export class RunningRight extends PlayerStates {
   constructor(player) {
     super(player);
+    this.name = "RUNNING_RIGHT";
   }
   enter(currentFrame) {
-    checkStatement.innerHTML = "RunningRight";
+    checkStatement.innerHTML = this.name;
 
     super.getEntityFrame("PLAYER_RUNNING_RIGHT", currentFrame);
-    super.getEntityDirection("PLAYER_RUNNING_RIGHT");
+    super.getEntityDirection(this.name);
   }
   updateState() {
     super.updateFrame();
@@ -141,11 +159,13 @@ export class RunningRight extends PlayerStates {
 export class JumpIdleLeft extends PlayerStates {
   constructor(player) {
     super(player);
+    this.name = "JUMP_IDLE_LEFT";
   }
   enter(currentFrame) {
-    checkStatement.innerHTML = "JumpIdleLeft";
+    checkStatement.innerHTML = this.name;
 
     super.getEntityFrame("PLAYER_JUMPING", currentFrame);
+    super.getEntityDirection(this.name);
   }
   updateState() {
     super.updateFrame();
@@ -159,10 +179,12 @@ export class JumpIdleLeft extends PlayerStates {
 export class JumpIdleRight extends PlayerStates {
   constructor(player) {
     super(player);
+    this.name = "JUMP_IDLE_RIGHT";
   }
   enter(currentFrame) {
-    checkStatement.innerHTML = "JumpIdleRight";
+    checkStatement.innerHTML = this.name;
     super.getEntityFrame("PLAYER_JUMPING", currentFrame);
+    super.getEntityDirection(this.name);
   }
   updateState() {
     super.updateFrame();
@@ -176,10 +198,12 @@ export class JumpIdleRight extends PlayerStates {
 export class JumpRunningLeft extends PlayerStates {
   constructor(player) {
     super(player);
+    this.name = "JUMP_RUNNING_LEFT";
   }
   enter(currentFrame) {
-    checkStatement.innerHTML = "JumpRunningLeft";
+    checkStatement.innerHTML = this.name;
     super.getEntityFrame("PLAYER_JUMPING", currentFrame);
+    super.getEntityDirection(this.name);
   }
   updateState() {
     super.updateFrame();
@@ -193,10 +217,12 @@ export class JumpRunningLeft extends PlayerStates {
 export class JumpRunningRight extends PlayerStates {
   constructor(player) {
     super(player);
+    this.name = "JUMP_RUNNING_RIGHT";
   }
   enter(currentFrame) {
-    checkStatement.innerHTML = "JumpRunningRight";
+    checkStatement.innerHTML = this.name;
     super.getEntityFrame("PLAYER_JUMPING", currentFrame);
+    super.getEntityDirection(this.name);
   }
   updateState() {
     super.updateFrame();
@@ -209,11 +235,13 @@ export class JumpRunningRight extends PlayerStates {
 export class FallIdleLeft extends PlayerStates {
   constructor(player) {
     super(player);
+    this.name = "FALL_IDLE_LEFT";
   }
   enter(currentFrame) {
-    checkStatement.innerHTML = "FallIdleLeft";
+    checkStatement.innerHTML = this.name;
 
     super.getEntityFrame("PLAYER_FALLING", currentFrame);
+    super.getEntityDirection(this.name);
   }
   updateState() {
     super.updateFrame();
@@ -228,10 +256,12 @@ export class FallIdleLeft extends PlayerStates {
 export class FallIdleRight extends PlayerStates {
   constructor(player) {
     super(player);
+    this.name = "FALL_IDLE_RIGHT";
   }
   enter(currentFrame) {
-    checkStatement.innerHTML = "FallIdleRight";
+    checkStatement.innerHTML = this.name;
     super.getEntityFrame("PLAYER_FALLING", currentFrame);
+    super.getEntityDirection(this.name);
   }
   updateState() {
     super.updateFrame();
@@ -246,10 +276,12 @@ export class FallIdleRight extends PlayerStates {
 export class FallRunningLeft extends PlayerStates {
   constructor(player) {
     super(player);
+    this.name = "FALL_RUNNING_LEFT";
   }
   enter(currentFrame) {
-    checkStatement.innerHTML = "FallRunningLeft";
+    checkStatement.innerHTML = this.name;
     super.getEntityFrame("PLAYER_FALLING", currentFrame);
+    super.getEntityDirection(this.name);
   }
   updateState() {
     super.updateFrame();
@@ -264,10 +296,12 @@ export class FallRunningLeft extends PlayerStates {
 export class FallRunningRight extends PlayerStates {
   constructor(player) {
     super(player);
+    this.name = "FALL_RUNNING_RIGHT";
   }
   enter(currentFrame) {
-    checkStatement.innerHTML = "FallRunningRight";
+    checkStatement.innerHTML = this.name;
     super.getEntityFrame("PLAYER_FALLING", currentFrame);
+    super.getEntityDirection(this.name);
   }
   updateState() {
     super.updateFrame();

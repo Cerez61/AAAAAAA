@@ -24,6 +24,14 @@ export class Enemy {
     const enemyClass = ENEMY_TYPE[enemyInfo.subType];
     this.enemies.push(new enemyClass(enemyInfo, targetJSON, targetStat));
   }
+  updateEnemyStates() {
+    for (const enemy of this.enemies) {
+      const distance = Math.sign(enemy.p.x - enemy.p2.x);
+
+      if (distance) enemy.isMoving = true;
+      else enemy.isMoving = false;
+    }
+  }
   updateGlobalState() {
     this.globalState.playerPosition = this.playerPosition;
   }
@@ -52,6 +60,8 @@ export class Enemy {
     this.updateGlobalState();
 
     this.updateEnemies();
+    this.updateEnemyStates();
+
     this.destroyEnemies();
   }
 }

@@ -4,6 +4,8 @@ export class EnemyObject extends EntityObject {
   constructor(targetData, targetJSON, targetStat) {
     super(targetData, targetJSON);
 
+    this.isDynamic = true;
+    this.isMoving = false;
     this.isDead = false;
 
     //Positions

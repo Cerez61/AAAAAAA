@@ -16,7 +16,7 @@ export class MeleeAttack extends AbilityObject {
     this.damagedEntity = [];
   }
   collide(mtv, collisionDirection, targetEntity) {
-    if (targetEntity.subType === "Player") return;
+    if (targetEntity.subType === targetEntity.subType) return;
     this.outlineColor = 1;
   }
   setState(state, currentFrame) {

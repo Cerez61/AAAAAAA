@@ -64,21 +64,6 @@
           "h": 0
         },
         "name": "floor"
-      },
-      {
-        "id": "enemy_0",
-        "type": "ENEMY",
-        "subType": "Archer",
-        "p": {
-          "x": 1000,
-          "y": 50,
-          "z": 1
-        },
-        "s": {
-          "w": 0,
-          "h": 0
-        },
-        "name": "chain"
       }
     ]
   },

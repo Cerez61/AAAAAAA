@@ -31,6 +31,8 @@ export class PlayerObject extends EntityObject {
       jumpCount: 2,
       jumpHeight: 10,
     };
+    this.isMoving = false;
+    this.isDynamic = true;
 
     this.direction;
 

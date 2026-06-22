@@ -2,20 +2,41 @@ import { MAT4 } from "../../../utils/matrix.js";
 
 const mat4 = new MAT4();
 export class SAT {
+  constructor() {
+    this.maxStepHeight = 10;
+    this.stepTestValue = 4;
+  }
   intersectPolygons(entityA, entityB, vertexData) {
+    let directionA, directionB, directions;
+    let result, result2;
+    let mtv = [];
+
     const finalPosA = this.getPositionDiff(entityA.p, entityA.p2);
     const subStepA = this.getSubStep(finalPosA, entityA.s2);
-    const result = this.calculate(entityA, entityB, vertexData, subStepA);
+    result = this.calculate(entityA, entityB, vertexData, subStepA);
     if (!result) return false;
 
-    const directionA = this.findDirection(result.minAxis);
-    const directionB = this.getOppositeDirection(directionA);
-    const directions = [directionA, directionB];
-    const mtv = this.mtv(result.minAxis, result.minOverlap);
+    directionA = this.findDirection(result.minAxis);
+    directionB = this.getOppositeDirection(directionA);
 
+    directions = [directionA, directionB];
+
+    if (directions.includes("RIGHT") || directions.includes("LEFT")) {
+      result2 = this.autoStep(entityA, entityB, vertexData);
+      if (result2) {
+        result = result2;
+
+        directionA = this.findDirection(result.minAxis);
+        directionB = this.getOppositeDirection(directionA);
+
+        directions = [directionA, directionB];
+      }
+    }
+
+    mtv = this.calculateMtv(entityA, entityB, result.minAxis, result.minOverlap);
     return { mtv, directions };
   }
-  calculate(entityA, entityB, vertexData, subStep) {
+  calculate(entityA, entityB, vertexData, subStep, isTest = false) {
     const currentMatrixA = mat4.copy(entityA.modelMatrix);
     const verticesB = mat4.multiplyVerticesMatrix(new Float32Array(12), vertexData, entityB.modelMatrix);
     for (let c = 0; c < subStep.hipotenus; c++) {
@@ -32,9 +53,10 @@ export class SAT {
 
       const result = this.checkSat(verticesA, verticesB, entityA, entityB);
       if (result) {
-        //When entities collide happens sub-step then update entities position to that sub-step
-        entityA.p.x = x;
-        entityA.p.y = y;
+        if (!isTest) {
+          entityA.p.x = x;
+          entityA.p.y = y;
+        }
         return result;
       }
     }
@@ -71,6 +93,53 @@ export class SAT {
 
     return { minAxis, minOverlap };
   }
+  autoStep(entityA, entityB, vertexData) {
+    let directionA, directionB, directions;
+
+    const oldPy = entityA.p.y;
+    const oldP2y = entityA.p2.y;
+
+    entityA.p.y += this.maxStepHeight;
+    entityA.p2.y += this.maxStepHeight;
+
+    const directionSign = Math.sign(entityA.p2.x - entityA.p.x);
+
+    if (directionSign === 0) {
+      entityA.p.y = oldPy;
+      entityA.p2.y = oldP2y;
+      return false;
+    }
+
+    const tempSubStep = {
+      hipotenus: 1,
+      stepX: directionSign * this.stepTestValue,
+      stepY: 0,
+    };
+
+    const finalPosA = this.getPositionDiff(entityA.p, entityA.p2);
+    const subStepA = this.getSubStep(finalPosA, entityA.s2);
+    const result = this.calculate(entityA, entityB, vertexData, tempSubStep, true);
+
+    if (!result) {
+      return false;
+    }
+
+    entityA.p.y = oldPy;
+    entityA.p2.y = oldP2y;
+
+    return result;
+  }
+  calculateMtv(entityA, entityB, axis, overlap) {
+    const mtv = [];
+    let newOverlap = overlap;
+
+    if (entityA.isDynamic && entityB.isDynamic) newOverlap = overlap * 0.5;
+
+    mtv[0] = this.mtv(axis, newOverlap);
+    mtv[1] = this.mtv([-axis[0], -axis[1]], newOverlap);
+
+    return mtv;
+  }
   getPositionDiff(currentPos, nextPos) {
     const x = nextPos.x - currentPos.x;
     const y = nextPos.y - currentPos.y;
@@ -78,9 +147,11 @@ export class SAT {
   }
   getSubStep(finalPos, s) {
     let hipotenus = Math.sqrt(Math.pow(finalPos.x, 2) + Math.pow(finalPos.y, 2));
-    if (hipotenus >= 30) {
-      if (Math.abs(finalPos.x) > Math.abs(finalPos.y)) hipotenus /= s.w;
-      else hipotenus /= s.h / 8;
+
+    const maxStepSize = Math.min(s.w, s.h) / 2;
+
+    if (hipotenus > maxStepSize) {
+      hipotenus /= maxStepSize;
     } else hipotenus = 1;
 
     hipotenus = Math.ceil(hipotenus);
@@ -116,7 +187,7 @@ export class SAT {
     if (Math.abs(axis[1]) > Math.abs(axis[0])) {
       return axis[1] > 0 ? "BOTTOM" : "TOP";
     } else {
-      return axis[0] > 0 ? "RIGHT" : "LEFT";
+      return axis[0] > 0 ? "LEFT" : "RIGHT";
     }
   }
   getOppositeDirection(direction) {

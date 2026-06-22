@@ -4,14 +4,15 @@ export class Program {
     this.gameProgram = this.gl.createProgram();
     this.collisionProgram = this.gl.createProgram();
     this.qtProgram = this.gl.createProgram();
+    this.programs = [];
+    this.programId = 0;
   }
-  initGameProgram() {
-    return this.gameProgram;
-  }
-  initCollisionProgram() {
-    return this.collisionProgram;
-  }
-  initQtProgram() {
-    return this.qtProgram;
+  createProgram() {
+    const program = this.gl.createProgram();
+    const id = this.programId;
+    this.programs.push([program, this.programId]);
+    this.programId++;
+
+    return { program, id };
   }
 }

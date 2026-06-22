@@ -1,4 +1,4 @@
-import { MeleeAttack } from "./globalAbility/meleeAttack.js";
+import { MeleeAttack } from "./playerAbility/meleeAttack.js";
 const abilityEnum = {
   MeleeAttack: MeleeAttack,
 };

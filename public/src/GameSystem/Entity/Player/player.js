@@ -100,6 +100,12 @@ export class Player extends PlayerObject {
   updateFrame(uvRect) {
     this.uvRect = [uvRect.x, uvRect.y, uvRect.w, uvRect.h];
   }
+  updatePlayerStates() {
+    const distance = Math.sign(this.p.x - this.p2.x);
+
+    if (distance) this.isMoving = true;
+    else this.isMoving = false;
+  }
   updateModelData() {
     this.mat4.translate(this.modelMatrix, [this.p.x, this.p.y, 0]);
   }
@@ -112,6 +118,8 @@ export class Player extends PlayerObject {
 
     this.movement();
     this.ability();
+
+    this.updatePlayerStates();
     this.updateEntityData();
     this.clear();
   }

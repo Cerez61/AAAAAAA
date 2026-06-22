@@ -13,4 +13,7 @@ export class Uniform {
 
     return { uniform, id };
   }
+  uniformMatrix4fv(uniform, data) {
+    this.gl.uniformMatrix4fv(uniform, false, data);
+  }
 }
