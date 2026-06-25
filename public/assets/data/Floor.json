@@ -1,0 +1,21 @@
+{
+  "frames": [
+    {
+      "filename": "Sprite-0001.",
+      "frame": { "x": 0, "y": 0, "w": 64, "h": 32 }
+    }
+  ],
+  "meta": {
+    "app": "https://www.aseprite.org/",
+    "version": "1.3.17.2-x64",
+    "image": "Floor.png",
+    "format": "RGBA8888",
+    "size": { "w": 512, "h": 512 },
+    "scale": "1",
+    "assets": {
+      "floor": {
+        "frameTags": [{ "name": "Floor", "from": 0, "to": 0, "direction": "forward", "color": "#000000ff" }]
+      }
+    }
+  }
+}

@@ -17,9 +17,6 @@
     "size": { "w": 512, "h": 512 },
     "scale": "1",
     "assets": {
-      "floor": {
-        "frameTags": [{ "frameName": "Floor", "from": 0, "to": 0, "direction": "forward", "color": "#000000ff" }]
-      },
       "chain": {
         "frameTags": [{ "frameName": "Chain", "from": 1, "to": 1, "direction": "forward", "color": "#000000ff" }]
       }

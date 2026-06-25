@@ -25,13 +25,13 @@
         "type": "TEXTURE",
         "subType": "Surface",
         "p": {
-          "x": 0,
+          "x": -128,
           "y": 20,
           "z": 1
         },
         "s": {
-          "w": 0,
-          "h": 0
+          "w": 1024,
+          "h": 32
         },
         "name": "floor"
       },
@@ -40,8 +40,8 @@
         "type": "TEXTURE",
         "subType": "Surface",
         "p": {
-          "x": 510,
-          "y": 20,
+          "x": 256,
+          "y": 400,
           "z": 1
         },
         "s": {
@@ -55,8 +55,23 @@
         "type": "TEXTURE",
         "subType": "Surface",
         "p": {
-          "x": 1020,
-          "y": 20,
+          "x": 512,
+          "y": 500,
+          "z": 1
+        },
+        "s": {
+          "w": 0,
+          "h": 0
+        },
+        "name": "floor"
+      },
+      {
+        "id": "texture_3",
+        "type": "TEXTURE",
+        "subType": "Surface",
+        "p": {
+          "x": 800,
+          "y": 400,
           "z": 1
         },
         "s": {
@@ -70,7 +85,7 @@
         "type": "ENEMY",
         "subType": "Archer",
         "p": {
-          "x": 1000,
+          "x": 800,
           "y": 50,
           "z": 1
         },

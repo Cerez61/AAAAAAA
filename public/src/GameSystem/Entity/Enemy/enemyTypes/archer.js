@@ -50,7 +50,6 @@ export class Archer extends EnemyObject {
     };
   }
   collide(mtv, collisionDirection, targetEntity) {
-    console.log(targetEntity);
     /* console.log(mtv, collisionDirection); */
     if (targetEntity.type === "Ability") {
       this.abilityCollision(targetEntity);
