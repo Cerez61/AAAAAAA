@@ -24,13 +24,12 @@ export class Game {
 
     this.dataLoader = new DataLoader(this.infoData);
     this.textureLoader = new TextureLoader(this.assetData);
-    this.scene = new Scene([this.sceneData, this.entityData]);
 
+    this.scene = new Scene([this.sceneData, this.entityData]);
     this.renderer = new Renderer([this.globalData, this.instanceData, this.assetData]);
     this.collector = new Collector([this.instanceData, this.entityData]);
     this.collision = new Collision([this.instanceData, this.sceneData, this.entityData]);
     this.inputHandler = new InputHandler(this.entityData);
-
     this.entity = new Entity([this.globalData, this.sceneData, this.instanceData, this.entityData, this.assetData, this.infoData]);
   }
   async init() {

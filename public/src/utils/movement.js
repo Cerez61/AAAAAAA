@@ -26,6 +26,21 @@ export class Movement {
     v.vy = v.ySpeed;
     p.y += v.vy;
   }
+  static enemyHorizontalMovement(p, v) {}
+  static enemyVerticalMovement(p, v) {
+    /* if (lastPressKeys[0] === "w" && v.jumpCount > 0) {
+      v.jumpCount--;
+      v.jumpHeight = 10;
+      v.ySpeed = 0;
+    } */
+    if (null && v.jumpHeight > 0) {
+      v.jumpHeight--;
+      v.ySpeed += v.weight;
+    } else v.ySpeed -= v.weight;
+
+    v.vy = v.ySpeed;
+    p.y += v.vy;
+  }
   static getNextPosition(p, p2, s, s2, vx, vy, modelMatrix) {
     const x = p.x;
     const y = p.y;

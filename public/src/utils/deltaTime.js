@@ -3,7 +3,7 @@ export class DeltaTime {
   static lastTime = 0;
 
   static update(timeStamp) {
-    this.deltaTime = timeStamp - this.lastTime || 1;
+    this.deltaTime = timeStamp - this.lastTime;
     this.lastTime = timeStamp;
   }
   static get() {

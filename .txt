@@ -1,0 +1,25 @@
+System.Data.SqlClient;
+
+
+baglanti.Open();
+SqlCommand komut = new SqlCommand('Select ogr_ad ogr_soyad FROM ogrenciler Where ogr_id=@p1',baglanti);
+komut.Parameters.AddWithValue('@p1',numara);
+SqlDataReader dr = komut.ExecuteReader();
+
+
+while(dr.Read()) {
+    this.Text = dr[0] + '' + dr[1];
+
+}
+baglanti.Close();
+
+SqlCommand cmd = new SqlCommand('Select ders_ad,sinav1,sinav2,sinav3,proje,ortalama,durum from notlar inner join dersler 
+on dersler.ders_id = notlar.dersid where ogrid=@p1',baglanti);
+
+cmd.Parameters.AddWithValue('@p1',numara);
+
+SqlDataAdapter da = new SqlDataAdapter(cmd);
+DataTable dt = new DataTable();
+dt.Fill(da);
+
+dataGridView1.DataSource = dt;

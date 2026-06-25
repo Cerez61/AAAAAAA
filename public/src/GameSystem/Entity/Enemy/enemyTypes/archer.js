@@ -43,8 +43,14 @@ export class Archer extends EnemyObject {
         state: { isPatrolling: true },
       },
     ];
+
+    this.targetPosDiff = {
+      x: 0,
+      y: 0,
+    };
   }
   collide(mtv, collisionDirection, targetEntity) {
+    console.log(targetEntity);
     /* console.log(mtv, collisionDirection); */
     if (targetEntity.type === "Ability") {
       this.abilityCollision(targetEntity);
@@ -53,10 +59,31 @@ export class Archer extends EnemyObject {
     }
     this.outlineColor = 1;
 
+    this.collision(collisionDirection);
+
     this.p.x += mtv[0];
     this.p.y += mtv[1];
 
     this.mat4.translate(this.modelMatrix, [this.p.x, this.p.y]);
+  }
+  collision(collideDirection) {
+    if (!collideDirection) return;
+
+    if (collideDirection === "BOTTOM") {
+      if (this.verticalStates.ySpeed <= 0) {
+        this.verticalStates.ySpeed = 0;
+        this.verticalStates.jumpHeight = 10;
+        this.verticalStates.jumpCount = 2;
+      }
+    }
+    if (collideDirection === "TOP") {
+    }
+    if (collideDirection === "LEFT") {
+      if (this.vx <= 0) this.vx = 0;
+    }
+    if (collideDirection === "RIGHT") {
+      if (this.vx >= 0) this.vx = 0;
+    }
   }
   abilityCollision(ability) {
     const abilityCaster = ability.caster;
@@ -70,6 +97,9 @@ export class Archer extends EnemyObject {
 
     this.getHealtState();
   }
+  movement() {
+    Movement.enemyVerticalMovement(this.p, this.verticalStates);
+  }
   getHealtState() {
     if (0 >= this.healt) this.isDead = true;
   }
@@ -78,14 +108,11 @@ export class Archer extends EnemyObject {
     if (this.p.x - playerX > 0) this.p.x -= 5;
     else this.p.x += 5;
   }
-  verticalMovement() {
-    this.p.y -= 10;
-  }
   chasePlayer() {
     this.horizontalMovement();
-    this.verticalMovement();
-    /*    console.log("chase player");
-     */
+
+    this.mat4.translate(this.modelMatrix, [this.p.x, this.p.y]);
+    Movement.getNextPosition(this.p, this.p2, this.s, this.s2, 10, 5, this.nextModelMatrix);
   }
   meleeAttack() {
     /*   console.log("melee attack");
@@ -94,6 +121,10 @@ export class Archer extends EnemyObject {
   init() {}
   updateGlobalState(globalState) {
     this.globalState = globalState;
+  }
+  updateEnemyVariables() {
+    this.targetPosDiff.x = this.globalState.playerPosition[0] - this.p.x;
+    this.targetPosDiff.y = this.globalState.playerPosition[1] - this.p.y;
   }
   updateWorldStates() {
     const playerX = this.globalState.playerPosition[0];
@@ -104,6 +135,8 @@ export class Archer extends EnemyObject {
     this.updateGlobalState(globalState);
     this.currentAction = this.currentActionList[0];
 
+    this.movement();
+
     switch (this.currentAction.name) {
       case "chasePlayer":
         this.chasePlayer();
@@ -113,8 +146,8 @@ export class Archer extends EnemyObject {
         break;
     }
 
+    this.currentState.updateState();
+
     this.updateWorldStates(globalState);
-    this.mat4.translate(this.modelMatrix, [this.p.x, this.p.y]);
-    Movement.getNextPosition(this.p, this.p2, this.s, this.s2, 1, 5, this.nextModelMatrix);
   }
 }

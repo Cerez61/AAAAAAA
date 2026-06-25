@@ -54,6 +54,7 @@ export class Enemy {
       }
     }
   }
+
   async init() {}
   update() {
     this.entityDataTake();

@@ -1,9 +1,8 @@
-import { Game } from "./Game.js";
+import { Game } from "./game.js";
 import { DeltaTime } from "./utils/deltaTime.js";
 
 const game = new Game();
 
-let lastTime = 0;
 function animate(timeStamp) {
   DeltaTime.update(timeStamp);
 

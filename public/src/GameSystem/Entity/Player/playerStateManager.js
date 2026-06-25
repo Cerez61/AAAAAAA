@@ -68,7 +68,6 @@ class PlayerStates {
     } else this.lastTime += DeltaTime.get();
   }
   getEntityDirection(frameName) {
-    console.log(leftFramesEnum[frameName]);
     if (leftFramesEnum[frameName]) this.player.direction = "Left";
     else this.player.direction = "Right";
   }

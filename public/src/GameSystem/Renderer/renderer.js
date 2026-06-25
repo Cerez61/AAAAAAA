@@ -75,7 +75,6 @@ export class Renderer {
   }
   gameDataGive() {
     this.globalData.gl = this.gl;
-    this.globalData.program = this.gameProgram;
   }
   setup() {
     this.initProgram(this.gameProgram.program, this.gameShader);

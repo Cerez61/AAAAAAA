@@ -1,18 +1,3 @@
-import {
-  IdleLeft,
-  IdleRight,
-  RunningLeft,
-  RunningRight,
-  JumpIdleLeft,
-  JumpIdleRight,
-  JumpRunningLeft,
-  JumpRunningRight,
-  FallIdleLeft,
-  FallIdleRight,
-  FallRunningLeft,
-  FallRunningRight,
-} from "./playerStateManager.js";
-import { MAT4 } from "../../../utils/matrix.js";
 import { PlayerObject } from "../EntityObject/playerObject.js";
 import { Movement } from "../../../utils/movement.js";
 import { Ability } from "../Ability/ability.js";
@@ -21,28 +6,8 @@ import { DeltaTime } from "../../../utils/deltaTime.js";
 export class Player extends PlayerObject {
   constructor(gameData, targetData, targetJSON, targetStat) {
     super(gameData, targetData, targetJSON, targetStat);
+  }
 
-    this.states = [
-      new IdleLeft(this),
-      new IdleRight(this),
-      new RunningLeft(this),
-      new RunningRight(this),
-      new JumpIdleLeft(this),
-      new JumpIdleRight(this),
-      new JumpRunningLeft(this),
-      new JumpRunningRight(this),
-      new FallIdleLeft(this),
-      new FallIdleRight(this),
-      new FallRunningLeft(this),
-      new FallRunningRight(this),
-    ];
-    this.currentState = this.states[0];
-    this.currentState.enter(0);
-  }
-  setState(state, currentFrame) {
-    this.currentState = this.states[state];
-    this.currentState.enter(currentFrame);
-  }
   collide(mtv, collisionDirection, targetEntity) {
     if (targetEntity.type === "Ability") return;
     this.p.x += mtv[0];

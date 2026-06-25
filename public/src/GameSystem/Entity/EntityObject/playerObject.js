@@ -1,4 +1,18 @@
 import { EntityObject } from "./entityObject.js";
+import {
+  IdleLeft,
+  IdleRight,
+  RunningLeft,
+  RunningRight,
+  JumpIdleLeft,
+  JumpIdleRight,
+  JumpRunningLeft,
+  JumpRunningRight,
+  FallIdleLeft,
+  FallIdleRight,
+  FallRunningLeft,
+  FallRunningRight,
+} from "../Player/playerStateManager.js";
 
 export class PlayerObject extends EntityObject {
   constructor(gameData, targetData, targetJSON, targetStat) {
@@ -63,5 +77,27 @@ export class PlayerObject extends EntityObject {
     this.abilities = [];
 
     this.usedSkill = false;
+
+    //playerStates
+    this.states = [
+      new IdleLeft(this),
+      new IdleRight(this),
+      new RunningLeft(this),
+      new RunningRight(this),
+      new JumpIdleLeft(this),
+      new JumpIdleRight(this),
+      new JumpRunningLeft(this),
+      new JumpRunningRight(this),
+      new FallIdleLeft(this),
+      new FallIdleRight(this),
+      new FallRunningLeft(this),
+      new FallRunningRight(this),
+    ];
+    this.currentState = this.states[0];
+    this.currentState.enter(0);
+  }
+  setState(state, currentFrame) {
+    this.currentState = this.states[state];
+    this.currentState.enter(currentFrame);
   }
 }
