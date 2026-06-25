@@ -3,9 +3,8 @@ name: Deploy Public Folder to Pages
 
 on:
   push:
-    branches: ["main"] # Eğer ana branch adınız master ise burayı master yapın
-
-  # Pages sekmesinden manuel olarak tetiklemeye de izin verir
+    branches: ["master"] 
+    
   workflow_dispatch:
 
 permissions:
@@ -33,7 +32,6 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # İşte kritik nokta: Sadece public klasörünü yüklüyoruz
           path: './public'
 
       - name: Deploy to GitHub Pages
